@@ -1,0 +1,60 @@
+/* Shared layout for Work / Design / Ceramics — based on the smaller
+   banner treatment sketched on the mockup's second artboard. The mockup's
+   grid artboards (pages 3-4) were left blank, so .grid below is scaffolding
+   for portfolio items — replace the placeholder cells with real content. */
+
+.page-banner {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 4 / 3;
+  margin: var(--space-3) var(--page-padding) var(--space-4);
+  overflow: hidden;
+}
+
+.page-banner__bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.page-banner__title {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+  padding: 0 var(--page-padding) var(--space-5);
+}
+
+.grid__item {
+  aspect-ratio: 1 / 1;
+  border: 1px solid #e2e2e2;
+}
+
+@media (min-width: 768px) {
+  .page-banner {
+    max-width: 480px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

@@ -1,0 +1,91 @@
+/* ---- Reset ---- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- Page shell ----
+   Mobile: full width. Desktop: cap the reading column but let full-bleed
+   elements (like .hero) opt out with the .full-bleed class. */
+.page {
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (min-width: 1024px) {
+  .page {
+    max-width: 1400px;
+  }
+}
+
+/* ---- Nav ---- */
+.nav {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--page-padding);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-nav);
+  list-style: none;
+}
+
+.nav a {
+  text-decoration: none;
+}
+
+.nav a[aria-current="page"] {
+  color: var(--color-muted);
+}
+
+@media (min-width: 768px) {
+  .nav {
+    gap: var(--space-4);
+    padding: var(--space-4) var(--page-padding);
+  }
+}
+
+/* ---- Contact / footer ---- */
+.contact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: 0 var(--page-padding) var(--space-5);
+  font-weight: 600;
+}
+
+.contact a {
+  text-decoration: none;
+  width: fit-content;
+}
+
+@media (min-width: 768px) {
+  .contact {
+    flex-direction: row;
+    gap: var(--space-4);
+  }
+}
