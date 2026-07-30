@@ -16,6 +16,18 @@ img {
   max-width: 100%;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 a {
   color: inherit;
 }
@@ -31,9 +43,24 @@ body {
 
 /* ---- Page shell ----
    Mobile: full width. Desktop: cap the reading column but let full-bleed
-   elements (like .hero) opt out with the .full-bleed class. */
+   elements (like .hero) opt out with the .full-bleed class.
+
+   display:flex + min-height:100dvh is the classic "sticky footer" flex
+   pattern: since height is a *minimum*, not fixed, a flex child that's
+   given flex:1 (see .hero in home.css) grows to soak up whatever space is
+   left over on a tall window, or shrinks back on a short one — but if
+   content is taller than the viewport even after that child shrinks to
+   its floor, the page simply grows past 100dvh and scrolls normally
+   rather than clipping anything. 100dvh (dynamic viewport height) is used
+   over 100vh so mobile browser chrome (the address bar showing/hiding)
+   doesn't leave a sliver of unreachable content; 100vh above it is a
+   fallback for browsers that don't support dvh yet. */
 .page {
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
   margin: 0 auto;
 }
 

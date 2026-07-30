@@ -36,9 +36,9 @@ src/styles/
   fonts.css           @font-face declarations
   base.css            Reset + shared nav/footer
   home.css            Home page hero + statement
-  subpage.css         Work/Design/Ceramics banner + placeholder grid
+  subpage.css         Work/Design/Ceramics placeholder grid
 assets/
-  icon-star.svg        Star mark, extracted as vector from mobile.ai
+  focustendersword.svg Star mark, extracted as vector from mobile.ai
   hero-bg.jpg           Hero background, cropped from the mockup export
   fonts/                PP Mori webfont files
 ```
@@ -72,6 +72,9 @@ then add `woff2` `src` entries above the `woff` ones in `src/styles/fonts.css`.
 ## Work / Design / Ceramics pages
 
 The mockup only fleshed out the home page — the other three artboards were
-a banner with a title and a blank grid. Those pages are scaffolded with the
-same banner treatment and an empty responsive grid (`.grid` / `.grid__item`
-in `subpage.css`) ready for real project content.
+a banner with a title and a blank grid. The banner was dropped: the nav
+already marks the current page, so repeating its label as a heading right
+below it was redundant. These pages now go straight from nav into an empty
+responsive grid (`.grid` / `.grid__item` in `subpage.css`) ready for real
+project content. Each page keeps a screen-reader-only `<h1>` for
+accessibility even though no heading is shown visually.

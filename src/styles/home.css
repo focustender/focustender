@@ -1,11 +1,29 @@
 /* ---- Hero ----
-   Aspect ratio matches the exported mockup crop (2214 x 2484) so the
-   layout matches at any width. Swap for a different ratio at the desktop
-   breakpoint if the desktop design calls for a wider/shorter hero. */
+   Not full-bleed: the photo is inset by --page-padding on the left, top,
+   and right — the same variable the nav/statement/contact text uses for
+   its own margin — so the photo's edge lines up with where the text
+   starts instead of touching the browser edges. No explicit width is set,
+   so the box's width is "auto" and the browser fills in the space left
+   over after the left/right margins, at every breakpoint including
+   mobile. The star icon and photo are both sized as percentages of this
+   same box, so they resize/reposition together as one unit.
+
+   No fixed aspect-ratio: .hero is the flexible child of the .page flex
+   column (base.css) — flex:1 makes it absorb whatever vertical space is
+   left over after nav/statement/contact take what they need, so the
+   whole page fits one viewport with no scrolling on ordinary windows.
+   min-height is a floor so it never gets squeezed away to nothing (and
+   takes the icon with it); max-height is a ceiling so it doesn't stretch
+   absurdly tall on a narrow-but-very-tall window. Between those two, its
+   shape is fluid rather than a fixed ratio — that's the trade-off for a
+   no-scroll layout, since a fixed shape and a flexible height can't both
+   be honored at once. */
 .hero {
   position: relative;
-  width: 100%;
-  aspect-ratio: 2214 / 2484;
+  margin: var(--page-padding) var(--page-padding) 0;
+  flex: 1 1 0;
+  min-height: 220px;
+  max-height: 88vh;
   overflow: hidden;
 }
 
@@ -15,17 +33,30 @@
   object-fit: cover;
 }
 
+/* Fixed px width (not a % of .hero) so the icon stays the size it was at
+   mobile — 46px wide, measured at a 390px-wide viewport — across every
+   breakpoint, rather than scaling up as .hero grows on wider/taller
+   windows. left/top stay percentages so its top-left anchor still tracks
+   the photo underneath it as the box resizes. */
 .hero__icon {
   position: absolute;
   left: 30.78%;
   top: 16.67%;
-  width: 13.44%;
+  width: 46px;
   height: auto;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    min-height: 280px;
+    max-height: 70vh;
+  }
 }
 
 @media (min-width: 1024px) {
   .hero {
-    aspect-ratio: 21 / 9;
+    min-height: 320px;
+    max-height: 60vh;
   }
 }
 
