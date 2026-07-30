@@ -24,7 +24,7 @@
   --space-6: 6rem;
 
   /* ---- Layout ---- */
-  --page-padding: 1.5rem;
+  --page-padding: 0.25in; /* matches the 1/4" margin guides from the mockup — left edge for nav, statement, and contact all align to this */
   --content-max: 640px;
 }
 
