@@ -21,6 +21,12 @@ const images = import.meta.glob(
 const container = document.querySelector(".masonry");
 const paths = Object.keys(images).sort();
 
+// Golden-ratio spacing scale: base × φ⁰, ×φ¹, ×φ² (φ ≈ 1.618). Each item's
+// margin-bottom is randomly drawn from this so the whitespace between
+// images feels organic/varied but every value is still golden-ratio
+// related rather than arbitrary — matches the .masonry column-gap base.
+const GOLDEN_GAPS = ["3rem", "4.854rem", "7.854rem"];
+
 if (paths.length === 0) {
   container.innerHTML = '<p class="empty-state">new work loading soon.</p>';
 } else {
@@ -33,9 +39,31 @@ if (paths.length === 0) {
     img.alt = alt;
     img.loading = "lazy";
     img.className = "masonry__item";
-    img.style.setProperty("--rotate", `${(Math.random() * 8 - 4).toFixed(2)}deg`);
-    img.style.setProperty("--offset", `${Math.round(Math.random() * 24 - 12)}px`);
+    img.style.setProperty("--gap", GOLDEN_GAPS[Math.floor(Math.random() * GOLDEN_GAPS.length)]);
 
     container.appendChild(img);
+  }
+
+  // Fade in on scroll, except items already visible on page load — those
+  // just appear immediately. IntersectionObserver's first callback
+  // reports the current state of every newly-observed target (including
+  // ones already in the viewport), so isInitialBatch distinguishes that
+  // one-time initial report from a real scroll-triggered entry: for the
+  // former, transitions are disabled right before adding .is-visible so
+  // it snaps in instead of animating.
+  let isInitialBatch = true;
+  const observer = new IntersectionObserver((entries) => {
+    const initial = isInitialBatch;
+    isInitialBatch = false;
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      if (initial) entry.target.style.transition = "none";
+      entry.target.classList.add("is-visible");
+      observer.unobserve(entry.target);
+    }
+  });
+
+  for (const img of container.querySelectorAll(".masonry__item")) {
+    observer.observe(img);
   }
 }

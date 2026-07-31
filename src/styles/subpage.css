@@ -173,17 +173,23 @@
   margin-top: 0.35em;
 }
 
-/* ---- Design: floating masonry ----
+/* ---- Design: masonry ----
    CSS multi-column layout is the masonry mechanism — items flow down a
    column and wrap to the next, which naturally staggers heights without
-   any JS layout math. design.js (populated via Vite's import.meta.glob
-   from assets/design/) assigns each image a random --rotate/--offset via
-   inline custom properties for the "scattered on a table" feel; the CSS
-   here just consumes those variables. break-inside:avoid stops a column
-   break from slicing an image in half mid-item. */
+   any JS layout math. break-inside:avoid stops a column break from
+   slicing an image in half mid-item.
+
+   No more rotation/tilt or random vertical shift — items sit level, at
+   their natural position in the column flow. The "organic and random"
+   feeling instead comes from --gap: design.js assigns each image a
+   margin-bottom randomly drawn from a golden-ratio scale (three steps,
+   each ~1.618× the last: 3rem / 4.854rem / 7.854rem — i.e. base × φ⁰,
+   ×φ¹, ×φ²), so spacing varies but every value is still harmonically
+   related rather than arbitrary. column-gap uses the same scale's base
+   step for consistency. */
 .masonry {
   columns: 2;
-  column-gap: var(--space-3);
+  column-gap: 3rem;
   padding: var(--space-4) var(--page-padding) var(--space-5);
 }
 
@@ -196,13 +202,23 @@
   column-span: all;
 }
 
+/* Fade-in-on-scroll: default hidden, design.js adds .is-visible via
+   IntersectionObserver once an item scrolls into view. Items already
+   inside the viewport at page load are made visible immediately with
+   transitions disabled (see design.js) so only the ones you have to
+   scroll to reveal actually animate. */
 .masonry__item {
   display: block;
   width: 100%;
   height: auto;
-  margin: 0 0 var(--space-5);
+  margin: 0 0 var(--gap, 3rem);
   break-inside: avoid;
-  transform: rotate(var(--rotate, 0deg)) translateY(var(--offset, 0px));
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.masonry__item.is-visible {
+  opacity: 1;
 }
 
 @media (min-width: 768px) {
