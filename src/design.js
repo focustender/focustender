@@ -34,14 +34,29 @@ if (paths.length === 0) {
     const filename = path.split("/").pop().replace(/\.[^.]+$/, "");
     const alt = filename.replace(/^\d+[-_]*/, "").replace(/[-_]+/g, " ");
 
+    // Each item is a <button> wrapping the <img>, not a bare clickable
+    // img — plain <img> elements aren't keyboard-focusable (no tabindex
+    // by default), so without this a mouse click would work but keyboard
+    // users couldn't reach it at all, and even the "return focus to the
+    // thumbnail on close" behavior below would silently fail. The button
+    // carries the accessible name (aria-label) and the img inside it is
+    // marked alt="" so its filename-derived text isn't announced twice.
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "masonry__item";
+    button.setAttribute("aria-label", `Expand image: ${alt}`);
+    button.dataset.alt = alt;
+    button.style.setProperty("--gap", GOLDEN_GAPS[Math.floor(Math.random() * GOLDEN_GAPS.length)]);
+    button.addEventListener("click", () => openLightbox(button));
+
     const img = document.createElement("img");
     img.src = images[path];
-    img.alt = alt;
+    img.alt = "";
     img.loading = "lazy";
-    img.className = "masonry__item";
-    img.style.setProperty("--gap", GOLDEN_GAPS[Math.floor(Math.random() * GOLDEN_GAPS.length)]);
+    img.className = "masonry__item-img";
 
-    container.appendChild(img);
+    button.appendChild(img);
+    container.appendChild(button);
   }
 
   // Fade in on scroll, except items already visible on page load — those
@@ -67,3 +82,54 @@ if (paths.length === 0) {
     observer.observe(img);
   }
 }
+
+// ---- Lightbox ----
+// Click a masonry image to expand it over the whole page, with
+// everything behind it (nav included) blurred via .page.is-blurred —
+// see subpage.css. Single-image view only: no next/previous, closing
+// just returns to the grid exactly where it was. function declarations
+// are hoisted, so openLightbox can be referenced above in the click
+// listener even though it's defined after the loop that adds it.
+const lightbox = document.getElementById("lightbox");
+const lightboxImage = lightbox.querySelector(".lightbox__image");
+const lightboxClose = lightbox.querySelector(".lightbox__close");
+const page = document.querySelector(".page");
+let lastFocused = null;
+
+function openLightbox(button) {
+  lastFocused = button;
+  lightboxImage.src = button.querySelector("img").src;
+  lightboxImage.alt = button.dataset.alt;
+  lightbox.classList.add("is-open");
+  lightbox.setAttribute("aria-hidden", "false");
+  // .page.inert (not just the blur) is what actually stops the blurred
+  // background from being clicked or tabbed into while it's open —
+  // filter:blur() alone is only visual.
+  page.classList.add("is-blurred");
+  page.inert = true;
+  document.documentElement.style.overflow = "hidden";
+  lightboxClose.focus();
+}
+
+function closeLightbox() {
+  lightbox.classList.remove("is-open");
+  lightbox.setAttribute("aria-hidden", "true");
+  page.classList.remove("is-blurred");
+  page.inert = false;
+  document.documentElement.style.overflow = "";
+  lastFocused?.focus();
+}
+
+lightboxClose.addEventListener("click", closeLightbox);
+
+// Click anywhere in the lightbox that isn't the image itself (i.e. the
+// blurred backdrop showing through around it) closes it.
+lightbox.addEventListener("click", (event) => {
+  if (event.target === lightbox) closeLightbox();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && lightbox.classList.contains("is-open")) {
+    closeLightbox();
+  }
+});
