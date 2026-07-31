@@ -22,6 +22,19 @@
         <div class="masonry"></div>
       </main>
     </div>
+
+    <!-- Sibling of .page, not a descendant — .page gets blurred when an
+         image is expanded (see design.js/subpage.css), and a blurred
+         ancestor would blur this too if it were nested inside .page.
+         aria-hidden (not the hidden attribute) tracks open/closed state —
+         hidden forces display:none, which can't be CSS-transitioned into;
+         design.js toggles aria-hidden and an .is-open class together, and
+         the fade is handled entirely by opacity/visibility in CSS. -->
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Expanded image" aria-hidden="true">
+      <button type="button" class="lightbox__close" aria-label="Close">×</button>
+      <img class="lightbox__image" src="" alt="" />
+    </div>
+
     <script type="module" src="src/design.js"></script>
   </body>
 </html>

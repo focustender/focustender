@@ -206,19 +206,38 @@
    IntersectionObserver once an item scrolls into view. Items already
    inside the viewport at page load are made visible immediately with
    transitions disabled (see design.js) so only the ones you have to
-   scroll to reveal actually animate. */
+   scroll to reveal actually animate.
+
+   .masonry__item is a <button> (see design.js) wrapping the actual
+   <img>, not the img itself — a plain img isn't keyboard-focusable, so
+   clicking to open the lightbox would work but Tab/Enter wouldn't, and
+   restoring focus to it on close would silently fail. The reset rules
+   below (background/border/padding/text-align/font) undo the browser's
+   default button chrome so it's visually identical to the old bare-img
+   version. */
 .masonry__item {
   display: block;
   width: 100%;
-  height: auto;
   margin: 0 0 var(--gap, 3rem);
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  text-align: inherit;
   break-inside: avoid;
+  cursor: pointer;
   opacity: 0;
   transition: opacity 0.6s ease;
 }
 
 .masonry__item.is-visible {
   opacity: 1;
+}
+
+.masonry__item-img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 @media (min-width: 768px) {
@@ -231,4 +250,80 @@
   .masonry {
     columns: 4;
   }
+}
+
+/* ---- Design: lightbox ----
+   .page (nav + masonry, everything) blurs when an image is expanded —
+   design.js toggles this class and also sets .page.inert, which both
+   stops the blurred content from being clickable/tabbable and visually
+   dims interaction affordances like link underlines while it's active.
+   filter:blur() on an ancestor would blur position:fixed descendants
+   too, which is exactly why the lightbox itself lives outside .page in
+   the HTML (see design.html) rather than being blurred along with it. */
+.page.is-blurred {
+  filter: blur(12px);
+  transition: filter 0.3s ease;
+}
+
+/* No backdrop color — the blurred .page itself shows through the
+   transparent areas around the image, which is the "blurred layer
+   underneath" effect. visibility is toggled (not just opacity) so the
+   hidden lightbox can't be tabbed/clicked into before it's opened. */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5) var(--page-padding);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.lightbox.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease;
+}
+
+.lightbox__image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  transform: scale(0.96);
+  transition: transform 0.3s ease;
+}
+
+.lightbox.is-open .lightbox__image {
+  transform: scale(1);
+}
+
+/* A solid background (not "blur only" like the rest of the lightbox) is
+   deliberate here — with no backdrop tint, a plain glyph over an
+   arbitrary blurred photo could land on a background close to its own
+   color and become unreadable. This one small piece of chrome stays
+   legible regardless of what's behind it. */
+.lightbox__close {
+  position: absolute;
+  top: var(--page-padding);
+  right: var(--page-padding);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
 }
