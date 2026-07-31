@@ -1,29 +1,218 @@
-/* Shared layout for Work / Design / Ceramics. The mockup's grid artboards
-   (pages 3-4) were left blank, so .grid below is scaffolding for
-   portfolio items — replace the placeholder cells with real content.
-   No banner/title here: the nav above already marks the current page,
-   so repeating its label as a heading would just be redundant. */
+/* Shared: Work / Design / Ceramics all skip a page-banner (the nav above
+   already marks the current page — see CLAUDE.md) and share the .page
+   flex column from base.css. Beyond that they no longer have much in
+   common — each one's content is different enough now that it's styled
+   individually below rather than reusing one generic placeholder grid. */
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-2);
-  padding: var(--space-4) var(--page-padding) var(--space-5);
+/* ---- Empty-state message ----
+   Used directly on Ceramics ("waiting on my kiln to fire"), and injected
+   by design.js on Design when its image folder is empty. Same weight as
+   .statement on the homepage so these read as the same typographic
+   "voice" rather than looking like a lesser afterthought page. */
+.empty-state {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-heading);
+  line-height: var(--lh-heading);
+  max-width: 20ch;
+  margin: 0;
 }
 
-.grid__item {
-  aspect-ratio: 1 / 1;
-  border: 1px solid #e2e2e2;
+/* ---- Work / Ceramics: single centered line ----
+   main is the flexible child of .page (base.css sets .page to
+   display:flex/flex-direction:column), so flex:1 makes it soak up the
+   leftover vertical space below the nav — the same "sticky footer" trick
+   used for the home hero, applied here to vertically center one short
+   line of content instead of growing a photo. */
+.main--center {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--page-padding) var(--space-5);
+}
+
+.resume-link {
+  display: inline-block;
+  max-width: 20ch;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-heading);
+  line-height: var(--lh-heading);
+  text-decoration: none;
+}
+
+.resume-link__arrow {
+  font-weight: 400;
+  padding-left: var(--space-1);
+}
+
+.resume-link[aria-disabled="true"] {
+  color: var(--color-muted);
+  pointer-events: none;
+  cursor: default;
 }
 
 @media (min-width: 768px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
+  .empty-state,
+  .resume-link {
+    font-size: 3rem;
   }
 }
 
 @media (min-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(4, 1fr);
+  .empty-state,
+  .resume-link {
+    font-size: 4rem;
+  }
+}
+
+/* ---- Work: resume page ----
+   Replaces the old single-link Work page with the actual resume content,
+   styled with the site's existing tokens rather than new ones: --space-*
+   for rhythm, --color-muted for secondary text (dates/locations/role),
+   font-weight 600 (Semibold) for anything heading-like matching nav/
+   statement elsewhere, and plain body text left at its default weight
+   400 (Regular) — no override needed since body{} in base.css already
+   sets font-family:var(--font-body) at normal weight, and both PP Mori
+   weights share that one font-family in fonts.css. --content-max caps
+   the reading width on wide screens without centering the block —
+   content still hugs the left page-padding like nav/statement/contact,
+   consistent with the rest of the site rather than introducing a
+   center-aligned layout just for this page. */
+.resume {
+  max-width: var(--content-max);
+  padding: var(--space-4) var(--page-padding) var(--space-6);
+}
+
+.resume__name {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-heading);
+  line-height: var(--lh-heading);
+  margin: 0 0 var(--space-2);
+}
+
+.resume__contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-2);
+  margin: 0 0 var(--space-3);
+  color: var(--color-muted);
+}
+
+.resume__contact a {
+  text-decoration: none;
+}
+
+/* Overrides the big heading-scale .resume-link from the old single-link
+   Work page — here it's a small secondary action next to the resume
+   content, not the page's only content, so it's sized like body text. */
+.resume__download {
+  display: inline-block;
+  max-width: none;
+  font-size: var(--fs-body);
+  font-weight: 600;
+}
+
+.resume__section {
+  margin-top: var(--space-5);
+}
+
+.resume__section h2 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-body);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 var(--space-3);
+  padding-bottom: var(--space-1);
+  border-bottom: 1px solid #e2e2e2;
+}
+
+.resume__section p {
+  margin: 0 0 var(--space-1);
+}
+
+.resume__entry + .resume__entry {
+  margin-top: var(--space-3);
+}
+
+.resume__entry-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.resume__entry-row h3 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-body);
+  margin: 0;
+}
+
+.resume__entry-row--sub {
+  color: var(--color-muted);
+  font-style: italic;
+  margin-bottom: var(--space-1);
+}
+
+.resume__dates,
+.resume__location {
+  white-space: nowrap;
+  color: var(--color-muted);
+}
+
+.resume__entry ul {
+  margin: var(--space-1) 0 0;
+  padding-left: 1.1em;
+}
+
+.resume__entry li + li {
+  margin-top: 0.35em;
+}
+
+/* ---- Design: floating masonry ----
+   CSS multi-column layout is the masonry mechanism — items flow down a
+   column and wrap to the next, which naturally staggers heights without
+   any JS layout math. design.js (populated via Vite's import.meta.glob
+   from assets/design/) assigns each image a random --rotate/--offset via
+   inline custom properties for the "scattered on a table" feel; the CSS
+   here just consumes those variables. break-inside:avoid stops a column
+   break from slicing an image in half mid-item. */
+.masonry {
+  columns: 2;
+  column-gap: var(--space-3);
+  padding: var(--space-4) var(--page-padding) var(--space-5);
+}
+
+/* design.js injects .empty-state directly inside .masonry when the
+   folder has no images yet — without column-span:all the CSS multi-column
+   layout above doesn't just arrange it, it fragments the text itself
+   across the columns (multi-col balances flowing content, not just
+   block children), scrambling the reading order. */
+.masonry .empty-state {
+  column-span: all;
+}
+
+.masonry__item {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 0 var(--space-5);
+  break-inside: avoid;
+  transform: rotate(var(--rotate, 0deg)) translateY(var(--offset, 0px));
+}
+
+@media (min-width: 768px) {
+  .masonry {
+    columns: 3;
+  }
+}
+
+@media (min-width: 1024px) {
+  .masonry {
+    columns: 4;
   }
 }

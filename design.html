@@ -10,7 +10,7 @@
   <body>
     <div class="page">
       <nav class="nav" aria-label="Primary">
-        <a href="index.html">Home</a>
+        <a href="index.html" class="nav__home" aria-label="Home"></a>
         <a href="work.html">Work</a>
         <a href="design.html" aria-current="page">Design</a>
         <a href="ceramics.html">Ceramics</a>
@@ -18,14 +18,10 @@
 
       <main>
         <h1 class="sr-only">Design</h1>
-        <!-- Placeholder grid — swap each .grid__item for a real project card -->
-        <div class="grid">
-          <div class="grid__item"></div>
-          <div class="grid__item"></div>
-          <div class="grid__item"></div>
-          <div class="grid__item"></div>
-        </div>
+        <!-- Populated automatically from assets/design/ — see assets/design/README.md -->
+        <div class="masonry"></div>
       </main>
     </div>
+    <script type="module" src="src/design.js"></script>
   </body>
 </html>

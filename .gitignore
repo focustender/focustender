@@ -5,3 +5,11 @@ dist
 
 # Local agent handoff notes — not for the public repo
 CLAUDE.md
+
+# Claude Code's local dev-server preview config — machine-specific, not
+# needed by the actual build/deploy pipeline
+.claude/
+
+# Pre-optimization backups from scripts/optimize-design-images.mjs —
+# large source files, not needed by the site itself
+assets/design/_originals/

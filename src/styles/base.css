@@ -73,6 +73,7 @@ body {
 /* ---- Nav ---- */
 .nav {
   display: flex;
+  align-items: center;
   gap: var(--space-3);
   padding: var(--space-3) var(--page-padding);
   font-family: var(--font-heading);
@@ -87,6 +88,29 @@ body {
 
 .nav a[aria-current="page"] {
   color: var(--color-muted);
+}
+
+/* ---- Nav home icon (Work/Design/Ceramics only) ----
+   The sword SVG itself is hard-coded fill:#ffffff for its job on the hero
+   photo — used directly here it'd be an invisible white mark on the
+   white nav background. mask-image + background-color:currentColor sinks
+   the actual pixels into a mask instead of drawing them directly, so the
+   visible color comes from CSS (inherits the nav's ink color) rather than
+   the file. Same source SVG, no second asset to keep in sync, and it'll
+   follow color changes (hover, aria-current, etc.) automatically if any
+   are ever added. Sized to ~line-height of the surrounding nav text
+   rather than the hero's 46px so it reads as part of the nav row. */
+.nav__home {
+  display: inline-block;
+  height: 20px;
+  aspect-ratio: 148.77 / 207;
+  background-color: currentColor;
+  mask-image: url("../../assets/focustendersword.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-image: url("../../assets/focustendersword.svg");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
 }
 
 @media (min-width: 768px) {
