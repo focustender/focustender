@@ -10,11 +10,16 @@
     <!-- Blocking (not type=module) so this runs before first paint —
          marks the page so the landing intro's CSS starts hidden instead
          of flashing fullscreen for a frame before src/home.js can react.
-         Only ever set once per tab session (see src/home.js), so repeat
-         home-page loads/nav clicks within the same session skip it. -->
+         Set once per tab session (see src/home.js), so repeat home-page
+         loads/nav clicks within the same session skip it — except an
+         actual reload (F5/Cmd+R), which the Navigation Timing entry's
+         type identifies regardless of sessionStorage, so hitting refresh
+         always replays the intro even after it's already played once
+         this session. -->
     <script>
       try {
-        if (sessionStorage.getItem("heroIntroPlayed")) {
+        var isReload = performance.getEntriesByType("navigation")[0]?.type === "reload";
+        if (sessionStorage.getItem("heroIntroPlayed") && !isReload) {
           document.documentElement.classList.add("no-hero-intro");
         }
       } catch {}
