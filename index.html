@@ -7,6 +7,18 @@
     <meta name="description" content="focustender is dedicated to creating experiences through data and design." />
     <link rel="icon" type="image/svg+xml" href="assets/focustendersword.svg" />
     <link rel="stylesheet" href="src/styles/main.css" />
+    <!-- Blocking (not type=module) so this runs before first paint —
+         marks the page so the landing intro's CSS starts hidden instead
+         of flashing fullscreen for a frame before src/home.js can react.
+         Only ever set once per tab session (see src/home.js), so repeat
+         home-page loads/nav clicks within the same session skip it. -->
+    <script>
+      try {
+        if (sessionStorage.getItem("heroIntroPlayed")) {
+          document.documentElement.classList.add("no-hero-intro");
+        }
+      } catch {}
+    </script>
   </head>
   <body>
     <div class="page">
@@ -23,7 +35,7 @@
 
       <main>
         <h1 class="statement">
-          focustender is dedicated to creating experiences through data and design.
+          <span class="statement__brand">focustender</span> is dedicated to creating experiences through data and design.
         </h1>
 
         <footer class="contact">
@@ -32,5 +44,18 @@
         </footer>
       </main>
     </div>
+
+    <!-- Landing intro: fills the viewport with the hero photo on a
+         visitor's first page load this session, then src/home.js
+         shrinks it into the real .hero's spot and removes it. Sibling
+         of .page (not nested in .hero) since it needs position:fixed to
+         cover the whole viewport regardless of .hero's own box — see
+         home.css. -->
+    <div class="hero-intro" aria-hidden="true">
+      <img class="hero-intro__img" src="assets/hero-bg.jpg" alt="" />
+    </div>
+    <noscript><style>.hero-intro { display: none; } .statement__brand { color: var(--color-text); }</style></noscript>
+
+    <script type="module" src="src/home.js"></script>
   </body>
 </html>
