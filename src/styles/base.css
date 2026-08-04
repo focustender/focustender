@@ -39,6 +39,14 @@ body {
   font-size: var(--fs-body);
   line-height: var(--lh-body);
   -webkit-font-smoothing: antialiased;
+  /* PP Mori stylistic sets — ss03 swaps to the single-story alternate
+     "g", ss05 swaps to the alternate "t" (see fonts.css; confirmed via
+     the shipped .woff's GSUB table, since PP Mori has no generic "salt"
+     feature — these are the specific set numbers that carry the g/t
+     alternates, not an arbitrary choice). */
+  font-feature-settings:
+    "ss03" 1,
+    "ss05" 1;
 }
 
 /* ---- Page shell ----
