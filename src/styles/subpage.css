@@ -327,3 +327,167 @@
   line-height: 1;
   cursor: pointer;
 }
+
+/* ---- Site menu (mobile/tablet only, <1024px) ----
+   Hamburger-triggered menu that stands in for the pill nav below
+   1024px (see .nav__toggle/.nav--overlay in base.css) — it carries its
+   own copy of the home hero photo as an opaque background (same file
+   as .hero__bg) with white text on top, so it reads as a dedicated
+   "menu screen" rather than a lens over whatever content happens to be
+   on the page underneath (Work's resume text, Design's masonry,
+   Ceramics' empty state all look different, and blurring them gave
+   three inconsistent-looking menus).
+
+   No home/close elements of its own — the real nav row (star +
+   hamburger-turned-X) stays fixed and visible the whole time it's open
+   (nav.js lifts it to .nav--above-menu instead), so this is purely a
+   curtain that reveals in from behind that row. Same technique as the
+   home hero's own reveal (.hero-intro in home.css) — clip-path rather
+   than a transform translate, because moving the whole fixed,
+   full-viewport box as one rigid mass read as heavy/physical; clipping
+   it open top-down instead keeps the photo itself stationary and just
+   wipes the reveal boundary down the screen, which is a visually
+   lighter effect for the same "curtain" idea. Closed: inset(0 0 100% 0)
+   clips everything below the very top away (nothing visible). Open:
+   the bottom-inset shrinks to 0%, so the visible window grows downward
+   from the fixed top edge to the full viewport. Paired with an opacity
+   fade over the same duration/curve — the freshly-revealed edge of the
+   wipe fades in rather than snapping straight to full brightness,
+   which softens what would otherwise be a hard-edged cut line as it
+   travels down. cubic-bezier(0.4,0,0.2,1) is a gentler ease-in-out than
+   the punchier curve used for the home hero's reveal — slower (0.6s)
+   and smoother reads better for a full-screen wipe than for the hero's
+   quick shrink. visibility follows the same delayed-transition trick
+   as .lightbox's opacity, for the same reason: it can't be transitioned
+   directly, so it only flips to hidden once the closing wipe has
+   actually finished, and immediately visible the instant an open
+   starts.
+
+   padding-top isn't just spacing: the real nav row sits fixed on top
+   of this curtain (z-index above it — see .nav--above-menu), so
+   content has to start below its actual rendered height or it'll
+   overlap. 80px/112px below mirror .nav's own height at each
+   breakpoint (space-3|4 top+bottom padding around the 32px-tall
+   toggle — see .nav/.nav__toggle in base.css), plus ~16px of
+   breathing room past that. */
+.site-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: 96px var(--page-padding) var(--space-5);
+  background: url("../../assets/hero-bg.jpg") center / cover no-repeat;
+  color: #fff;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 3.75rem;
+  line-height: 1.05;
+  clip-path: inset(0 0 100% 0);
+  opacity: 0;
+  visibility: hidden;
+  transition: clip-path 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0.6s;
+}
+
+.site-menu.is-open {
+  clip-path: inset(0 0 0% 0);
+  opacity: 1;
+  visibility: visible;
+  transition: clip-path 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* flex:1 makes this block claim all the vertical space .site-menu
+   isn't using for its own padding, and justify-content:flex-start (not
+   center) keeps the links hugging the top of that space — close under
+   the fixed nav row rather than floating mid-screen. .site-menu__contact
+   (not flex:1) is left sitting right after it, which in a column flex
+   container reads as "pinned to the bottom" rather than stacked
+   directly under the links. */
+.site-menu__links {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0;
+  line-height: 0.85;
+}
+
+.site-menu__links a {
+  text-decoration: none;
+  color: #fff;
+}
+
+.site-menu__links a[aria-current="page"] {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Plain "Contact" now — no arrow glyph. Same font-size as
+   .site-menu__links (inherited from .site-menu) rather than a smaller
+   secondary size. */
+.site-menu__contact {
+  display: inline-block;
+  width: fit-content;
+  text-decoration: none;
+  color: #fff;
+}
+
+/* Each item animates on its own now, not as one rigid block sliding
+   together — every item starts pulled up toward a shared point near
+   Work's resting spot (a loose stack, closer together than their
+   eventual spread) and drops into its own place from there. Contact
+   can't be measured to line up exactly with the links' stack — it's
+   pushed to the bottom of a flex:1 gap that varies with viewport
+   height — so its starting offset is a reasonable approximation, not a
+   precise overlap; close enough to read as part of the same stack.
+
+   Duration/delay increase down the list (0.45s at Work up to 0.85s at
+   Contact) rather than every item sharing one duration: with a shared
+   duration, farther-traveling items would just move at a higher
+   average speed to arrive at the same moment — this instead makes
+   Work/Design actually finish sooner and Ceramics/Contact actually
+   take longer, so the peeling-apart is stretched out in time, not just
+   in distance. First pass at the stagger amounts — tune from here. */
+.site-menu__links a,
+.site-menu__contact {
+  opacity: 0;
+}
+
+.site-menu__links a:nth-child(1) {
+  transform: translateY(-0.2em);
+  transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.site-menu__links a:nth-child(2) {
+  transform: translateY(-1em);
+  transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1) 0.05s, transform 0.55s cubic-bezier(0.4, 0, 0.2, 1) 0.05s;
+}
+
+.site-menu__links a:nth-child(3) {
+  transform: translateY(-1.8em);
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.1s, transform 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+}
+
+.site-menu__contact {
+  transform: translateY(-2.6em);
+  transition: opacity 0.85s cubic-bezier(0.4, 0, 0.2, 1) 0.15s, transform 0.85s cubic-bezier(0.4, 0, 0.2, 1) 0.15s;
+}
+
+.site-menu.is-open .site-menu__links a,
+.site-menu.is-open .site-menu__contact {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* .nav grows taller at this breakpoint (space-4 padding instead of
+   space-3 — see base.css), so the clearance below it has to grow too. */
+@media (min-width: 768px) {
+  .site-menu {
+    padding-top: 128px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-menu {
+    display: none;
+  }
+}

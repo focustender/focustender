@@ -9,11 +9,15 @@
   </head>
   <body>
     <div class="page">
-      <nav class="nav" aria-label="Primary">
+      <nav class="nav nav--overlay" aria-label="Primary">
         <a href="index.html" class="nav__home" aria-label="Home"></a>
         <a href="work.html">Work</a>
         <a href="design.html" aria-current="page">Design</a>
         <a href="ceramics.html">Ceramics</a>
+        <button type="button" class="nav__toggle" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+        </button>
       </nav>
 
       <main>
@@ -35,6 +39,18 @@
       <img class="lightbox__image" src="" alt="" />
     </div>
 
+    <!-- Hamburger-triggered curtain menu, mobile/tablet only (<1024px)
+         — see the same note on work.html's #site-menu. -->
+    <div class="site-menu" id="site-menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+      <nav class="site-menu__links" aria-label="Primary">
+        <a href="work.html">Work</a>
+        <a href="design.html" aria-current="page">Design</a>
+        <a href="ceramics.html">Ceramics</a>
+      </nav>
+      <a href="https://instagram.com/focustender" target="_blank" rel="noopener noreferrer" class="site-menu__contact">Contact</a>
+    </div>
+
     <script type="module" src="src/design.js"></script>
+    <script type="module" src="src/nav.js"></script>
   </body>
 </html>
