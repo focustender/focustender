@@ -144,10 +144,21 @@
    before the clip-path transition completes; waiting for the full
    animation to end would leave white-on-white (invisible) text for
    most of the shrink. */
+/* ss05 (alternate "t") kept on just this "focustender" wordmark — body
+   (base.css) only sets ss03 (alt "g") globally now, so this is what
+   keeps the brand word's "t"s on the alternate glyph while the rest of
+   the site's body text reverted to the regular one. ss03 is repeated
+   here too since font-feature-settings doesn't merge with an inherited
+   value — this element would otherwise lose it, not because "g" ever
+   appears in "focustender". An earlier ss04 (alternate "r") experiment
+   on this word was tried and reverted. */
 .statement__brand {
   position: relative;
   z-index: 1001;
   color: #fff;
+  font-feature-settings:
+    "ss03" 1,
+    "ss05" 1;
   transition: color 500ms ease;
 }
 
