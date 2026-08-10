@@ -159,23 +159,23 @@ body {
 }
 
 /* .nav__toggle sets its own explicit color (see below), so this only
-   ever repaints .nav__home's currentColor-based mask — the star turns
+   ever repaints .nav__home's currentColor-based mask — the sword turns
    white to match the menu's white text once it's open. Same white the
-   home hero's own star already sits at directly on this same photo
+   home hero's own sword already sits at directly on this same photo
    (see .hero__icon in home.css), so it's a proven-legible combination
    here, not a new contrast risk. */
 .nav--above-menu {
   color: #fff;
 }
 
-/* Fades the star out while scrolling into content and back in on any
-   scroll up (see the scroll listener in nav.js) — the hamburger stays
-   put regardless of scroll, since it's the only way to open the menu.
-   Scoped to <1024px since desktop's pill nav should stay put
-   regardless of scroll direction; nav.js's listener isn't itself
+/* Fades the sword out while scrolling into content and back in only at
+   the very top (see the scroll listener in nav.js) — the hamburger
+   stays put regardless of scroll, since it's the only way to open the
+   menu. Scoped to <1024px since desktop's pill nav should stay put
+   regardless of scroll position; nav.js's listener isn't itself
    width-gated, so this media query is what keeps the class inert at
-   desktop. Also where the star gets a bit bigger — with the pill links
-   hidden at this width, the row can spare more room for it. */
+   desktop. Also where the sword gets a bit bigger — with the pill
+   links hidden at this width, the row can spare more room for it. */
 @media (max-width: 1023.98px) {
   .nav--overlay .nav__home {
     height: 28px;
@@ -212,7 +212,7 @@ body {
    Same frosted-glass treatment as the pill links so it reads as part of
    the same nav language. margin-left:auto pushes it to the end of the
    row regardless of how many (hidden) links precede it, keeping it
-   pinned top-right next to .nav__home's top-left star at every width. */
+   pinned top-right next to .nav__home's top-left sword at every width. */
 .nav__toggle {
   display: inline-flex;
   flex-direction: column;
@@ -283,4 +283,47 @@ body {
     flex-direction: row;
     gap: var(--space-4);
   }
+}
+
+/* ---- Copyright footer (all four pages) ----
+   A small brand signature at the very bottom of .page, separate from
+   home's .contact (which is the actual "get in touch" email link, only
+   on home). Same currentColor mask-image technique as .nav__home, just
+   sized down for a footer-scale mark rather than duplicating that
+   class outright — a nav icon and a footer signature are different
+   enough contexts that coupling them felt worse than repeating a few
+   lines. */
+.copyright {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: var(--space-4) var(--page-padding) var(--space-4);
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+}
+
+.copyright__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.copyright__sword {
+  display: inline-block;
+  height: 14px;
+  aspect-ratio: 148.77 / 207;
+  background-color: currentColor;
+  mask-image: url("../../assets/focustendersword.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-image: url("../../assets/focustendersword.svg");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+}
+
+.copyright__line {
+  margin: 0;
 }

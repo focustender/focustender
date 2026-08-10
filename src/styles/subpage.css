@@ -338,7 +338,7 @@
    Ceramics' empty state all look different, and blurring them gave
    three inconsistent-looking menus).
 
-   No home/close elements of its own — the real nav row (star +
+   No home/close elements of its own — the real nav row (sword +
    hamburger-turned-X) stays fixed and visible the whole time it's open
    (nav.js lifts it to .nav--above-menu instead), so this is purely a
    curtain that reveals in from behind that row. Same technique as the

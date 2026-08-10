@@ -5,7 +5,7 @@
    starts instead of touching the browser edges. No explicit width is set,
    so the box's width is "auto" and the browser fills in the space left
    over after the left/right margins, at every breakpoint including
-   mobile. The star icon and photo are both sized as percentages of this
+   mobile. The sword icon and photo are both sized as percentages of this
    same box, so they resize/reposition together as one unit.
 
    No fixed aspect-ratio: .hero is the flexible child of the .page flex

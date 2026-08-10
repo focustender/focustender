@@ -41,7 +41,7 @@ src/
   design.js            Populates the Design masonry from assets/design/
   work.js               Wires the resume link on Work from assets/resume/
 assets/
-  focustendersword.svg Star mark, extracted as vector from mobile.ai
+  focustendersword.svg Sword mark, extracted as vector from mobile.ai
   hero-bg.jpg           Hero background, cropped from the mockup export
   fonts/                PP Mori webfont files
   resume/                Drop your resume .pdf here — see its README
