@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Facilities Maintenance Analytics — focustender</title>
+    <link rel="icon" type="image/svg+xml" href="assets/focustendersword.svg" />
+    <link rel="stylesheet" href="src/styles/main.css" />
+  </head>
+  <body>
+    <div class="page">
+      <nav class="nav nav--overlay" aria-label="Primary">
+        <a href="index.html" class="nav__home" aria-label="Home"></a>
+        <a href="work.html" aria-current="page">Work</a>
+        <a href="design.html">Design</a>
+        <a href="ceramics.html">Ceramics</a>
+        <button type="button" class="nav__toggle" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+        </button>
+      </nav>
+
+      <main class="project">
+        <a href="work.html" class="project__back">← Work</a>
+
+        <header class="project__header">
+          <span class="project__eyebrow">Python + Tableau</span>
+          <h1 class="project__title">Facilities Maintenance Analytics</h1>
+          <p class="project__subtitle">Reactive vs. Proactive Analysis</p>
+        </header>
+
+        <p class="project__note">
+          This project uses fully synthetic data. It's built to statistically
+          match a real facilities-maintenance operation, but every building,
+          technician, and individual work order in the dataset is generated,
+          not extracted from actual company records.
+          <a href="https://github.com/focustender/data-analyst-portfolio/tree/main/05-facilities-maintenance-analytics" target="_blank" rel="noopener noreferrer">Full write-up, code, and data-handling details on GitHub →</a>
+        </p>
+
+        <div class="project__viz">
+          <iframe
+            src="https://public.tableau.com/views/FacilityMaintenanceBuildingandTechnicianAnalysis/ReliabilityOverview?:showVizHome=no&:embed=true"
+            title="Facilities Maintenance Analytics — interactive Tableau dashboard"
+            loading="lazy"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <a
+          href="https://public.tableau.com/app/profile/ian.castorillo/viz/FacilityMaintenanceBuildingandTechnicianAnalysis/ReliabilityOverview"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="project__viz-link"
+        >
+          Open dashboard on Tableau Public ↗
+        </a>
+
+        <section class="project__recommendations">
+          <h2>Recommendations</h2>
+          <ol class="project__rec-list">
+            <li>Target the 8-building watch list directly, a blanket "add more staff" response would miss them entirely.</li>
+            <li>Review staffing, parts, and vendor contracts for Mechanical/Utility trades specifically before assuming a broader fix is needed.</li>
+            <li>Point any performance conversation at buildings and a trade, not individual technicians.</li>
+            <li>Review staffing capacity and rebalance workload across the team, the current concentration on 4 of 9 technicians is a burnout and single-point-of-failure risk.</li>
+            <li>Pilot formalized technician-building assignments so technicians build equipment familiarity over time, a forward-looking proposal, not a pattern the data proved.</li>
+            <li>Use this six-month window as the "before" baseline to measure a future proactive program against.</li>
+          </ol>
+        </section>
+
+        <section class="project__findings">
+          <h2>Key Findings</h2>
+
+          <article class="project__finding">
+            <h3>Building volume and reliability are not the same problem</h3>
+            <p>
+              The two busiest buildings run a normal 18-20% late rate. A separate
+              group of 8 buildings, only 13% of total volume, runs late 42-85% of
+              the time.
+            </p>
+          </article>
+
+          <article class="project__finding">
+            <h3>One trade is driving the watch list</h3>
+            <p>
+              Mechanical/Utility Systems work is overrepresented on the watch list
+              by 11-13 percentage points, the largest gap of any category.
+            </p>
+          </article>
+
+          <article class="project__finding">
+            <h3>Not a technician performance problem</h3>
+            <p>
+              On-time rates cluster tightly across the whole team (13.6-23.4%), no
+              individual stands out.
+            </p>
+          </article>
+
+          <article class="project__finding">
+            <h3>Workload is concentrated on 4 of 9 technicians</h3>
+            <p>
+              Four technicians carry roughly double the workload of the other
+              five, in both task count and actual minutes worked, not a counting
+              artifact.
+            </p>
+          </article>
+
+          <article class="project__finding">
+            <h3>Worth piloting: formalized technician-building assignments</h3>
+            <p>
+              A standard proactive-maintenance lever, pairing technicians
+              consistently with the same buildings so they build equipment
+              familiarity over time. Framed as a forward-looking proposal, not
+              a pattern this dataset proved, whether consistent assignment
+              already happens informally is a real open question the
+              synthetic data can't answer.
+            </p>
+          </article>
+
+          <article class="project__finding">
+            <h3>This dataset is the "before" baseline</h3>
+            <p>
+              Late rate holds flat around 20-21% every month, no proactive
+              program exists yet.
+            </p>
+          </article>
+        </section>
+      </main>
+
+      <footer class="copyright">
+        <p class="copyright__brand">
+          <span class="copyright__sword" aria-hidden="true"></span>
+          focustender
+        </p>
+        <p class="copyright__line">© 2026</p>
+      </footer>
+    </div>
+
+    <div class="site-menu" id="site-menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+      <nav class="site-menu__links" aria-label="Primary">
+        <a href="work.html" aria-current="page">Work</a>
+        <a href="design.html">Design</a>
+        <a href="ceramics.html">Ceramics</a>
+      </nav>
+      <a href="https://instagram.com/focustender" target="_blank" rel="noopener noreferrer" class="site-menu__contact">Contact</a>
+    </div>
+
+    <script type="module" src="src/nav.js"></script>
+  </body>
+</html>

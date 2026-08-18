@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Telehealth No-Show Prediction — focustender</title>
+    <link rel="icon" type="image/svg+xml" href="assets/focustendersword.svg" />
+    <link rel="stylesheet" href="src/styles/main.css" />
+  </head>
+  <body>
+    <div class="page">
+      <nav class="nav nav--overlay" aria-label="Primary">
+        <a href="index.html" class="nav__home" aria-label="Home"></a>
+        <a href="work.html" aria-current="page">Work</a>
+        <a href="design.html">Design</a>
+        <a href="ceramics.html">Ceramics</a>
+        <button type="button" class="nav__toggle" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+        </button>
+      </nav>
+
+      <main class="project">
+        <a href="work.html" class="project__back">← Work</a>
+
+        <header class="project__header">
+          <span class="project__eyebrow">Python</span>
+          <h1 class="project__title">Telehealth No-Show Prediction</h1>
+          <p class="project__subtitle">SMS Reminders &amp; the Accessibility Gap</p>
+        </header>
+
+        <p class="project__note">
+          Built on a public Kaggle dataset (110,521 Brazilian clinic appointments), used here to demonstrate a realistic telehealth/clinic scheduling analysis, not proprietary or production data.
+          <a href="https://github.com/focustender/data-analyst-portfolio/tree/main/02-python-telehealth-noshow" target="_blank" rel="noopener noreferrer">Full write-up and notebooks on GitHub →</a>
+        </p>
+
+        <section class="project__recommendations">
+          <h2>Recommendations</h2>
+          <ol class="project__rec-list">
+            <li>Shorten scheduling lead times where clinically reasonable, this moves no-show rates more than any reminder change could.</li>
+            <li>Keep the SMS system, but close the income gap with something that addresses the underlying barrier (transportation, time off work) directly.</li>
+            <li>Route the chronic no-show segment to direct case management instead of more SMS volume, standard reminders aren't reaching them.</li>
+            <li>Prioritize chronic-condition patients in outreach anyway, a missed visit costs more when someone is managing a chronic condition, whatever their baseline odds of missing it.</li>
+          </ol>
+        </section>
+
+        <section class="project__findings">
+          <h2>Key Findings</h2>
+
+          <article class="project__finding">
+            <h3>Lead time is the dominant driver of no-shows</h3>
+            <p>
+              Same-day appointments no-show at just 4.6%, versus 24-33% for anything booked further in advance.
+            </p>
+          </article>
+
+          <article class="project__finding">
+            <h3>SMS works, but can't close the income gap on its own</h3>
+            <p>
+              Scholarship patients (a welfare-enrollment flag, the closest proxy this dataset has to income) no-show 4 points more than everyone else. SMS reduces no-shows by a similar percentage for both groups, tested directly with an interaction term rather than read off a crosstab, so the gap that remains isn't the reminder system failing low-income patients. It's a pre-existing difference an equal-percentage intervention structurally can't erase.
+            </p>
+          </article>
+
+          <article class="project__finding">
+            <h3>A small chronic no-show segment behaves differently</h3>
+            <p>
+              About 4% of repeat patients never show up at all, accounting for roughly 11% of every no-show in the dataset.
+            </p>
+          </article>
+
+          <article class="project__finding">
+            <h3>Chronic conditions looked protective, until age was controlled for</h3>
+            <p>
+              Hypertension and diabetes patients no-show less in a raw comparison, but that's an age confound (hypertension prevalence climbs from 0.1% at ages 0-17 to 61.6% at 75+), not the condition itself.
+            </p>
+          </article>
+        </section>
+      </main>
+
+      <footer class="copyright">
+        <p class="copyright__brand">
+          <span class="copyright__sword" aria-hidden="true"></span>
+          focustender
+        </p>
+        <p class="copyright__line">© 2026</p>
+      </footer>
+    </div>
+
+    <div class="site-menu" id="site-menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+      <nav class="site-menu__links" aria-label="Primary">
+        <a href="work.html" aria-current="page">Work</a>
+        <a href="design.html">Design</a>
+        <a href="ceramics.html">Ceramics</a>
+      </nav>
+      <a href="https://instagram.com/focustender" target="_blank" rel="noopener noreferrer" class="site-menu__contact">Contact</a>
+    </div>
+
+    <script type="module" src="src/nav.js"></script>
+  </body>
+</html>

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hospital Cost &amp; Rurality Dashboard — focustender</title>
+    <link rel="icon" type="image/svg+xml" href="assets/focustendersword.svg" />
+    <link rel="stylesheet" href="src/styles/main.css" />
+  </head>
+  <body>
+    <div class="page">
+      <nav class="nav nav--overlay" aria-label="Primary">
+        <a href="index.html" class="nav__home" aria-label="Home"></a>
+        <a href="work.html" aria-current="page">Work</a>
+        <a href="design.html">Design</a>
+        <a href="ceramics.html">Ceramics</a>
+        <button type="button" class="nav__toggle" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+        </button>
+      </nav>
+
+      <main class="project">
+        <a href="work.html" class="project__back">← Work</a>
+
+        <header class="project__header">
+          <span class="project__eyebrow">Tableau</span>
+          <h1 class="project__title">Hospital Cost &amp; Rurality Dashboard</h1>
+          <p class="project__subtitle">Medicare Inpatient Cost by Diagnosis and Geography</p>
+        </header>
+
+        <p class="project__note">
+          Built on official CMS Medicare inpatient data (2019-2023, ~790K rows, all federal, not Kaggle). Not published to a live Tableau Public link, a reproducible app bug (an unrelated "not an extract yet" dialog that couldn't be dismissed) blocked publishing, so the screenshot below is a static export of the finished, fully interactive local workbook.
+          <a href="https://github.com/focustender/data-analyst-portfolio/tree/main/03-tableau-healthcare-dashboard" target="_blank" rel="noopener noreferrer">Full write-up and workbook on GitHub →</a>
+        </p>
+
+        <div class="project__viz">
+          <img src="assets/photos/hospitalCostDashboard.png" alt="Hospital Cost & Rurality dashboard: KPI tiles, cost by diagnosis, cost by rurality, and a multi-year discharge volume trend" loading="lazy" />
+        </div>
+
+        <section class="project__recommendations">
+          <h2>Recommendations</h2>
+          <ol class="project__rec-list">
+            <li>Use volume-weighted cost, not raw per-case sticker price, to prioritize where cost-containment or care-pathway review actually pays off.</li>
+            <li>Control for case-mix and facility scale before treating the rural/metro cost gap as purely geographic, the right response differs depending on the real driver.</li>
+            <li>Plan capacity against 2019 volume, not current volume, current numbers may still understate real demand rather than reflect a permanent shift.</li>
+          </ol>
+        </section>
+
+        <section class="project__findings">
+          <h2>Key Findings</h2>
+
+          <article class="project__finding">
+            <h3>Cost varies enormously by diagnosis, and volume-weighting matters</h3>
+            <p>
+              Weighted average charge ranges from roughly $13K to over $2M by diagnosis. Extensive burns treatment topped the ranking ahead of CAR-T immunotherapy, not because it costs more per case, but because it happens at meaningfully higher volume.
+            </p>
+          </article>
+
+          <article class="project__finding">
+            <h3>A real, reliable rural/metro cost gap</h3>
+            <p>
+              Metropolitan hospitals average roughly $80K per admission versus $47K at rural hospitals. A simplified metro/rural split was used instead of the full 15-category RUCA breakdown, after several of those categories turned out to be backed by fewer than 10 hospitals, one by just 1.
+            </p>
+          </article>
+
+          <article class="project__finding">
+            <h3>Inpatient volume still hasn't recovered from COVID</h3>
+            <p>
+              National Medicare inpatient discharges dropped from 6.96M in 2019 to 5.61M in 2020, and were still at 4.96M by 2023, below the pandemic low three years later.
+            </p>
+          </article>
+        </section>
+      </main>
+
+      <footer class="copyright">
+        <p class="copyright__brand">
+          <span class="copyright__sword" aria-hidden="true"></span>
+          focustender
+        </p>
+        <p class="copyright__line">© 2026</p>
+      </footer>
+    </div>
+
+    <div class="site-menu" id="site-menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+      <nav class="site-menu__links" aria-label="Primary">
+        <a href="work.html" aria-current="page">Work</a>
+        <a href="design.html">Design</a>
+        <a href="ceramics.html">Ceramics</a>
+      </nav>
+      <a href="https://instagram.com/focustender" target="_blank" rel="noopener noreferrer" class="site-menu__contact">Contact</a>
+    </div>
+
+    <script type="module" src="src/nav.js"></script>
+  </body>
+</html>

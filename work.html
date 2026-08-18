@@ -20,119 +20,39 @@
         </button>
       </nav>
 
-      <main class="resume">
-        <header class="resume__header">
-          <h1 class="resume__name">Ian Castorillo</h1>
-          <p class="resume__contact">
-            <a href="mailto:iancastorillo@gmail.com">iancastorillo@gmail.com</a>
-            <span aria-hidden="true">·</span>
-            <span>Los Angeles, CA</span>
-            <span aria-hidden="true">·</span>
-            <a href="https://instagram.com/focustender" target="_blank" rel="noopener noreferrer">focustender</a>
-          </p>
-          <!-- Wired up by work.js from whatever .pdf is in assets/resume/ -->
-          <a href="#" class="resume-link resume__download" aria-disabled="true">Download PDF</a>
-        </header>
+      <main>
+        <!-- Title and filters share one row at desktop (title left,
+             filters right, flush to the same page margins nav/footer
+             use) via .work-header's justify-content:space-between —
+             stacked full-width on mobile/tablet instead. -->
+        <div class="work-header">
+          <!-- Visible now (not sr-only like Design/Ceramics' h1) — its
+               text is rewritten by work.js to reflect the active
+               Industry filter, "All Work" when none is active. -->
+          <h1 class="work-title" id="work-title">All Work</h1>
 
-        <section class="resume__section">
-          <h2>Work Experience</h2>
+          <div class="work-filters" role="group" aria-label="Filter projects">
+            <div class="work-filters__group">
+              <h2 class="work-filters__title">Tools</h2>
+              <ul class="work-filters__list" id="filter-tools"></ul>
+            </div>
+            <div class="work-filters__group">
+              <h2 class="work-filters__title">Industry</h2>
+              <ul class="work-filters__list" id="filter-industry"></ul>
+            </div>
+          </div>
+        </div>
 
-          <article class="resume__entry">
-            <div class="resume__entry-row">
-              <h3>Handles Coffee</h3>
-              <span class="resume__dates">March 2026 — Present</span>
-            </div>
-            <div class="resume__entry-row resume__entry-row--sub">
-              <span class="resume__role">Assistant Manager | Graphic Designer</span>
-              <span class="resume__location">Los Angeles, CA</span>
-            </div>
-            <ul>
-              <li>Analyzing sales and demand trends to inform product assortment and pricing decisions for a new location launch</li>
-              <li>Building process templates and workflows to support faster, more consistent decision-making as the team scales</li>
-            </ul>
-          </article>
+        <!-- One removable chip per active filter, populated by work.js.
+             Reserves its own height even when empty (see CSS) so
+             toggling a filter on/off doesn't shift the grid below up
+             and down. -->
+        <div class="work-active-filters" id="active-filters"></div>
 
-          <article class="resume__entry">
-            <div class="resume__entry-row">
-              <h3>DULCE USC Village</h3>
-              <span class="resume__dates">May 2020 — March 2026</span>
-            </div>
-            <div class="resume__entry-row resume__entry-row--sub">
-              <span class="resume__role">Assistant Manager</span>
-              <span class="resume__location">Los Angeles, CA</span>
-            </div>
-            <ul>
-              <li>Managed product assortment and daily sourcing decisions across a multi-roaster coffee program, evaluating trends and quality to select the best mix for a 600-700 guest/day location generating $14,000 in average daily sales</li>
-              <li>Analyzed sales and inventory data to inform ordering, staffing, and pricing decisions, balancing demand with cost and availability</li>
-              <li>Tracked performance metrics across shifts and used findings to identify and correct inefficiencies in real time</li>
-              <li>Built training and process documentation to standardize operations and improve decision-making consistency across a 7-10 person team</li>
-            </ul>
-          </article>
-
-          <article class="resume__entry">
-            <div class="resume__entry-row">
-              <h3>Grifols Biological</h3>
-              <span class="resume__dates">Jun 2023 — Dec 2023</span>
-            </div>
-            <div class="resume__entry-row resume__entry-row--sub">
-              <span class="resume__role">Data Analyst Intern</span>
-              <span class="resume__location">Los Angeles, CA</span>
-            </div>
-            <ul>
-              <li>Queried and analyzed large, historical datasets to build a KPI Tracker in Excel, surfacing performance trends and workload patterns across 15 buildings</li>
-              <li>Built a predictive model from years of unstructured data, turning raw records into actionable recommendations that shifted the team from reactive to proactive planning</li>
-              <li>Delivered findings and recommendations directly to stakeholders to support faster, data-informed decisions</li>
-            </ul>
-          </article>
-
-          <article class="resume__entry">
-            <div class="resume__entry-row">
-              <h3>NASA Micro-G NExT &amp; NCAS</h3>
-              <span class="resume__dates">Oct 2019 — Aug 2021</span>
-            </div>
-            <div class="resume__entry-row resume__entry-row--sub">
-              <span class="resume__role">Student Researcher and Team Lead</span>
-              <span class="resume__location">Los Angeles, CA</span>
-            </div>
-            <ul>
-              <li>Conducted structured, hypothesis-driven analysis of microgravity experiment concepts with a cross-functional student team, earning a spot in a national competition</li>
-            </ul>
-          </article>
-        </section>
-
-        <section class="resume__section">
-          <h2>Education</h2>
-
-          <article class="resume__entry">
-            <div class="resume__entry-row">
-              <h3>University of Southern California</h3>
-              <span class="resume__dates">December 2025</span>
-            </div>
-            <div class="resume__entry-row resume__entry-row--sub">
-              <span class="resume__role">B.S. Mathematics</span>
-              <span class="resume__location">Los Angeles, CA</span>
-            </div>
-          </article>
-        </section>
-
-        <section class="resume__section">
-          <h2>Skills &amp; Interests</h2>
-          <p><strong>Skills:</strong> Data-Driven Decision Making, Retail &amp; Assortment Analysis, Trend &amp; Competitive Research, Process Improvement, Illustrator, Photoshop, InDesign</p>
-          <p><strong>Technical:</strong> SQL, Python, Excel (Dashboards, KPI Tracking &amp; Reporting)</p>
-        </section>
-
-        <section class="resume__section">
-          <h2>Projects</h2>
-
-          <article class="resume__entry">
-            <div class="resume__entry-row">
-              <h3>For Garnish (Cocktail Pop-Up Service)</h3>
-            </div>
-            <ul>
-              <li>Applied pricing and demand analysis to plan a 14-item menu and sell out two ticketed pop-up events (60 tickets each), managing vendor sourcing and budget</li>
-            </ul>
-          </article>
-        </section>
+        <!-- Populated by src/work.js from a small data array — see the
+             comment there for why the grid is rendered rather than
+             hand-authored per tile. -->
+        <div class="work-grid" id="work-grid"></div>
       </main>
 
       <footer class="copyright">
@@ -144,13 +64,6 @@
       </footer>
     </div>
 
-    <!-- Sibling of .page, not a descendant — see the same note on
-         design.html's #lightbox. Hamburger-triggered curtain menu,
-         mobile/tablet only (<1024px); desktop shows the pill nav
-         directly instead and never opens this. No home/close controls
-         here — the real nav row stays fixed and visible above this
-         while it's open (see src/nav.js), so .nav__toggle is what
-         closes it too. -->
     <div class="site-menu" id="site-menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
       <nav class="site-menu__links" aria-label="Primary">
         <a href="work.html" aria-current="page">Work</a>

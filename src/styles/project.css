@@ -1,0 +1,447 @@
+/* ---- Work: dynamic title ----
+   Static "All Work" until a filter is clicked, then work.js swaps it to
+   the most-recently-activated filter's own label (see the reference
+   screenshots) — a real visible <h1> now rather than the sr-only one
+   Design/Ceramics use, since here the heading is doing real work
+   (reflecting filter state) instead of just restating the nav. */
+.work-title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: var(--lh-heading);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+/* ---- Work: header row ----
+   Wraps the title and the filters block so they can sit on one row at
+   desktop (title left, filters right, both flush to the page's normal
+   side margins) via justify-content:space-between, while staying
+   stacked full-width on mobile/tablet like every other page section. */
+.work-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--page-padding) 0;
+}
+
+@media (min-width: 1024px) {
+  .work-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+}
+
+/* ---- Work: filters ----
+   Tools/Industry facets, rendered by src/work.js from the same data
+   array that builds the grid below, so the filter vocabulary can't
+   drift out of sync with what the tiles actually have tagged. Filter
+   values are real <button>s (not styled <div>s) so they're keyboard-
+   operable — toggled via aria-pressed rather than a custom class, which
+   also gives assistive tech the selected state for free.
+
+   Two columns side by side at every width (not just tablet+), each one
+   internally a vertical stack: title, then its values below. Plain text
+   throughout — no border/box on either the group title or the values.
+   Unselected values sit at a lighter grey than the site's usual
+   --color-muted specifically so the title (dark) / values (light) split
+   reads as an obvious filter UI rather than blending into body copy —
+   selected/hover jumps all the way to the dark text color, so the
+   available contrast range is used deliberately rather than two colors
+   sitting close together. */
+.work-filters {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-4);
+}
+
+.work-filters__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* ---- Desktop: title + list flow in one row ----
+   display:contents on the <ul> (and its <li>s) removes their own boxes
+   from layout entirely, promoting each <button> to a direct flex child
+   of .work-filters__group alongside the <h2> title — that's what lets
+   "Tools" and its values wrap together as one flowing line/paragraph
+   instead of the title sitting on its own row above a separate list.
+   Mobile/tablet keep the stacked column layout above; this only takes
+   over at the same 1024px breakpoint the project grid goes 3-wide at.
+   Exact column widths here are a first pass — revisit once the 3-wide
+   grid's own edges are dialed in, per Ian's note to account for that
+   after this layout lands. */
+@media (min-width: 1024px) {
+  .work-filters__group {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.3em 0.6em;
+    max-width: 340px;
+  }
+
+  .work-filters__list,
+  .work-filters__list li {
+    display: contents;
+  }
+}
+
+.work-filters__title {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.work-filters__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05em;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.work-filter {
+  display: block;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: #b0b0b0;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.work-filter:hover {
+  color: var(--color-text);
+}
+
+.work-filter[aria-pressed="true"] {
+  color: var(--color-text);
+}
+
+/* ---- Work: active filter chips ----
+   One removable chip per active filter (work.js keeps this in sync with
+   both the filter buttons' aria-pressed state and the dynamic title).
+   Same filled/square-cornered treatment as the tile tags below, for
+   visual consistency between "a tag describing a project" and "a tag
+   describing an active filter." */
+/* Fixed `height` (not min-height) reserves exactly the chip's own box
+   height at all times — min-height alone still let the row grow taller
+   than the reserved space whenever a chip's actual rendered height (font
+   line-box + padding, dependent on inherited line-height) exceeded the
+   estimate, which is what was still causing a small jump. A fixed height
+   with overflow:visible guarantees the row can never change size
+   regardless of whether a chip is present, at the cost of needing to
+   keep this number and .work-active-filter's own box math in sync if
+   either one's padding/font-size changes later. */
+.work-active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+  height: 1.75rem;
+  overflow: visible;
+  padding: var(--space-3) var(--page-padding) 0;
+}
+
+/* opacity transition backs the fade-in work.js applies when a chip is
+   first added (see addChip) — an existing chip's DOM node is never
+   recreated when some other filter changes, so it never re-fades. */
+.work-active-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.3em 0.5em 0.3em 0.7em;
+  line-height: 1.2;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 0;
+  transition: opacity 1.2s ease;
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+}
+
+.work-active-filter__remove {
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 1em;
+  line-height: 1;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.work-active-filter__remove:hover {
+  color: var(--color-text);
+}
+
+/* ---- Work: project tile grid ----
+   Replaces the old resume page. Image-forward cards (photo, title, tag
+   pills), one column on mobile up to three on desktop. Styled as a
+   distinct, more restrained register than the rest of the site (no
+   golden-ratio gaps, no rotation/tilt) since this section is analyst
+   work, not the fashion/design portfolio pieces. */
+/* Tiles fill their grid column edge to edge at every breakpoint — the
+   earlier approach (each tile capped at a % of its own column width)
+   made the first/last tile in a row sit inset from the true page
+   margins no matter which side got the leftover space, which read as
+   misaligned against the rest of the site's flush-to-margin content.
+   The "smaller/tighter" feel it was chasing comes from the tile media's
+   aspect-ratio instead (squarer from tablet up, see .work-tile-media)
+   plus the tighter inter-tile gap below. */
+.work-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4) var(--space-3);
+  padding: var(--space-4) var(--page-padding) var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .work-grid {
+    grid-template-columns: repeat(2, 1fr);
+    /* 2.5× the gap between a filter group's title and its own list
+       (--space-1, 0.5rem) — tighter than the space-4/space-3 default,
+       which was reading as too loose once tiles themselves got more
+       compact. */
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .work-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* opacity transition backs the fade-in work.js applies when a tile
+   newly becomes visible after a filter change (see applyFilters) —
+   tiles that were already visible are never touched, so they don't
+   re-animate just because some other filter got toggled. */
+.work-tile {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+  opacity: 1;
+  transition: opacity 1.2s ease;
+}
+
+/* work.js sets the native `hidden` attribute (not a custom class) on
+   tiles a filter excludes — this rule is only needed because `hidden`
+   is a boolean attribute some browsers still render as a stray
+   `display: inline` box without an explicit override. */
+.work-tile[hidden] {
+  display: none;
+}
+
+/* Square at every breakpoint now, for continuity between mobile and
+   wider views — a deliberate crop from the source photo's native
+   420:596 portrait ratio via object-fit:cover below. */
+.work-tile-media {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #f2f2f2;
+}
+
+.work-tile-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.work-tile:hover .work-tile-media img,
+.work-tile:focus-visible .work-tile-media img {
+  transform: scale(1.03);
+}
+
+.work-tile__title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  margin: var(--space-2) 0 var(--space-1);
+}
+
+.work-tile__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+}
+
+/* Filled rather than outlined — rgba over a flat hex so the fill reads
+   consistently as "light grey" regardless of what's behind it, same
+   reasoning as .lightbox__close's solid backdrop elsewhere in this
+   codebase. border-radius stays 0: square corners, no pill shape. */
+.work-tile__tag {
+  padding: 0.25em 0.6em;
+  border: none;
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0.06);
+  font-size: 0.6875rem;
+  color: var(--color-muted);
+}
+
+/* ---- Project detail page ----
+   Text content (header, note, findings) is capped at --content-max for
+   readability, same reading-column width as the old resume page. The
+   dashboard embed deliberately breaks out of that width — Tableau
+   dashboards in this portfolio are built at 1200px wide, so capping the
+   iframe at 640px would make the actual visualization illegible. */
+.project {
+  padding: var(--space-4) var(--page-padding) var(--space-6);
+}
+
+.project__back {
+  display: inline-block;
+  margin-bottom: var(--space-3);
+  color: var(--color-muted);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.project__header {
+  max-width: var(--content-max);
+  margin-bottom: var(--space-3);
+}
+
+.project__eyebrow {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  margin-bottom: var(--space-1);
+}
+
+.project__title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-heading);
+  line-height: var(--lh-heading);
+  margin: 0;
+}
+
+.project__subtitle {
+  color: var(--color-muted);
+  margin: var(--space-1) 0 0;
+}
+
+.project__note {
+  max-width: var(--content-max);
+  padding: var(--space-2) var(--space-3);
+  margin: 0 0 var(--space-4);
+  border-left: 2px solid var(--color-text);
+  font-size: 0.9375rem;
+  color: var(--color-muted);
+}
+
+.project__note a {
+  color: var(--color-text);
+  display: block;
+  margin-top: var(--space-1);
+}
+
+/* 1200px matches the Tableau workbook's own canvas width — no point
+   letting the wrapper grow past what the dashboard was actually
+   designed at. aspect-ratio approximates this project's dashboard
+   proportions (built ~1200×1000) so the layout doesn't jump once the
+   iframe's own content finishes loading. */
+.project__viz {
+  max-width: 1200px;
+  margin: var(--space-2) 0 var(--space-2);
+}
+
+.project__viz iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 6 / 5;
+  border: none;
+}
+
+/* Static screenshot variant for projects without a live embed (e.g. the
+   Tableau dashboard that never got published due to an app publishing
+   bug — see that project's own note). No fixed aspect-ratio, the image
+   dictates its own proportions. */
+.project__viz img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.project__viz-link {
+  display: inline-block;
+  margin-bottom: var(--space-5);
+  font-weight: 600;
+  color: var(--color-muted);
+  text-decoration: none;
+}
+
+.project__recommendations,
+.project__findings {
+  max-width: var(--content-max);
+}
+
+.project__recommendations {
+  margin-bottom: var(--space-4);
+}
+
+.project__recommendations h2,
+.project__findings h2 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-body);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 var(--space-3);
+  padding-bottom: var(--space-1);
+  border-bottom: 1px solid #e2e2e2;
+}
+
+/* The recommendations themselves — short, stated as actions, no
+   supporting data mixed in (that lives in .project__finding below,
+   which each recommendation here corresponds to in order). Set in the
+   heading font/weight so this list reads as the primary "so what,"
+   findings below are the supporting evidence, not the other way
+   around. */
+.project__rec-list {
+  margin: 0;
+  padding-left: 1.2em;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.project__rec-list li {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+.project__finding {
+  margin-top: var(--space-3);
+}
+
+.project__finding h3 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-body);
+  margin: 0 0 var(--space-1);
+}
+
+.project__finding p {
+  margin: 0;
+  color: var(--color-muted);
+}

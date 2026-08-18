@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hospital Readmissions &amp; Utilization Risk — focustender</title>
+    <link rel="icon" type="image/svg+xml" href="assets/focustendersword.svg" />
+    <link rel="stylesheet" href="src/styles/main.css" />
+  </head>
+  <body>
+    <div class="page">
+      <nav class="nav nav--overlay" aria-label="Primary">
+        <a href="index.html" class="nav__home" aria-label="Home"></a>
+        <a href="work.html" aria-current="page">Work</a>
+        <a href="design.html">Design</a>
+        <a href="ceramics.html">Ceramics</a>
+        <button type="button" class="nav__toggle" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+        </button>
+      </nav>
+
+      <main class="project">
+        <a href="work.html" class="project__back">← Work</a>
+
+        <header class="project__header">
+          <span class="project__eyebrow">SQL</span>
+          <h1 class="project__title">Hospital Readmissions &amp; Utilization Risk</h1>
+          <p class="project__subtitle">Readmission Risk &amp; Outreach Value</p>
+        </header>
+
+        <p class="project__note">
+          Built on a public Kaggle dataset (25,000 diabetes hospital encounters), used here to demonstrate SQL analysis on a realistic healthcare business question, not proprietary or production data.
+          <a href="https://github.com/focustender/data-analyst-portfolio/tree/main/01-sql-hospital-readmissions" target="_blank" rel="noopener noreferrer">Full write-up, schema, and queries on GitHub →</a>
+        </p>
+
+        <section class="project__recommendations">
+          <h2>Recommendations</h2>
+          <ol class="project__rec-list">
+            <li>Triage outreach by prior utilization history, not age, age alone would misroute effort toward older patients who aren't actually at elevated risk.</li>
+            <li>Pilot a targeted outreach program against the high-risk segment, and validate the effectiveness assumption against a real pilot cohort rather than treating it as a budget number.</li>
+            <li>Cross-reference readmission risk against income and access indicators before scaling outreach, a purely clinical program risks under-serving the population most likely to actually benefit.</li>
+          </ol>
+        </section>
+
+        <section class="project__findings">
+          <h2>Key Findings</h2>
+
+          <article class="project__finding">
+            <h3>Utilization history predicts risk far better than age does</h3>
+            <p>
+              Age barely moves readmission rate (44.2-49.6% across every band). Prior inpatient stays and ER visits do, climbing from 39.9% to 75.7% and 45.1% to 79.5%.
+            </p>
+          </article>
+
+          <article class="project__finding">
+            <h3>A defensible high-risk segment stands out clearly</h3>
+            <p>
+              16% of encounters (2+ prior inpatient or ER visits) run a 69.0% readmit rate versus 42.8% for everyone else. Illustrative cost-avoidance assumptions suggest 200-400 avoided readmissions worth $2.0M-$6.0M annually in gross avoided cost, not derived from this dataset, an estimate to validate, not a number to plan a budget around.
+            </p>
+          </article>
+
+          <article class="project__finding">
+            <h3>This dataset can't say whether risk is partly an access proxy</h3>
+            <p>
+              No socioeconomic fields exist here, so this measures clinical utilization risk only. Whether the high-risk segment is disproportionately access-limited rather than just clinically severe is a real open question worth real patient data.
+            </p>
+          </article>
+        </section>
+      </main>
+
+      <footer class="copyright">
+        <p class="copyright__brand">
+          <span class="copyright__sword" aria-hidden="true"></span>
+          focustender
+        </p>
+        <p class="copyright__line">© 2026</p>
+      </footer>
+    </div>
+
+    <div class="site-menu" id="site-menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+      <nav class="site-menu__links" aria-label="Primary">
+        <a href="work.html" aria-current="page">Work</a>
+        <a href="design.html">Design</a>
+        <a href="ceramics.html">Ceramics</a>
+      </nav>
+      <a href="https://instagram.com/focustender" target="_blank" rel="noopener noreferrer" class="site-menu__contact">Contact</a>
+    </div>
+
+    <script type="module" src="src/nav.js"></script>
+  </body>
+</html>

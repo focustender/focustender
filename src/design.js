@@ -6,7 +6,7 @@
 // case-sensitive — phone/camera exports and some design tools save
 // .JPG/.PNG (uppercase), which a lowercase-only pattern silently misses.
 //
-// query:"?url" is required (same reason as work.js's PDF glob): Vite's
+// query:"?url" is required: Vite's
 // default assetsInclude — which decides "treat this as a raw asset" vs.
 // "parse this as JS source" — is *also* case-sensitive and only lists
 // lowercase extensions. Without ?url, matching an uppercase .JPG/.PNG

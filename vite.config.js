@@ -11,6 +11,11 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, "index.html"),
         work: resolve(__dirname, "work.html"),
+        projectFacilitiesMaintenance: resolve(__dirname, "project-facilities-maintenance.html"),
+        projectHospitalReadmissions: resolve(__dirname, "project-hospital-readmissions.html"),
+        projectTelehealthNoshow: resolve(__dirname, "project-telehealth-noshow.html"),
+        projectHospitalCostDashboard: resolve(__dirname, "project-hospital-cost-dashboard.html"),
+        projectDrugAccessForecasting: resolve(__dirname, "project-drug-access-forecasting.html"),
         design: resolve(__dirname, "design.html"),
         ceramics: resolve(__dirname, "ceramics.html"),
       },

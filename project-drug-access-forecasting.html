@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drug Access &amp; Affordability Forecasting — focustender</title>
+    <link rel="icon" type="image/svg+xml" href="assets/focustendersword.svg" />
+    <link rel="stylesheet" href="src/styles/main.css" />
+  </head>
+  <body>
+    <div class="page">
+      <nav class="nav nav--overlay" aria-label="Primary">
+        <a href="index.html" class="nav__home" aria-label="Home"></a>
+        <a href="work.html" aria-current="page">Work</a>
+        <a href="design.html">Design</a>
+        <a href="ceramics.html">Ceramics</a>
+        <button type="button" class="nav__toggle" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+        </button>
+      </nav>
+
+      <main class="project">
+        <a href="work.html" class="project__back">← Work</a>
+
+        <header class="project__header">
+          <span class="project__eyebrow">BigQuery + Python + Tableau</span>
+          <h1 class="project__title">Drug Access &amp; Affordability Forecasting</h1>
+          <p class="project__subtitle">Spend Per Prescription Across Four Drug Categories</p>
+        </header>
+
+        <p class="project__note">
+          Built on official Medicaid State Drug Utilization Data (2019-2024, quarterly). This is market-wide Medicaid data, a legitimate proxy for industry-level demand and cost trends, not any single company's own internal numbers.
+          <a href="https://github.com/focustender/data-analyst-portfolio/tree/main/04-drug-access-forecasting" target="_blank" rel="noopener noreferrer">Full write-up, BigQuery pipeline, and forecasting code on GitHub →</a>
+        </p>
+
+        <div class="project__viz">
+          <iframe
+            src="https://public.tableau.com/views/prescriptionDrugAcessAndAffordability/DrugAccessAffordability?:showVizHome=no&:embed=true"
+            title="Drug Access & Affordability Forecasting — interactive Tableau dashboard"
+            loading="lazy"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <a
+          href="https://public.tableau.com/app/profile/ian.castorillo/viz/prescriptionDrugAcessAndAffordability/DrugAccessAffordability"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="project__viz-link"
+        >
+          Open dashboard on Tableau Public ↗
+        </a>
+
+        <section class="project__recommendations">
+          <h2>Recommendations</h2>
+          <ol class="project__rec-list">
+            <li>Give weight-loss access a deliberate response (negotiated rates, patient assistance, a lower-cost formulary alternative), the "affordability improves on its own" assumption has been wrong for this category for five years running.</li>
+            <li>Monitor weight loss closely for margin and access reasons alike, cost and demand are compounding in the same direction at once.</li>
+            <li>Use sexual health as the reference case for what GLP-1 pricing could look like once a generic eventually arrives, so that shift is anticipated rather than a surprise.</li>
+          </ol>
+        </section>
+
+        <section class="project__findings">
+          <h2>Key Findings</h2>
+
+          <article class="project__finding">
+            <h3>Three of four categories got more affordable, weight loss didn't</h3>
+            <p>
+              Spend per prescription 2019-2024: sexual health -67%, hair loss +16%, mental health +18%, weight loss +39%, at the same time weight-loss prescription volume grew roughly 5x. No generic GLP-1s exist yet, so there's no organic price-relief mechanism working the way generic competition did for the other three.
+            </p>
+          </article>
+
+          <article class="project__finding">
+            <h3>Cost and demand are compounding in the same direction for weight loss</h3>
+            <p>
+              Rising cost per script and rising volume at the same time means total category spend is compounding on both fronts.
+            </p>
+          </article>
+
+          <article class="project__finding">
+            <h3>Forecasts were validated against held-out actuals, not just fitted</h3>
+            <p>
+              Trend/seasonality diagnosed per category before picking a method (Holt linear trend vs. Holt-Winters), time-based train/test split (never randomly shuffled for a time series), MAPE of 2.8-11.0% across categories.
+            </p>
+          </article>
+
+          <article class="project__finding">
+            <h3>Sexual health's affordability trend is a real pattern, not noise</h3>
+            <p>
+              Whatever drove that category's 67% cost decline (generic maturity, most likely) is a clear, sustained trend across the full time series, not a one-quarter blip.
+            </p>
+          </article>
+        </section>
+      </main>
+
+      <footer class="copyright">
+        <p class="copyright__brand">
+          <span class="copyright__sword" aria-hidden="true"></span>
+          focustender
+        </p>
+        <p class="copyright__line">© 2026</p>
+      </footer>
+    </div>
+
+    <div class="site-menu" id="site-menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+      <nav class="site-menu__links" aria-label="Primary">
+        <a href="work.html" aria-current="page">Work</a>
+        <a href="design.html">Design</a>
+        <a href="ceramics.html">Ceramics</a>
+      </nav>
+      <a href="https://instagram.com/focustender" target="_blank" rel="noopener noreferrer" class="site-menu__contact">Contact</a>
+    </div>
+
+    <script type="module" src="src/nav.js"></script>
+  </body>
+</html>
