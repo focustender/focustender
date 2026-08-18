@@ -56,10 +56,20 @@
   gap: var(--space-4);
 }
 
+/* flex:1 1 50% with min-width:0 forces Tools/Industry to an even
+   half-and-half split below desktop, regardless of how long either
+   column's content runs — min-width:0 is required because flex items
+   default to a min-width equal to their content's natural width, which
+   would otherwise let a long value list blow past its half and break
+   the even split. Reset to auto at 1024px+, where the different
+   inline-flowing desktop treatment (own max-width, see below) takes
+   over instead. */
 .work-filters__group {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
+  flex: 1 1 50%;
+  min-width: 0;
 }
 
 /* ---- Desktop: title + list flow in one row ----
@@ -75,6 +85,7 @@
    after this layout lands. */
 @media (min-width: 1024px) {
   .work-filters__group {
+    flex: 0 1 auto;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: baseline;
@@ -88,11 +99,14 @@
   }
 }
 
+/* Filter text bumped up two steps from the site's small-label size
+   (0.8125rem) with letter-spacing tightened to match — larger text at
+   the same relative spacing reads as looser, so the two move together. */
 .work-filters__title {
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 0.8125rem;
-  letter-spacing: -0.01em;
+  font-size: 0.9375rem;
+  letter-spacing: -0.02em;
   color: var(--color-text);
   margin: 0;
 }
@@ -112,8 +126,8 @@
   border: none;
   background: none;
   font-family: var(--font-body);
-  font-size: 0.8125rem;
-  letter-spacing: -0.01em;
+  font-size: 0.9375rem;
+  letter-spacing: -0.02em;
   line-height: 1.3;
   color: #b0b0b0;
   text-align: left;
