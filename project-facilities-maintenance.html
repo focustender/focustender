@@ -14,7 +14,6 @@
         <a href="index.html" class="nav__home" aria-label="Home"></a>
         <a href="work.html" aria-current="page">Work</a>
         <a href="design.html">Design</a>
-        <a href="ceramics.html">Ceramics</a>
         <button type="button" class="nav__toggle" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
           <span class="nav__toggle-bar"></span>
           <span class="nav__toggle-bar"></span>
@@ -38,6 +37,22 @@
           <a href="https://github.com/focustender/data-analyst-portfolio/tree/main/05-facilities-maintenance-analytics" target="_blank" rel="noopener noreferrer">Full write-up, code, and data-handling details on GitHub →</a>
         </p>
 
+        <p class="project__summary">
+          The goal was to separate a genuine reliability problem from a volume problem, and figure out whether the maintenance backlog was a technician-performance issue or a building- and trade-specific one. The business metrics in view were on-time completion rate and workload distribution across technicians, aimed at surfacing real workflow and staffing problem areas before recommending a proactive-maintenance program instead of just adding headcount.
+        </p>
+
+        <section class="project__recommendations">
+          <h2>Recommendations</h2>
+          <ol class="project__rec-list">
+            <li>Target the 8-building watch list directly, a blanket "add more staff" response would miss them entirely.</li>
+            <li>Review staffing, parts, and vendor contracts for Mechanical/Utility trades specifically before assuming a broader fix is needed.</li>
+            <li>Point any performance conversation at buildings and a trade, not individual technicians.</li>
+            <li>Review staffing capacity and rebalance workload across the team, the current concentration on 4 of 9 technicians is a burnout and single-point-of-failure risk.</li>
+            <li>Pilot formalized technician-building assignments so technicians build equipment familiarity over time, a forward-looking proposal, not a pattern the data proved.</li>
+            <li>Use this six-month window as the "before" baseline to measure a future proactive program against.</li>
+          </ol>
+        </section>
+
         <div class="project__viz">
           <tableau-viz
             src="https://public.tableau.com/views/FacilityMaintenanceBuildingandTechnicianAnalysis/ReliabilityOverview"
@@ -52,18 +67,6 @@
         >
           Open dashboard on Tableau Public ↗
         </a>
-
-        <section class="project__recommendations">
-          <h2>Recommendations</h2>
-          <ol class="project__rec-list">
-            <li>Target the 8-building watch list directly, a blanket "add more staff" response would miss them entirely.</li>
-            <li>Review staffing, parts, and vendor contracts for Mechanical/Utility trades specifically before assuming a broader fix is needed.</li>
-            <li>Point any performance conversation at buildings and a trade, not individual technicians.</li>
-            <li>Review staffing capacity and rebalance workload across the team, the current concentration on 4 of 9 technicians is a burnout and single-point-of-failure risk.</li>
-            <li>Pilot formalized technician-building assignments so technicians build equipment familiarity over time, a forward-looking proposal, not a pattern the data proved.</li>
-            <li>Use this six-month window as the "before" baseline to measure a future proactive program against.</li>
-          </ol>
-        </section>
 
         <section class="project__findings">
           <h2>Key Findings</h2>
@@ -137,7 +140,6 @@
       <nav class="site-menu__links" aria-label="Primary">
         <a href="work.html" aria-current="page">Work</a>
         <a href="design.html">Design</a>
-        <a href="ceramics.html">Ceramics</a>
       </nav>
       <a href="https://instagram.com/focustender" target="_blank" rel="noopener noreferrer" class="site-menu__contact">Contact</a>
     </div>

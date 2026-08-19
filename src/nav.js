@@ -1,4 +1,7 @@
-// Hamburger menu for Work/Design/Ceramics on mobile/tablet (<1024px).
+// Hamburger menu for Work/Design on mobile/tablet (<1024px). Ceramics is
+// delisted from nav for now (2026-08-19, Ian's call) but the page and its
+// vite.config.js build entry are untouched, so relinking it later is just
+// restoring the nav links, not rebuilding the page.
 // The toggle itself doubles as open AND close control — no separate
 // close button — its two bars morph into an X via CSS keyed off
 // aria-expanded (see .nav__toggle-bar in base.css); the pill around

@@ -14,7 +14,6 @@
         <a href="index.html" class="nav__home" aria-label="Home"></a>
         <a href="work.html" aria-current="page">Work</a>
         <a href="design.html">Design</a>
-        <a href="ceramics.html">Ceramics</a>
         <button type="button" class="nav__toggle" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
           <span class="nav__toggle-bar"></span>
           <span class="nav__toggle-bar"></span>
@@ -35,6 +34,19 @@
           <a href="https://github.com/focustender/data-analyst-portfolio/tree/main/04-drug-access-forecasting" target="_blank" rel="noopener noreferrer">Full write-up, BigQuery pipeline, and forecasting code on GitHub →</a>
         </p>
 
+        <p class="project__summary">
+          This project forecasts spend per prescription across four drug categories to flag where affordability is trending the wrong way before it turns into a bigger access problem. The business metric in view was spend per script over time, checked against held-out actuals rather than just fitted, with weight-loss access standing out as the category most likely to need a deliberate response instead of assuming the market corrects itself.
+        </p>
+
+        <section class="project__recommendations">
+          <h2>Recommendations</h2>
+          <ol class="project__rec-list">
+            <li>Give weight-loss access a deliberate response (negotiated rates, patient assistance, a lower-cost formulary alternative), the "affordability improves on its own" assumption has been wrong for this category for five years running.</li>
+            <li>Monitor weight loss closely for margin and access reasons alike, cost and demand are compounding in the same direction at once.</li>
+            <li>Use sexual health as the reference case for what GLP-1 pricing could look like once a generic eventually arrives, so that shift is anticipated rather than a surprise.</li>
+          </ol>
+        </section>
+
         <div class="project__viz">
           <tableau-viz
             src="https://public.tableau.com/views/prescriptionDrugAcessAndAffordability/DrugAccessAffordability"
@@ -49,15 +61,6 @@
         >
           Open dashboard on Tableau Public ↗
         </a>
-
-        <section class="project__recommendations">
-          <h2>Recommendations</h2>
-          <ol class="project__rec-list">
-            <li>Give weight-loss access a deliberate response (negotiated rates, patient assistance, a lower-cost formulary alternative), the "affordability improves on its own" assumption has been wrong for this category for five years running.</li>
-            <li>Monitor weight loss closely for margin and access reasons alike, cost and demand are compounding in the same direction at once.</li>
-            <li>Use sexual health as the reference case for what GLP-1 pricing could look like once a generic eventually arrives, so that shift is anticipated rather than a surprise.</li>
-          </ol>
-        </section>
 
         <section class="project__findings">
           <h2>Key Findings</h2>
@@ -105,7 +108,6 @@
       <nav class="site-menu__links" aria-label="Primary">
         <a href="work.html" aria-current="page">Work</a>
         <a href="design.html">Design</a>
-        <a href="ceramics.html">Ceramics</a>
       </nav>
       <a href="https://instagram.com/focustender" target="_blank" rel="noopener noreferrer" class="site-menu__contact">Contact</a>
     </div>

@@ -425,6 +425,17 @@
   border-bottom: 1px solid #e2e2e2;
 }
 
+/* No heading here on purpose — it reads as a continuation of
+   .project__note right above it (the GitHub/data-provenance line),
+   not a distinct callout, so it doesn't need its own label/rule to
+   signal a section change. */
+.project__summary {
+  max-width: var(--content-max);
+  margin: 0 0 var(--space-4);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
 /* The recommendations themselves — short, stated as actions, no
    supporting data mixed in (that lives in .project__finding below,
    which each recommendation here corresponds to in order). Set in the
