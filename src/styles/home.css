@@ -74,11 +74,18 @@
    visually that read as a second copy of the photo appearing near the
    top-left corner and sliding into place, not a clean shrink. Clipping
    instead of resizing means the underlying image is laid out once and
-   never changes size, so there's nothing for object-fit to recompute. */
+   never changes size, so there's nothing for object-fit to recompute.
+
+   background-color is the opaque fill for the box itself, painted
+   before the img has decoded — without it the div is transparent until
+   the photo loads, so on a slow first paint (mobile especially: slower
+   decode, no cache yet) the real page shows through for a frame,
+   footer included, since it's the lowest thing on the page. */
 .hero-intro {
   position: fixed;
   inset: 0;
   z-index: 1000;
+  background-color: var(--color-text);
   clip-path: inset(0);
   transition: clip-path 900ms cubic-bezier(0.65, 0, 0.35, 1);
 }
@@ -144,21 +151,14 @@
    before the clip-path transition completes; waiting for the full
    animation to end would leave white-on-white (invisible) text for
    most of the shrink. */
-/* ss05 (alternate "t") kept on just this "focustender" wordmark — body
-   (base.css) only sets ss03 (alt "g") globally now, so this is what
-   keeps the brand word's "t"s on the alternate glyph while the rest of
-   the site's body text reverted to the regular one. ss03 is repeated
-   here too since font-feature-settings doesn't merge with an inherited
-   value — this element would otherwise lose it, not because "g" ever
-   appears in "focustender". An earlier ss04 (alternate "r") experiment
-   on this word was tried and reverted. */
+/* ss05 (alternate "t") kept on just this "focustender" wordmark — the
+   rest of the site's body text uses the regular "t". An earlier ss04
+   (alternate "r") experiment on this word was tried and reverted. */
 .statement__brand {
   position: relative;
   z-index: 1001;
   color: #fff;
-  font-feature-settings:
-    "ss03" 1,
-    "ss05" 1;
+  font-feature-settings: "ss05" 1;
   transition: color 500ms ease;
 }
 

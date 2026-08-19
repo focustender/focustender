@@ -38,16 +38,8 @@ body {
   font-family: var(--font-body);
   font-size: var(--fs-body);
   line-height: var(--lh-body);
+  letter-spacing: -0.02em;
   -webkit-font-smoothing: antialiased;
-  /* PP Mori stylistic sets — ss03 swaps to the single-story alternate
-     "g" (see fonts.css; confirmed via the shipped .woff's GSUB table,
-     since PP Mori has no generic "salt" feature — this is the specific
-     set number that carries the g alternate, not an arbitrary choice).
-     ss05 (alternate "t") used to be global here too, but is now scoped
-     to just the "focustender" wordmark instead — see .statement__brand
-     in home.css and .copyright__brand below — so the rest of the site's
-     body text uses the regular "t". */
-  font-feature-settings: "ss03" 1;
 }
 
 /* ---- Page shell ----
@@ -303,13 +295,9 @@ body {
   font-size: 0.8125rem;
 }
 
-/* ss05 (alternate "t") kept on just this "focustender" wordmark now
-   that body no longer sets it globally — see the same note on
-   .statement__brand in home.css, the other place "focustender" renders
-   as text. ss03 (alt "g") is already global via body, repeated here
-   only because font-feature-settings doesn't merge with an inherited
-   value — this element would otherwise lose it, not because it does
-   anything visible ("focustender" has no "g"). */
+/* ss05 (alternate "t") kept on just this "focustender" wordmark — see
+   the same note on .statement__brand in home.css, the other place
+   "focustender" renders as text. */
 .copyright__brand {
   display: flex;
   align-items: center;
@@ -317,9 +305,7 @@ body {
   font-family: var(--font-heading);
   font-weight: 600;
   color: var(--color-text);
-  font-feature-settings:
-    "ss03" 1,
-    "ss05" 1;
+  font-feature-settings: "ss05" 1;
 }
 
 .copyright__sword {
