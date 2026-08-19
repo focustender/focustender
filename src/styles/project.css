@@ -310,7 +310,7 @@
    readability, same reading-column width as the old resume page. The
    dashboard embed deliberately breaks out of that width — Tableau
    dashboards in this portfolio are built at 1200px wide, so capping the
-   iframe at 640px would make the actual visualization illegible. */
+   embed at 640px would make the actual visualization illegible. */
 .project {
   padding: var(--space-4) var(--page-padding) var(--space-6);
 }
@@ -370,18 +370,20 @@
 /* 1200px matches the Tableau workbook's own canvas width — no point
    letting the wrapper grow past what the dashboard was actually
    designed at. aspect-ratio approximates this project's dashboard
-   proportions (built ~1200×1000) so the layout doesn't jump once the
-   iframe's own content finishes loading. */
+   proportions (built ~1200×1000) so the layout doesn't jump while the
+   tableau-viz web component is still loading. tableau-viz is a custom
+   element with no intrinsic size of its own (unlike iframe), so width
+   and aspect-ratio have to be set explicitly here or it renders at
+   zero height. */
 .project__viz {
   max-width: 1200px;
   margin: var(--space-2) 0 var(--space-2);
 }
 
-.project__viz iframe {
+.project__viz tableau-viz {
   display: block;
   width: 100%;
   aspect-ratio: 6 / 5;
-  border: none;
 }
 
 /* Static screenshot variant for projects without a live embed (e.g. the

@@ -6,6 +6,7 @@
     <title>Facilities Maintenance Analytics — focustender</title>
     <link rel="icon" type="image/svg+xml" href="assets/focustendersword.svg" />
     <link rel="stylesheet" href="src/styles/main.css" />
+    <script type="module" src="https://public.tableau.com/javascripts/api/tableau.embedding.3.latest.min.js"></script>
   </head>
   <body>
     <div class="page">
@@ -38,12 +39,10 @@
         </p>
 
         <div class="project__viz">
-          <iframe
-            src="https://public.tableau.com/views/FacilityMaintenanceBuildingandTechnicianAnalysis/ReliabilityOverview?:showVizHome=no&:embed=true"
-            title="Facilities Maintenance Analytics — interactive Tableau dashboard"
-            loading="lazy"
-            allowfullscreen
-          ></iframe>
+          <tableau-viz
+            src="https://public.tableau.com/views/FacilityMaintenanceBuildingandTechnicianAnalysis/ReliabilityOverview"
+            toolbar="bottom"
+          ></tableau-viz>
         </div>
         <a
           href="https://public.tableau.com/app/profile/ian.castorillo/viz/FacilityMaintenanceBuildingandTechnicianAnalysis/ReliabilityOverview"
