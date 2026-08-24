@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subscription Economics — focustender</title>
+    <link rel="icon" type="image/svg+xml" href="assets/focustendersword.svg" />
+    <link rel="stylesheet" href="src/styles/main.css" />
+  </head>
+  <body>
+    <div class="page">
+      <nav class="nav nav--overlay" aria-label="Primary">
+        <a href="index.html" class="nav__home" aria-label="Home"></a>
+        <a href="work.html" aria-current="page">Work</a>
+        <a href="design.html">Design</a>
+        <a href="contact.html" class="nav__contact">Contact</a>
+        <button type="button" class="nav__toggle" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+        </button>
+      </nav>
+
+      <main class="project">
+        <a href="work.html" class="project__back">← Work</a>
+
+        <header class="project__header">
+          <span class="project__eyebrow">Python</span>
+          <h1 class="project__title">Subscription Economics</h1>
+          <p class="project__subtitle">Subscriber Growth vs. Acquisition Cost</p>
+        </header>
+
+        <p class="project__note">
+          Built on real SEC filings, not a packaged dataset. Revenue and marketing spend came straight from the SEC's XBRL API; subscriber counts and revenue-per-subscriber aren't structured data at all, so those were hand-collected from 10-Q filings and earnings releases and cited to the exact source.
+          <a href="https://github.com/focustender/data-analyst-portfolio/tree/main/06-subscription-economics" target="_blank" rel="noopener noreferrer">Full write-up, code, and data on GitHub →</a>
+        </p>
+
+        <p class="project__summary">
+          The question behind this project was whether Hims & Hers's growth is coming from adding subscribers or from getting more revenue out of the ones it already has, and what that split means for how efficiently the company is spending to acquire new ones. The business metrics in view were subscriber count, monthly revenue per subscriber, and marketing spend per net-new subscriber, with LifeMD and Teladoc pulled in as public comparables to see whether the pattern is specific to Hims & Hers or something happening across the category.
+        </p>
+
+        <section class="project__questions">
+          <h2>Asking Questions</h2>
+          <ol class="project__question-list">
+            <li>Is revenue growth driven more by subscriber growth or by revenue per subscriber?</li>
+            <li>How has monthly revenue-per-subscriber trended, and what explains the jumps?</li>
+            <li>How does subscriber growth compare to LifeMD, the one directly comparable peer?</li>
+            <li>What is a $1/month (or 1%) increase in revenue-per-subscriber worth in incremental annual revenue?</li>
+            <li>Is marketing spend scaling in line with, faster, or slower than subscriber growth?</li>
+          </ol>
+        </section>
+
+        <section class="project__wrangling">
+          <h2>Getting and Cleaning the Data</h2>
+          <p>
+            Revenue and marketing spend came straight from the SEC's XBRL Company Facts API, structured and machine-readable. Subscriber counts and revenue-per-subscriber aren't in that structured data at all, companies only disclose those as plain sentences inside 10-Q filings and earnings releases, so each one was read individually and cited to its source.
+          </p>
+          <p>
+            Two things had to be fixed before any of it could be compared. Companies never report a fourth quarter on its own, only the full-year total, so Q4 revenue and marketing spend were derived as the annual figure minus the first three quarters, checked against an independently researched full-year number before trusting it. And a first pass at pulling marketing spend came back empty for the exact quarters that mattered, Hims & Hers tags it under a less common field name than the one most companies use, so the extraction had to check multiple possible tag names rather than assume one works everywhere.
+          </p>
+        </section>
+
+        <section class="project__eda">
+          <div class="project__eda-item">
+            <h3 class="project__eda-label"><span>01</span>Subscribers or revenue per subscriber?</h3>
+            <div class="project__eda-chart">
+              <img src="assets/photos/subscriptionEconomicsGrowth.png" alt="Chart showing Hims & Hers quarterly subscriber count as bars alongside monthly revenue per subscriber as a line, Q3 2024 through Q2 2026." />
+            </div>
+            <p class="project__eda-answer">
+              Both, almost evenly. Subscribers grew about 41% and revenue per subscriber grew about 37% over the same 8 quarters. Because those two compound together rather than simply adding, total revenue nearly doubled (+88%), outpacing either driver alone. This isn't a story of just adding customers cheaply or just monetizing existing ones harder, it's both at once.
+            </p>
+          </div>
+
+          <div class="project__eda-item">
+            <h3 class="project__eda-label"><span>02</span>What's behind the revenue-per-subscriber jumps?</h3>
+            <div class="project__eda-chart">
+              <img src="assets/photos/subscriptionEconomicsArpu.png" alt="Line chart of Hims & Hers monthly revenue per subscriber by quarter, with markers flagging a metric redefinition in Q1 2026 and the Eucalyptus acquisition in Q2 2026." />
+            </div>
+            <p class="project__eda-answer">
+              Trending up overall but not smooth: $67 to $84 to $74 to $80 to $80 to $92 across the eight quarters. Two real events explain the jumps rather than organic pricing shifts. Hims & Hers redefined the metric in Q1 2026, adding international revenue to the base, so it's not perfectly comparable to earlier quarters. And the Q2 2026 jump to $92 includes about a month of contribution from the Eucalyptus acquisition, part inorganic, not pure pricing or mix improvement.
+            </p>
+          </div>
+
+          <div class="project__eda-item">
+            <h3 class="project__eda-label"><span>03</span>How does this compare to LifeMD?</h3>
+            <div class="project__eda-chart">
+              <img src="assets/photos/subscriptionEconomicsPeerGrowth.png" alt="Line chart comparing Hims & Hers and LifeMD subscriber counts, both indexed to 100 at their starting quarter, showing the two tracking closely before diverging in the final quarter." />
+            </div>
+            <p class="project__eda-answer">
+              Hims & Hers and LifeMD, the one direct-to-consumer peer with a directly comparable subscriber metric, grew at similar indexed rates through most of the window, then diverged sharply in the most recent quarter. Hims & Hers accelerated to +41% cumulative growth (helped by the acquisition above), while LifeMD's subscriber count actually declined, alongside a cut to their own full-year guidance. Teladoc is left out of this comparison entirely, its "members" metric counts enterprise-contract covered lives, not paying consumers, a fundamentally different thing.
+            </p>
+          </div>
+
+          <div class="project__eda-item">
+            <h3 class="project__eda-label"><span>04</span>What is a small ARPU increase actually worth?</h3>
+            <div class="project__eda-chart">
+              <img src="assets/photos/subscriptionEconomicsArpuLever.png" alt="Bar chart comparing current annualized revenue against the projected value of a $1 per month and a 1 percent increase in revenue per subscriber." />
+            </div>
+            <p class="project__eda-answer">
+              At the current base of about 2.9 million subscribers, a $1/month increase in revenue-per-subscriber is worth roughly $35 million a year. A 1% increase is worth roughly $32 million. Neither requires adding a single new subscriber, which makes this a useful number to hold up against acquisition spend below: growing revenue-per-subscriber a little is often cheaper than growing headcount a lot.
+            </p>
+          </div>
+
+          <div class="project__eda-item">
+            <h3 class="project__eda-label"><span>05</span>Is marketing spend keeping pace with subscriber growth?</h3>
+            <div class="project__eda-chart">
+              <img src="assets/photos/subscriptionEconomicsEfficiency.png" alt="Two charts side by side: marketing spend and subscriber count by quarter, and marketing dollars spent per net-new subscriber by quarter, showing a sharp rise and fall through 2025." />
+            </div>
+            <p class="project__eda-answer">
+              No, and this was the finding that stood out most. Marketing spend stayed roughly flat, between $180M and $260M a quarter, while net-new subscribers added swung a lot. The result: acquisition cost per new subscriber climbed from about $1,200 in Q4 2024 to a peak of about $7,255 in Q3 2025, then dropped to about $854 in Q2 2026, a figure that needs its own caveat since it's inflated by the acquisition, not a genuine efficiency fix.
+            </p>
+          </div>
+        </section>
+
+        <section class="project__recommendations">
+          <h2>Conclusions &amp; Recommendations</h2>
+          <ol class="project__rec-list">
+            <li>Lean into the revenue-per-subscriber lever before spending more on acquisition, a 1% increase is worth about $32M a year with no acquisition cost attached.</li>
+            <li>Figure out why acquisition cost per new subscriber jumped sixfold through 2025 before increasing marketing budget further.</li>
+            <li>Separate organic growth from the Eucalyptus acquisition in any forward-looking growth narrative, Q2 2026's numbers blend both.</li>
+            <li>Watch whether LifeMD's Q2 2026 subscriber decline is company-specific or an early signal for the category.</li>
+          </ol>
+        </section>
+
+        <section class="project__limitations">
+          <h2>Limitations</h2>
+          <ul>
+            <li><strong>Aggregate, not customer-level data.</strong> Net-new subscribers per quarter nets signups against cancellations, so it can't separate an acquisition problem from a retention problem.</li>
+            <li><strong>LifeMD doesn't disclose revenue-per-subscriber</strong> at all, so its economics can only be compared on subscriber count, not monetization.</li>
+            <li><strong>Q4 figures for 2024 and 2025 are derived,</strong> not directly reported, an assumption of no prior-quarter restatement that's reasonable but not guaranteed.</li>
+            <li><strong>Three companies is a small sample,</strong> chosen as the clearest public comparables in this space, not a representative slice of the whole telehealth market.</li>
+          </ul>
+        </section>
+      </main>
+
+      <footer class="copyright">
+        <p class="copyright__brand">
+          <span class="copyright__sword" aria-hidden="true"></span>
+          focustender
+        </p>
+        <p class="copyright__line">© 2026</p>
+      </footer>
+    </div>
+
+    <div class="site-menu" id="site-menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+      <nav class="site-menu__links" aria-label="Primary">
+        <a href="work.html" aria-current="page">Work</a>
+        <a href="design.html">Design</a>
+      </nav>
+      <a href="contact.html" class="site-menu__contact">Contact</a>
+    </div>
+
+    <script type="module" src="src/nav.js"></script>
+  </body>
+</html>

@@ -24,8 +24,14 @@
   --space-6: 6rem;
 
   /* ---- Layout ---- */
-  --page-padding: 0.25in; /* matches the 1/4" margin guides from the mockup — left edge for nav, statement, and contact all align to this */
+  --page-padding: 0.25in; /* left edge for nav, statement, and contact all align to this — mobile value, bumped to 0.5in at tablet+ below */
   --content-max: 640px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --page-padding: 0.5in;
+  }
 }
 
 /* ----------------------------------------------------------------

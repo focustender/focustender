@@ -306,11 +306,11 @@
 }
 
 /* ---- Project detail page ----
-   Text content (header, note, findings) is capped at --content-max for
-   readability, same reading-column width as the old resume page. The
-   dashboard embed deliberately breaks out of that width — Tableau
-   dashboards in this portfolio are built at 1200px wide, so capping the
-   embed at 640px would make the actual visualization illegible. */
+   Content fills the full width inside .project's own side padding
+   (--page-padding), deliberately hugging the margins instead of sitting
+   in a narrower centered reading column. --content-max is unused here
+   now — kept defined in variables.css in case a narrower column is
+   wanted somewhere else later, but nothing on this page reaches for it. */
 .project {
   padding: var(--space-4) var(--page-padding) var(--space-6);
 }
@@ -324,7 +324,6 @@
 }
 
 .project__header {
-  max-width: var(--content-max);
   margin-bottom: var(--space-3);
 }
 
@@ -353,7 +352,6 @@
 }
 
 .project__note {
-  max-width: var(--content-max);
   padding: var(--space-2) var(--space-3);
   margin: 0 0 var(--space-4);
   border-left: 2px solid var(--color-text);
@@ -377,7 +375,7 @@
    zero height. */
 .project__viz {
   max-width: 1200px;
-  margin: var(--space-2) 0 var(--space-2);
+  margin: var(--space-2) auto;
 }
 
 .project__viz tableau-viz {
@@ -404,11 +402,6 @@
   text-decoration: none;
 }
 
-.project__recommendations,
-.project__findings {
-  max-width: var(--content-max);
-}
-
 .project__recommendations {
   margin-bottom: var(--space-4);
 }
@@ -430,7 +423,6 @@
    not a distinct callout, so it doesn't need its own label/rule to
    signal a section change. */
 .project__summary {
-  max-width: var(--content-max);
   margin: 0 0 var(--space-4);
   font-size: var(--fs-body);
   line-height: var(--lh-body);
@@ -471,4 +463,115 @@
 .project__finding p {
   margin: 0;
   color: var(--color-muted);
+}
+
+/* ---- Project detail page: notebook-structured layout ----
+   For projects built to mirror the analysis notebook's own shape (ask
+   questions up front, explain how the data was gathered/cleaned, then
+   answer each question in turn with its chart) rather than condensing
+   straight to Recommendations/Findings. .project__recommendations above
+   is reused as-is for the closing "Conclusions & Recommendations"
+   section — same visual weight, no need for a second class. */
+
+.project__questions,
+.project__wrangling,
+.project__limitations {
+  margin: 0 0 var(--space-4);
+}
+
+.project__questions h2,
+.project__wrangling h2,
+.project__limitations h2 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-body);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 var(--space-3);
+  padding-bottom: var(--space-1);
+  border-bottom: 1px solid #e2e2e2;
+}
+
+.project__question-list {
+  margin: 0;
+  padding-left: 1.2em;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+.project__wrangling p {
+  margin: 0 0 var(--space-2);
+  color: var(--color-muted);
+}
+
+.project__wrangling p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---- EDA: one block per question — a short label, its chart, then the
+   written answer directly underneath, in that order, same sequence the
+   notebook itself follows. All three fill the full width like the rest
+   of the page (see the top-of-file note on --content-max going unused
+   here). */
+.project__eda {
+  margin: 0 0 var(--space-5);
+}
+
+.project__eda-item {
+  margin: 0 0 var(--space-5);
+}
+
+.project__eda-item:last-child {
+  margin-bottom: 0;
+}
+
+.project__eda-label {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-body);
+  margin: 0 0 var(--space-2);
+}
+
+.project__eda-label span {
+  color: var(--color-muted);
+  font-weight: 400;
+  margin-right: 0.6em;
+}
+
+.project__eda-chart {
+  margin: 0 0 var(--space-2);
+}
+
+.project__eda-chart img {
+  width: 100%;
+  height: auto;
+  border: 1px solid #e2e2e2;
+}
+
+.project__eda-answer {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+.project__limitations ul {
+  margin: 0;
+  padding-left: 1.2em;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.project__limitations li {
+  color: var(--color-muted);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+.project__limitations li strong {
+  color: var(--color-text);
 }

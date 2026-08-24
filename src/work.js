@@ -25,45 +25,61 @@ function photoUrl(filename) {
   return entry ? entry[1] : "";
 }
 
-// All 5 projects now have real pages on this site. Two (SQL Hospital
+// All 6 projects now have real pages on this site. Two (SQL Hospital
 // Readmissions, Telehealth No-Show) don't have a visual asset — neither
-// project produced a dashboard, just notebooks/queries — so image stays
-// null and renders a plain placeholder square (see renderGrid).
+// produced a dashboard, just notebooks/queries — so image stays null
+// and renders a plain placeholder square (see renderGrid).
+//
+// `industries` is an array, not a single string — Subscription Economics
+// is deliberately tagged both Business and Health (real business-metrics
+// work, on a healthcare-adjacent subscription company), and a project
+// legitimately spanning categories needed the data model to allow it.
+// The Industry filter itself stays single-select in the UI (see
+// toggleFilter below) — this only changes how a tile is matched against
+// whichever single industry is active, the same OR-style match tools
+// already uses.
 const projects = [
+  {
+    title: "Subscription Economics",
+    href: "project-subscription-economics.html",
+    image: "himsLogoSquare.png",
+    tools: ["Python"],
+    industries: ["Business", "Health"],
+  },
   {
     title: "Facilities Maintenance Analytics",
     href: "project-facilities-maintenance.html",
     image: "grifolsFBM.jpg",
     tools: ["Python", "Tableau"],
-    industry: "Operations",
+    industries: ["Operations"],
   },
   {
     title: "Hospital Readmissions & Utilization Risk",
     href: "project-hospital-readmissions.html",
     image: "hospitalReadmissionsAndUtilization.webp",
     tools: ["SQL"],
-    industry: "Health",
+    industries: ["Health"],
   },
   {
     title: "Telehealth No-Show Prediction",
     href: "project-telehealth-noshow.html",
     image: "telehealthNoShowRezaGetty.webp",
     tools: ["Python"],
-    industry: "Health",
+    industries: ["Health"],
   },
   {
     title: "Hospital Cost & Rurality Dashboard",
     href: "project-hospital-cost-dashboard.html",
     image: "hospitalCostDashboardSquare.png",
     tools: ["Tableau"],
-    industry: "Health",
+    industries: ["Health"],
   },
   {
     title: "Drug Access & Affordability Forecasting",
     href: "project-drug-access-forecasting.html",
     image: "drugAccessDashboardSquare.png",
     tools: ["SQL", "Python", "Tableau"],
-    industry: "Health",
+    industries: ["Health"],
   },
 ];
 
@@ -76,7 +92,7 @@ const titleEl = document.getElementById("work-title");
 const activeFiltersEl = document.getElementById("active-filters");
 
 const allTools = [...new Set(projects.flatMap((p) => p.tools))].sort();
-const allIndustries = [...new Set(projects.map((p) => p.industry))].sort();
+const allIndustries = [...new Set(projects.flatMap((p) => p.industries))].sort();
 
 const activeTools = new Set();
 const activeIndustries = new Set();
@@ -208,7 +224,7 @@ function renderGrid() {
     }
     tile.className = "work-tile";
     tile.dataset.tools = project.tools.join(",");
-    tile.dataset.industry = project.industry;
+    tile.dataset.industry = project.industries.join(",");
 
     const media = document.createElement("div");
     media.className = "work-tile-media";
@@ -229,7 +245,7 @@ function renderGrid() {
 
     const tags = document.createElement("div");
     tags.className = "work-tile__tags";
-    for (const label of [...project.tools, project.industry]) {
+    for (const label of [...project.tools, ...project.industries]) {
       const tag = document.createElement("span");
       tag.className = "work-tile__tag";
       tag.textContent = label;
@@ -248,10 +264,10 @@ function renderGrid() {
 function applyFilters() {
   for (const tile of grid.querySelectorAll(".work-tile")) {
     const tileTools = tile.dataset.tools.split(",");
-    const tileIndustry = tile.dataset.industry;
+    const tileIndustries = tile.dataset.industry.split(",");
 
     const matchesTools = activeTools.size === 0 || tileTools.some((t) => activeTools.has(t));
-    const matchesIndustry = activeIndustries.size === 0 || activeIndustries.has(tileIndustry);
+    const matchesIndustry = activeIndustries.size === 0 || tileIndustries.some((i) => activeIndustries.has(i));
     const shouldShow = matchesTools && matchesIndustry;
 
     if (shouldShow && tile.hidden) {
