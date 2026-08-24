@@ -16,6 +16,7 @@ export default defineConfig({
         projectTelehealthNoshow: resolve(__dirname, "project-telehealth-noshow.html"),
         projectHospitalCostDashboard: resolve(__dirname, "project-hospital-cost-dashboard.html"),
         projectDrugAccessForecasting: resolve(__dirname, "project-drug-access-forecasting.html"),
+        projectSubscriptionEconomics: resolve(__dirname, "project-subscription-economics.html"),
         design: resolve(__dirname, "design.html"),
         ceramics: resolve(__dirname, "ceramics.html"),
         contact: resolve(__dirname, "contact.html"),
