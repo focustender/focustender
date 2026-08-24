@@ -18,6 +18,7 @@ export default defineConfig({
         projectDrugAccessForecasting: resolve(__dirname, "project-drug-access-forecasting.html"),
         design: resolve(__dirname, "design.html"),
         ceramics: resolve(__dirname, "ceramics.html"),
+        contact: resolve(__dirname, "contact.html"),
       },
     },
   },

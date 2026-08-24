@@ -255,6 +255,17 @@ body {
   .nav__toggle {
     display: none;
   }
+
+  /* Pushed to the far right margin regardless of how many page links
+     (Work, Design, and whatever else lands here later — Ceramics
+     relisted, new sections, etc.) sit to its left. margin-left:auto on
+     a flex child consumes all the leftover space in the row up to that
+     point, so this stays flush against the right edge no matter how the
+     link list to its left grows or shrinks, rather than just trailing
+     immediately after the last one. */
+  .nav--overlay .nav__contact {
+    margin-left: auto;
+  }
 }
 
 /* ---- Contact / footer ---- */

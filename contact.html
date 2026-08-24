@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact — focustender</title>
+    <link rel="icon" type="image/svg+xml" href="assets/focustendersword.svg" />
+    <link rel="stylesheet" href="src/styles/main.css" />
+  </head>
+  <body>
+    <div class="page">
+      <nav class="nav nav--overlay" aria-label="Primary">
+        <a href="index.html" class="nav__home" aria-label="Home"></a>
+        <a href="work.html">Work</a>
+        <a href="design.html">Design</a>
+        <a href="contact.html" class="nav__contact" aria-current="page">Contact</a>
+        <button type="button" class="nav__toggle" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+        </button>
+      </nav>
+
+      <main class="contact-page">
+        <header class="contact-page__header">
+          <h1 class="contact-page__title">Contact</h1>
+          <p class="contact-page__intro">
+            Have a project in mind, or just want to say hello? 
+          </p>
+        </header>
+
+        <!-- Submits to Web3Forms (no backend on this static site) via
+             src/contact.js's fetch handler, which progressively enhances
+             this into an inline success/error message instead of a full
+             page redirect. Without JS the form still posts natively and
+             Web3Forms shows its own confirmation page. -->
+        <form class="contact-form" id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+          <input type="hidden" name="access_key" value="e2cab7bd-456e-4b16-a50b-49a3a310f4ba" />
+          <input type="hidden" name="subject" value="New message from focustender.studio" />
+
+          <!-- Honeypot: real visitors never see or fill this in (off-screen,
+               not display:none, since some bots skip fields hidden that way).
+               contact.js drops the submission client-side if it's checked;
+               Web3Forms also checks the same field server-side as a backstop. -->
+          <div class="contact-form__honeypot" aria-hidden="true">
+            <label for="botcheck">Leave this field empty</label>
+            <input type="checkbox" id="botcheck" name="botcheck" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <div class="contact-form__field">
+            <label class="contact-form__label" for="name">Name</label>
+            <input class="contact-form__input" type="text" id="name" name="name" autocomplete="name" required />
+          </div>
+
+          <div class="contact-form__field">
+            <label class="contact-form__label" for="email">Email</label>
+            <input class="contact-form__input" type="email" id="email" name="email" autocomplete="email" required />
+          </div>
+
+          <div class="contact-form__field">
+            <label class="contact-form__label" for="message">Message</label>
+            <textarea class="contact-form__input contact-form__input--textarea" id="message" name="message" rows="5" required></textarea>
+          </div>
+
+          <button class="contact-form__submit" type="submit">Send</button>
+
+          <p class="contact-form__status" id="contact-form-status" role="status" aria-live="polite"></p>
+        </form>
+      </main>
+
+      <footer class="copyright">
+        <p class="copyright__brand">
+          <span class="copyright__sword" aria-hidden="true"></span>
+          focustender
+        </p>
+        <p class="copyright__line">© 2026</p>
+      </footer>
+    </div>
+
+    <!-- Hamburger-triggered curtain menu, mobile/tablet only (<1024px)
+         — see the same note on work.html's #site-menu. -->
+    <div class="site-menu" id="site-menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+      <nav class="site-menu__links" aria-label="Primary">
+        <a href="work.html">Work</a>
+        <a href="design.html">Design</a>
+      </nav>
+      <a href="contact.html" class="site-menu__contact" aria-current="page">Contact</a>
+    </div>
+
+    <script type="module" src="src/contact.js"></script>
+    <script type="module" src="src/nav.js"></script>
+  </body>
+</html>

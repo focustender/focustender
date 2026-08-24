@@ -1,0 +1,135 @@
+/* ---- Contact ----
+   Same reading-column width as the project detail pages (--content-max)
+   since this is the same "a bit of prose, then a focused task" shape as
+   a project write-up, not full-width like Work's grid or Design's
+   masonry. */
+.contact-page {
+  flex: 1 1 0;
+  padding: var(--space-4) var(--page-padding) var(--space-6);
+}
+
+.contact-page__header {
+  max-width: var(--content-max);
+  margin-bottom: var(--space-4);
+}
+
+.contact-page__title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-heading);
+  line-height: var(--lh-heading);
+  margin: 0 0 var(--space-2);
+}
+
+.contact-page__intro {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.contact-page__intro a {
+  color: var(--color-text);
+  text-decoration: underline;
+}
+
+@media (min-width: 768px) {
+  .contact-page__title {
+    font-size: 3rem;
+  }
+}
+
+/* ---- Contact: form ----
+   Underline-only inputs (no boxes) rather than the site-menu's or the
+   grid tiles' filled/square-cornered treatment — this is the one place
+   on the site asking someone to type, so it reads closer to writing on
+   a lined page than filling out a boxed form control. */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: var(--content-max);
+}
+
+/* Off-screen, not display:none — some spam bots skip fields hidden via
+   display:none but still fill in ones that are merely positioned away
+   from view, so this is the more effective of the two for a honeypot. */
+.contact-form__honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.contact-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+}
+
+.contact-form__label {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+}
+
+.contact-form__input {
+  width: 100%;
+  padding: 0.5em 0;
+  border: none;
+  border-bottom: 1px solid #e2e2e2;
+  border-radius: 0;
+  background: none;
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  color: var(--color-text);
+  transition: border-color 0.15s ease;
+}
+
+.contact-form__input:focus {
+  outline: none;
+  border-bottom-color: var(--color-text);
+}
+
+.contact-form__input--textarea {
+  resize: vertical;
+  min-height: 6em;
+}
+
+/* Filled pill, matching .nav__toggle's own border-radius: 999px — a
+   radius bigger than half the box's own height always resolves to a
+   full stadium shape, so this stays a true pill regardless of the
+   button's padding/font-size rather than needing a hand-tuned px value. */
+.contact-form__submit {
+  align-self: flex-start;
+  padding: 0.75em 1.75em;
+  border: none;
+  border-radius: 999px;
+  background: var(--color-text);
+  color: var(--color-bg);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-body);
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.contact-form__submit:hover {
+  opacity: 0.8;
+}
+
+.contact-form__submit:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.contact-form__status {
+  margin: 0;
+  min-height: 1.4em;
+  color: var(--color-muted);
+}
+
+.contact-form__status.is-error {
+  color: #b3261e;
+}
