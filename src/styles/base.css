@@ -185,20 +185,60 @@ body {
 
 /* Hidden below 1024px — replaced by .nav__toggle's hamburger + the
    full-screen #site-menu (see subpage.css) at those sizes, since there
-   isn't room for four pill-shaped tap targets on a phone/tablet row. */
+   isn't room for four pill-shaped tap targets on a phone/tablet row.
+   Width is intrinsic (content + 1rem horizontal padding) rather than a
+   fixed value, so "Work"/"Design"/"Contact" each get a rectangle sized
+   to their own word instead of a common oversized box. Vertical padding
+   (0.405rem, ×φ 1.618 from the original 0.25rem) is kept — that's what
+   gives the pill its added height. border-radius stays small and fixed:
+   enough to soften the corners without reading as a pill. */
 .nav--overlay a:not(.nav__home) {
   display: none;
-  width: 5.75rem;
-  padding: 0.25rem 0.5rem;
+  padding: 0.405rem 1rem;
   text-align: center;
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  transition: background-color 0.2s ease;
+  border-radius: 2px;
+  /* Non-current pages: much more transparent than the current-page pill
+     below (0.15 vs. its 0.85) — deliberately faint so the selected page
+     stands out by contrast rather than the two competing for attention.
+     Text carries its own alpha (rgba, not var(--color-text)) rather than
+     a whole-element `opacity`: element-level opacity also dims the
+     already-translucent, blurred background, which flattened the
+     frosted-glass look into a plain fade. Driving background-color and
+     text color separately keeps the backdrop-filter blur reading as
+     glass at every state. rgba(17,17,17,*) is --color-text (#111111)
+     with alpha, since var() can't be blended with a literal alpha here. */
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  color: rgba(17, 17, 17, 0.75);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
-.nav--overlay a:not(.nav__home):hover {
-  background: rgba(255, 255, 255, 0.8);
+.nav--overlay a:not(.nav__home):not([aria-current="page"]):hover {
+  background: rgba(255, 255, 255, 0.3);
+  color: rgba(17, 17, 17, 1);
+}
+
+/* Current page: Ghost White (#F8F8FF) — and opaque enough (0.85) that
+   it reads roughly the same regardless of what's scrolling underneath. A
+   lower opacity here let whatever photo/content was behind it (this nav
+   is sticky, so that changes as the page scrolls) show through the blur
+   and darken the pill inconsistently; this fixes most of that. Still
+   frosted (not fully solid), just no longer content-dependent. Overrides
+   the muted-text `.nav a[aria-current="page"]` rule above, which was
+   designed for a plain (non-overlay) nav context. */
+.nav--overlay a:not(.nav__home)[aria-current="page"] {
+  background: rgba(248, 248, 255, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: rgba(17, 17, 17, 0.9);
+}
+
+.nav--overlay a:not(.nav__home)[aria-current="page"]:hover {
+  background: rgba(248, 248, 255, 0.95);
+  color: rgba(17, 17, 17, 1);
 }
 
 /* ---- Nav hamburger toggle (mobile/tablet only, <1024px) ----
@@ -248,8 +288,29 @@ body {
 }
 
 @media (min-width: 1024px) {
+  /* Shared .nav rule sets padding-top: var(--space-4) (2.5rem) for use at
+     768px+ too; that reads as too much clearance above the larger desktop
+     pills, so it's pulled in tighter here, overlay-nav only. Row gap is
+     also tightened from the shared 8px to 0.15rem so the pills sit close
+     together — .nav__contact's own margin-left:auto (below) still wins
+     out over this small gap and pushes it to the far right regardless. */
+  .nav--overlay {
+    padding-top: 1.25rem;
+    gap: 0.15rem;
+  }
+
   .nav--overlay a:not(.nav__home) {
     display: inline-block;
+  }
+
+  /* 20px × φ (1.618) — scaled up to match the enlarged pills above.
+     aspect-ratio on .nav__home (base.css) keeps the sword's proportions
+     intact, so width follows automatically. margin-right is the icon's
+     distance to the first pill — combined with the 0.15rem row gap,
+     total works out to 4rem. */
+  .nav--overlay .nav__home {
+    height: 32.36px;
+    margin-right: 3.85rem;
   }
 
   .nav__toggle {
