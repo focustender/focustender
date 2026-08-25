@@ -1,16 +1,11 @@
-/* PP Mori (Pangram Pangram Foundry) — licensed webfont, converted from the
-   .otf file supplied into browser-ready .woff. Semibold is the only weight
-   shipped — used for both body and heading text (see variables.css).
-
-   To get a further-compressed .woff2 version (recommended for production),
-   run locally once you have network access:
-     npx ttf2woff2 PPMori-Semibold.otf > assets/fonts/PPMori-Semibold.woff2
-   then add a "woff2" src entry above the "woff" one below (browsers pick
-   the first supported format). */
+/* PP Mori (Pangram Pangram Foundry) — licensed webfont, exported from a
+   FontLab-modified .vfc source as .woff2. Single Bold-weight file mapped
+   across the whole 400–600 range — used for both body and heading text
+   (see variables.css). */
 
 @font-face {
   font-family: "PP Mori";
-  src: url("../../assets/fonts/PPMori-Bold.woff") format("woff");
+  src: url("../../assets/fonts/PPMori-Bold_focustender.woff2") format("woff2");
   font-weight: 400 600;
   font-style: normal;
   font-display: swap;
