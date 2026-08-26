@@ -1,7 +1,9 @@
 // Hamburger menu for Work/Design on mobile/tablet (<1024px). Ceramics is
 // delisted from nav for now (2026-08-19, Ian's call) but the page and its
 // vite.config.js build entry are untouched, so relinking it later is just
-// restoring the nav links, not rebuilding the page.
+// restoring the nav links, not rebuilding the page. Stickers (2026-08-25)
+// is delisted the same way — reachable only via its tile on the Design
+// page (design.html) — page and build entry untouched, just no nav link.
 // The toggle itself doubles as open AND close control — no separate
 // close button — its two bars morph into an X via CSS keyed off
 // aria-expanded (see .nav__toggle-bar in base.css); the pill around

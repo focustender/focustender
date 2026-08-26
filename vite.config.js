@@ -20,6 +20,7 @@ export default defineConfig({
         design: resolve(__dirname, "design.html"),
         ceramics: resolve(__dirname, "ceramics.html"),
         contact: resolve(__dirname, "contact.html"),
+        sticker: resolve(__dirname, "sticker.html"),
       },
     },
   },

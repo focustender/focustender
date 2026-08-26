@@ -1,0 +1,118 @@
+/* ---- Sticker page ---- */
+.sticker-page {
+  flex: 1 1 0;
+  padding: var(--space-4) var(--page-padding) var(--space-6);
+}
+.sticker-page__header {
+  max-width: var(--content-max);
+  margin-bottom: var(--space-4);
+}
+.sticker-page__title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-heading);
+  line-height: var(--lh-heading);
+  margin: 0;
+}
+
+/* Page-scoped max-width, wider than --content-max since this holds a
+   live image preview, not prose. */
+.sticker-tool {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 720px;
+}
+.sticker-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.sticker-dropzone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 8rem;
+  padding: var(--space-3);
+  border: 1px dashed #c9c9c9;
+  border-radius: 12px;
+  text-align: center;
+  color: var(--color-muted);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.sticker-dropzone:hover,
+.sticker-dropzone.is-dragover {
+  border-color: var(--color-text);
+  color: var(--color-text);
+}
+.sticker-dropzone.is-busy {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.sticker-status {
+  margin: 0;
+  min-height: 1.4em;
+  color: var(--color-muted);
+}
+.sticker-status.is-error {
+  color: #b3261e;
+}
+
+.sticker-preview {
+  display: flex;
+  justify-content: center;
+}
+.sticker-preview.is-empty {
+  display: none;
+}
+.sticker-preview__canvas {
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+}
+
+.sticker-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+/* Same pill treatment as .contact-form__submit. */
+.sticker-downloads__button {
+  padding: 0.75em 1.5em;
+  border: none;
+  border-radius: 999px;
+  background: var(--color-text);
+  color: var(--color-bg);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-body);
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+.sticker-downloads__button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.sticker-downloads__button:not(:disabled):hover {
+  opacity: 0.8;
+}
+
+@media (min-width: 1024px) {
+  .sticker-tool {
+    flex-direction: row;
+    align-items: flex-start;
+    max-width: none;
+  }
+  .sticker-controls {
+    flex: 1 1 0;
+    order: 2;
+  }
+  .sticker-preview {
+    flex: 0 0 480px;
+    order: 1;
+  }
+}

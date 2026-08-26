@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stickers — focustender</title>
+    <meta name="description" content="Upload a photo of an object and cut it out into a transparent sticker or a framed composite, right in your browser." />
+    <link rel="icon" type="image/svg+xml" href="assets/focustendersword.svg" />
+    <link rel="stylesheet" href="src/styles/main.css" />
+  </head>
+  <body>
+    <div class="page">
+      <nav class="nav nav--overlay" aria-label="Primary">
+        <a href="index.html" class="nav__home" aria-label="Home"></a>
+        <a href="work.html">Work</a>
+        <a href="design.html">Design</a>
+        <a href="sticker.html" aria-current="page">Stickers</a>
+        <a href="contact.html" class="nav__contact">Contact</a>
+        <button type="button" class="nav__toggle" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+        </button>
+      </nav>
+
+      <main class="sticker-page">
+        <header class="sticker-page__header">
+          <h1 class="sticker-page__title">f.Sticker</h1>
+        </header>
+
+        <div class="sticker-tool">
+          <div class="sticker-controls">
+            <label class="sticker-dropzone" for="sticker-file-input" id="sticker-dropzone">
+              <input class="sr-only" type="file" id="sticker-file-input" accept="image/*" />
+              <span class="sticker-dropzone__text">Drag a photo here, or click to choose one</span>
+            </label>
+
+            <p class="sticker-status" id="sticker-status" role="status" aria-live="polite"></p>
+
+            <div class="sticker-downloads">
+              <button type="button" class="sticker-downloads__button" id="sticker-download" disabled>Download sticker (PNG)</button>
+            </div>
+          </div>
+
+          <div class="sticker-preview is-empty">
+            <canvas class="sticker-preview__canvas" id="sticker-canvas" aria-label="Preview of your cut-out sticker"></canvas>
+          </div>
+        </div>
+      </main>
+
+      <footer class="copyright">
+        <p class="copyright__brand">
+          <span class="copyright__sword" aria-hidden="true"></span>
+          focustender
+        </p>
+        <p class="copyright__line">© 2026</p>
+      </footer>
+    </div>
+
+    <div class="site-menu" id="site-menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+      <nav class="site-menu__links" aria-label="Primary">
+        <a href="work.html">Work</a>
+        <a href="design.html">Design</a>
+        <a href="sticker.html" aria-current="page">Stickers</a>
+      </nav>
+      <a href="contact.html" class="site-menu__contact">Contact</a>
+    </div>
+
+    <script type="module" src="src/sticker.js"></script>
+    <script type="module" src="src/nav.js"></script>
+  </body>
+</html>

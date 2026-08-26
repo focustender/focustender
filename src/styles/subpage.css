@@ -43,6 +43,18 @@
   }
 }
 
+/* ---- Design: sticker tool tile ----
+   .work-tile (project.css) normally only appears as a grid item inside
+   .work-grid, which is what gives it a sized column to fill — used
+   standalone here, it needs its own max-width or it'd stretch to the
+   full page width. */
+.design-tool {
+  padding: var(--space-4) var(--page-padding) 0;
+}
+.design-tool__tile {
+  max-width: 220px;
+}
+
 /* ---- Design: masonry ----
    CSS multi-column layout is the masonry mechanism — items flow down a
    column and wrap to the next, which naturally staggers heights without
