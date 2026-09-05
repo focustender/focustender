@@ -575,3 +575,81 @@
 .project__limitations li strong {
   color: var(--color-text);
 }
+
+.project__findings {
+  margin: 0 0 var(--space-4);
+}
+
+/* ---- Project detail page: deliverables grid ----
+   For a project whose output is several separate live things (a Figma
+   file, a hosted preview, a published artifact) rather than one chart
+   per question — a card per deliverable, same heading treatment as
+   Recommendations/Findings/Limitations above (shared selector) so a
+   page mixing this section with the others doesn't grow a second
+   heading style. */
+.project__deliverables {
+  margin: 0 0 var(--space-4);
+}
+
+.project__deliverables h2 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-body);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 var(--space-3);
+  padding-bottom: var(--space-1);
+  border-bottom: 1px solid #e2e2e2;
+}
+
+.project__deliverable-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .project__deliverable-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.project__deliverable {
+  padding: var(--space-3);
+  border: 1px solid #e2e2e2;
+}
+
+.project__deliverable-kicker {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  margin-bottom: var(--space-1);
+}
+
+.project__deliverable h3 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-body);
+  margin: 0 0 var(--space-1);
+}
+
+.project__deliverable p {
+  margin: 0 0 var(--space-2);
+  color: var(--color-muted);
+  font-size: 0.9375rem;
+  line-height: var(--lh-body);
+}
+
+.project__deliverable a {
+  font-weight: 600;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.project__deliverable a:hover {
+  text-decoration: underline;
+}

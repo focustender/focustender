@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trade Signal — focustender</title>
+    <link rel="icon" type="image/svg+xml" href="assets/focustendersword.svg" />
+    <link rel="stylesheet" href="src/styles/main.css" />
+  </head>
+  <body>
+    <div class="page">
+      <nav class="nav nav--overlay" aria-label="Primary">
+        <a href="index.html" class="nav__home" aria-label="Home"></a>
+        <a href="work.html" aria-current="page">Work</a>
+        <a href="design.html">Design</a>
+        <a href="contact.html" class="nav__contact">Contact</a>
+        <button type="button" class="nav__toggle" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+        </button>
+      </nav>
+
+      <main class="project">
+        <a href="work.html" class="project__back">← Work</a>
+
+        <header class="project__header">
+          <span class="project__eyebrow">HubSpot + Shopify + Figma</span>
+          <h1 class="project__title">Trade Signal</h1>
+          <p class="project__subtitle">A Lifecycle Growth &amp; Analytics Work Sample, Built for Fireclay Tile</p>
+        </header>
+
+        <p class="project__note">
+          Built as a self-directed work sample for Fireclay Tile's Lifecycle Growth &amp; Analytics Manager opening — not affiliated with or endorsed by Fireclay Tile. All customer data is synthetic; the trade-show stall finding below is a property of the generated dataset, not a real Fireclay statistic.
+          <a href="https://claude.ai/code/artifact/437d5454-88ca-4eeb-95e5-e066416fea4f" target="_blank" rel="noopener noreferrer">Full case study write-up →</a>
+        </p>
+
+        <p class="project__summary">
+          The question behind this project: if Fireclay's own customer journey is homeowner → designer → trade → commercial, where does the biggest, most fixable stall actually sit, and can that finding survive being built on top of real tools instead of staying a slide? That meant generating a lifecycle dataset shaped like Fireclay's real segments, reconciling a deliberately messy CRM export the way a real one would arrive, seeding the result live into HubSpot, and carrying the resulting intervention (a Sample Kit Builder) all the way to a real Shopify theme section and a build-ready Figma spec, rather than stopping at a chart.
+        </p>
+
+        <section class="project__findings">
+          <h2>Key Findings</h2>
+
+          <div class="project__finding">
+            <h3>73% of trade-show-acquired leads stall after one sample</h3>
+            <p>
+              Breaking trade-segment single-sample requesters down by acquisition channel: 73% of leads acquired at trade shows who request exactly one sample never advance to a project upload or purchase — more than double the stall rate of leads from email capture (33.3%). Trade-show leads are also disproportionately unlikely to request a second sample (11%, versus 22% of trade leads overall) — the single point a Sample Kit Builder / Trade Portal intervention should target first, since a second sample request is the strongest observed predictor of eventual purchase in this segment.
+            </p>
+          </div>
+
+          <div class="project__finding">
+            <h3>A naive CRM cleanup would have hidden 34 of those customers entirely</h3>
+            <p>
+              The raw CRM export backing this analysis is deliberately messy: inconsistent segment casing, mixed date formats, and duplicate-ish rows split across multiple partial records per customer. Reconciling it by grouping raw rows per customer and coalescing fields — rather than a naive first-row-wins dedupe — took 669 raw rows down to 600 distinct customers and recovered acquisition channel for 34 customers who would otherwise have been reported as unattributed, silently darkening the channel-level finding above.
+            </p>
+          </div>
+        </section>
+
+        <section class="project__deliverables">
+          <h2>The Build</h2>
+          <div class="project__deliverable-grid">
+            <div class="project__deliverable">
+              <span class="project__deliverable-kicker">Concept</span>
+              <h3>Sample Kit Builder</h3>
+              <p>The Trade Portal module that closes the single-sample dead end, with before/after states and the design rationale for why it targets this exact point in the funnel.</p>
+              <a href="https://claude.ai/code/artifact/ab73786b-f081-44f6-8d8e-625854e2515d" target="_blank" rel="noopener noreferrer">Open the artifact →</a>
+            </div>
+            <div class="project__deliverable">
+              <span class="project__deliverable-kicker">Concept</span>
+              <h3>Room Visualizer</h3>
+              <p>A working perspective texture-mapping demo (real homography math, not generative image synthesis) with a before/after toggle across three glaze colorways.</p>
+              <a href="https://claude.ai/code/artifact/5224f126-1319-4e71-906c-33a9097ca8f6" target="_blank" rel="noopener noreferrer">Open the artifact →</a>
+            </div>
+            <div class="project__deliverable">
+              <span class="project__deliverable-kicker">Figma</span>
+              <h3>Build-ready spec file</h3>
+              <p>The Sample Kit Builder rebuilt in Figma with real bound color/text variables and auto-layout — a file a developer can inspect in Dev Mode, not a flat mockup.</p>
+              <a href="https://www.figma.com/design/hpXw6uV7Noke53bJTOdcW5?node-id=3-2" target="_blank" rel="noopener noreferrer">Open in Figma →</a>
+            </div>
+            <div class="project__deliverable">
+              <span class="project__deliverable-kicker">Shopify</span>
+              <h3>Live theme preview</h3>
+              <p>The section running on a Shopify dev store's product page, reading a live <code>custom.companion_samples</code> metafield — not a static screenshot. Password-gated; request access.</p>
+              <a href="https://fireclaytile-project.myshopify.com/products/original-ceramic-aegean?preview_theme_id=148365705269" target="_blank" rel="noopener noreferrer">Open the preview →</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="project__recommendations">
+          <h2>Experimentation Backlog</h2>
+          <ol class="project__rec-list">
+            <li>Trade-show second-sample nudge: a day-5/day-12 follow-up offering a curated second sample specifically to trade-show-acquired leads, tested holdout-vs-treatment on 90 days of new sign-ups.</li>
+            <li>Trade Portal single-sample re-entry flow: a portal prompt for accounts with exactly one sample on file and no activity in 21 days, powering the Sample Kit Builder above.</li>
+            <li>Visualizer-no-follow-up nurture: an AI-personalized email referencing the specific tile/room a visitor visualized, sent 3 days after a session with no sample request.</li>
+          </ol>
+        </section>
+
+        <section class="project__limitations">
+          <h2>Build Status</h2>
+          <ul>
+            <li><strong>Real integration:</strong> HubSpot seeded and live-verified (750 contacts), Shopify dev store configured with real products/collections/metafield/discount, the theme section reads the live metafield, the Figma file has real bound variables and auto-layout.</li>
+            <li><strong>Honest stubs:</strong> the Shopify cart-add button logs instead of calling <code>/cart/add.js</code>; the theme's nav menu wasn't touched; the Figma-source fonts (Playwright Display, MuseoSans) are substituted with close, licensable lookalikes (Playfair Display, Mulish) pending a real license.</li>
+          </ul>
+        </section>
+      </main>
+
+      <footer class="copyright">
+        <p class="copyright__brand">
+          <span class="copyright__sword" aria-hidden="true"></span>
+          focustender
+        </p>
+        <p class="copyright__line">© 2026</p>
+      </footer>
+    </div>
+
+    <div class="site-menu" id="site-menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+      <nav class="site-menu__links" aria-label="Primary">
+        <a href="work.html" aria-current="page">Work</a>
+        <a href="design.html">Design</a>
+      </nav>
+      <a href="contact.html" class="site-menu__contact">Contact</a>
+    </div>
+
+    <script type="module" src="src/nav.js"></script>
+  </body>
+</html>

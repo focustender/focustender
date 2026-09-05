@@ -25,7 +25,7 @@ function photoUrl(filename) {
   return entry ? entry[1] : "";
 }
 
-// All 6 projects now have real pages on this site. Two (SQL Hospital
+// All 7 projects now have real pages on this site. Two (SQL Hospital
 // Readmissions, Telehealth No-Show) don't have a visual asset — neither
 // produced a dashboard, just notebooks/queries — so image stays null
 // and renders a plain placeholder square (see renderGrid).
@@ -39,6 +39,13 @@ function photoUrl(filename) {
 // whichever single industry is active, the same OR-style match tools
 // already uses.
 const projects = [
+  {
+    title: "Trade Signal",
+    href: "project-trade-signal.html",
+    image: "tradeSignalVisualizer.png",
+    tools: ["Python", "Shopify", "HubSpot", "Figma"],
+    industries: ["Business"],
+  },
   {
     title: "Subscription Economics",
     href: "project-subscription-economics.html",
