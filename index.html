@@ -7,65 +7,36 @@
     <meta name="description" content="focustender is dedicated to creating experiences through data and design." />
     <link rel="icon" type="image/svg+xml" href="assets/focustendersword.svg" />
     <link rel="stylesheet" href="src/styles/main.css" />
-    <!-- Blocking (not type=module) so this runs before first paint —
-         marks the page so the landing intro's CSS starts hidden instead
-         of flashing fullscreen for a frame before src/home.js can react.
-         Set once per tab session (see src/home.js), so repeat home-page
-         loads/nav clicks within the same session skip it — except an
-         actual reload (F5/Cmd+R), which the Navigation Timing entry's
-         type identifies regardless of sessionStorage, so hitting refresh
-         always replays the intro even after it's already played once
-         this session. -->
-    <script>
-      try {
-        var isReload = performance.getEntriesByType("navigation")[0]?.type === "reload";
-        if (sessionStorage.getItem("heroIntroPlayed") && !isReload) {
-          document.documentElement.classList.add("no-hero-intro");
-        }
-      } catch {}
-    </script>
   </head>
   <body>
     <div class="page">
-      <header class="hero">
-        <img class="hero__bg" src="assets/hero-bg.jpg" alt="" />
-        <img class="hero__icon" src="assets/focustendersword.svg" alt="" aria-hidden="true" />
-      </header>
+      <main class="landing">
+        <h1 class="sr-only">focustender</h1>
 
-      <nav class="nav" aria-label="Primary">
-        <a href="work.html">Work</a>
-        <a href="design.html">Design</a>
-      </nav>
+        <div class="landing__brand">
+          <p class="landing__mark">f.tndr</p>
+          <p class="landing__copyright">©2026</p>
+        </div>
 
-      <main>
-        <h1 class="statement">
-          <span class="statement__brand">focustender</span> is a project on form meeting function.
-        </h1>
+        <div class="landing__showcase">
+          <a class="landing__project" id="landing-project" href="#">
+            <div class="landing__media">
+              <img id="landing-project-image" src="" alt="" />
+            </div>
+            <div class="landing__info">
+              <h2 class="landing__title" id="landing-project-title"></h2>
+              <p class="landing__desc" id="landing-project-desc"></p>
+            </div>
+          </a>
 
-        <footer class="contact">
-          <a href="contact.html">Contact</a>
-        </footer>
+          <div class="landing__dots" id="landing-dots" role="tablist" aria-label="Recent work"></div>
+
+          <a class="landing__view-all" href="work.html">View All Work</a>
+        </div>
+
+        <p class="landing__tagline">independent designer and data analyst.</p>
       </main>
-
-      <footer class="copyright">
-        <p class="copyright__brand">
-          <span class="copyright__sword" aria-hidden="true"></span>
-          focustender
-        </p>
-        <p class="copyright__line">© 2026</p>
-      </footer>
     </div>
-
-    <!-- Landing intro: fills the viewport with the hero photo on a
-         visitor's first page load this session, then src/home.js
-         shrinks it into the real .hero's spot and removes it. Sibling
-         of .page (not nested in .hero) since it needs position:fixed to
-         cover the whole viewport regardless of .hero's own box — see
-         home.css. -->
-    <div class="hero-intro" aria-hidden="true">
-      <img class="hero-intro__img" src="assets/hero-bg.jpg" alt="" />
-    </div>
-    <noscript><style>.hero-intro { display: none; } .statement__brand { color: var(--color-text); }</style></noscript>
 
     <script type="module" src="src/home.js"></script>
   </body>

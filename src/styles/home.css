@@ -1,179 +1,186 @@
-/* ---- Hero ----
-   Not full-bleed: the photo is inset by --page-padding on the left, top,
-   and right — the same variable the nav/statement/contact text uses for
-   its own margin — so the photo's edge lines up with where the text
-   starts instead of touching the browser edges. No explicit width is set,
-   so the box's width is "auto" and the browser fills in the space left
-   over after the left/right margins, at every breakpoint including
-   mobile. The sword icon and photo are both sized as percentages of this
-   same box, so they resize/reposition together as one unit.
+/* ---- Landing ----
+   Single full-viewport screen: a corner-pinned brand mark/copyright, a
+   showcase of the 3 most recent Work projects (image, title, description,
+   auto-advancing dot indicator — see src/home.js), a "View All Work" link,
+   and a tagline. Mobile stacks everything in one column with the brand
+   row pinned to the bottom; desktop (1024px+) splits into a 3-column row
+   (brand column | showcase | tagline) matching the Figma frames.
 
-   No fixed aspect-ratio: .hero is the flexible child of the .page flex
-   column (base.css) — flex:1 makes it absorb whatever vertical space is
-   left over after nav/statement/contact take what they need, so the
-   whole page fits one viewport with no scrolling on ordinary windows.
-   min-height is a floor so it never gets squeezed away to nothing (and
-   takes the icon with it); max-height is a ceiling so it doesn't stretch
-   absurdly tall on a narrow-but-very-tall window. Between those two, its
-   shape is fluid rather than a fixed ratio — that's the trade-off for a
-   no-scroll layout, since a fixed shape and a flexible height can't both
-   be honored at once. */
-.hero {
-  position: relative;
-  margin: var(--page-padding) var(--page-padding) 0;
-  flex: 1 1 0;
-  min-height: 220px;
-  max-height: 88vh;
-  overflow: hidden;
+   flex: 1 lets .landing (the only child of .page, see base.css) grow to
+   fill .page's own min-height: 100dvh, rather than shrinking to its own
+   content height. Background is a near-white distinct from the sitewide
+   --color-bg (#fffefc vs #ffffff) — from the Figma "white/0" token,
+   scoped to this page only since only the landing design was shared. */
+.landing {
+  flex: 1 1 auto;
+  background: #fffefc;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  grid-template-areas:
+    "showcase"
+    "brand";
+  align-items: center;
+  justify-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--page-padding) var(--space-2);
 }
 
-.hero__bg {
+.landing__brand {
+  grid-area: brand;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
-/* Fixed px width (not a % of .hero) so the icon stays the size it was at
-   mobile — 46px wide, measured at a 390px-wide viewport — across every
-   breakpoint, rather than scaling up as .hero grows on wider/taller
-   windows. left/top stay percentages so its top-left anchor still tracks
-   the photo underneath it as the box resizes. */
-.hero__icon {
-  position: absolute;
-  left: 30.78%;
-  top: 16.67%;
-  width: 46px;
-  height: auto;
+.landing__mark,
+.landing__copyright,
+.landing__tagline {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.875rem; /* mori-body: 14px */
 }
 
-@media (min-width: 768px) {
-  .hero {
-    min-height: 280px;
-    max-height: 70vh;
-  }
-}
-
-@media (min-width: 1024px) {
-  .hero {
-    min-height: 320px;
-    max-height: 60vh;
-  }
-}
-
-/* ---- Landing intro ----
-   Fullscreen photo on load that shrinks into the real .hero's spot.
-   Starts fullscreen via plain CSS (position:fixed + inset:0, no JS
-   needed for that part — matches the .lightbox pattern in subpage.css)
-   so there's no flash-of-wrong-size even if src/home.js loads slowly.
-
-   The photo's own box never resizes — home.js only ever animates
-   clip-path, shrinking the visible window from the full viewport down
-   to the real .hero's measured rect. Earlier this animated
-   top/left/width/height directly, which resizes the box itself, which
-   makes object-fit:cover recompute a new crop on every frame —
-   visually that read as a second copy of the photo appearing near the
-   top-left corner and sliding into place, not a clean shrink. Clipping
-   instead of resizing means the underlying image is laid out once and
-   never changes size, so there's nothing for object-fit to recompute.
-
-   background-color is the opaque fill for the box itself, painted
-   before the img has decoded — without it the div is transparent until
-   the photo loads, so on a slow first paint (mobile especially: slower
-   decode, no cache yet) the real page shows through for a frame,
-   footer included, since it's the lowest thing on the page. */
-.hero-intro {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  background-color: var(--color-text);
-  clip-path: inset(0);
-  transition: clip-path 900ms cubic-bezier(0.65, 0, 0.35, 1);
-}
-
-.hero-intro__img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Set synchronously (before first paint) by the inline script in
-   index.html's <head> when sessionStorage says the intro already
-   played this tab session — keeps repeat home-page loads/nav clicks
-   from flashing fullscreen before src/home.js can react. */
-.no-hero-intro .hero-intro {
+.landing__tagline {
   display: none;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .hero-intro {
-    display: none;
-  }
+/* ---- Showcase ---- */
+.landing__showcase {
+  grid-area: showcase;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  max-width: 420px;
 }
 
-/* ---- Statement ---- */
-.statement {
+.landing__project {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  text-decoration: none;
+}
+
+.landing__media {
+  width: 100%;
+  aspect-ratio: 595 / 366;
+  overflow: hidden;
+  background: #474747; /* fallback fill behind the <img>, matches .work-tile-media's placeholder pattern */
+}
+
+.landing__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.landing__info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+.landing__title {
+  margin: 0;
   font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: var(--fs-heading);
-  line-height: var(--lh-heading);
-  margin: var(--space-5) 0 var(--space-4);
-  padding: 0 var(--page-padding);
-  max-width: 20ch;
+  font-weight: 700;
+  font-size: 1.75rem; /* mori-title: 28px */
+  letter-spacing: 1.4px;
+  text-transform: capitalize;
 }
 
-@media (min-width: 768px) {
-  .statement {
-    font-size: 3rem;
-    max-width: 24ch;
-  }
+.landing__desc {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.875rem; /* mori-body: 14px */
+  max-width: 32ch;
+}
+
+.landing__dots {
+  display: flex;
+  align-items: center;
+  gap: var(--space-0);
+}
+
+.landing__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(17, 17, 17, 0.25);
+  cursor: pointer;
+  transition:
+    width 200ms ease,
+    background-color 200ms ease;
+}
+
+.landing__dot.is-active {
+  width: 16px;
+  background: var(--color-text);
+}
+
+.landing__view-all {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.25rem; /* mori-subheading: 20px */
+  text-transform: capitalize;
+  text-decoration: none;
 }
 
 @media (min-width: 1024px) {
-  .statement {
-    font-size: 4rem;
-    max-width: 30ch;
+  .landing {
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: 1fr;
+    grid-template-areas: "brand showcase tagline";
+    align-items: stretch;
+    justify-items: stretch;
+    padding: 1.75rem var(--space-5); /* gap-28 vertical, page margins(64px) horizontal */
   }
-}
 
-/* White by default because the statement sits well below the hero's
-   resting spot, so the fullscreen intro photo (see .hero-intro above)
-   covers it from the very first frame — position:relative + z-index
-   above .hero-intro's 1000 is what lifts it above that photo instead of
-   being hidden behind it like the rest of the sentence. font-size is
-   untouched (still whatever .statement's own rules/breakpoints set),
-   since this only changes stacking and color, not layout.
+  .landing__brand {
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: auto;
+  }
 
-   home.js flips .is-settled on the instant the shrinking clip-path's
-   bottom edge rises above this word's own on-page position — not when
-   the whole animation finishes. The hero's resting spot is above the
-   statement, so the photo uncovers this row early in the shrink, well
-   before the clip-path transition completes; waiting for the full
-   animation to end would leave white-on-white (invisible) text for
-   most of the shrink. */
-/* ss05 (alternate "t") kept on just this "focustender" wordmark — the
-   rest of the site's body text uses the regular "t". An earlier ss04
-   (alternate "r") experiment on this word was tried and reverted. */
-.statement__brand {
-  position: relative;
-  z-index: 1001;
-  color: #fff;
-  font-feature-settings: "ss05" 1;
-  transition: color 500ms ease;
-}
+  .landing__tagline {
+    display: block;
+    align-self: flex-end;
+    justify-self: end;
+  }
 
-.statement__brand.is-settled {
-  color: var(--color-text);
-}
+  .landing__showcase {
+    justify-self: center;
+    align-self: center;
+    max-width: 900px;
+    gap: 1.75rem; /* gap-28 */
+  }
 
-.no-hero-intro .statement__brand {
-  color: var(--color-text);
-  transition: none;
-}
+  .landing__project {
+    flex-direction: row;
+    align-items: stretch;
+    gap: var(--space-2);
+  }
 
-@media (prefers-reduced-motion: reduce) {
-  .statement__brand {
-    color: var(--color-text);
-    transition: none;
+  .landing__media {
+    width: 595px;
+    flex-shrink: 0;
+  }
+
+  .landing__info {
+    flex: 1;
+    justify-content: space-between;
   }
 }
