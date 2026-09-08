@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trade Signal — Full Findings Archive — focustender</title>
+    <link rel="icon" type="image/svg+xml" href="assets/focustendersword.svg" />
+    <link rel="stylesheet" href="src/styles/main.css" />
+    <link rel="stylesheet" href="src/styles/trade-signal.css" />
+  </head>
+  <body>
+    <div class="page">
+      <nav class="nav nav--overlay" aria-label="Primary">
+        <a href="index.html" class="nav__home" aria-label="Home"></a>
+        <a href="work.html" aria-current="page">Work</a>
+        <a href="design.html">Design</a>
+        <a href="contact.html" class="nav__contact">Contact</a>
+        <button type="button" class="nav__toggle" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+        </button>
+      </nav>
+
+      <main class="ts-page ts-appendix">
+        <a href="project-trade-signal-case-study.html" class="project__back">← Trade Signal</a>
+
+        <div class="shell">
+          <nav class="rail" aria-label="Findings navigation">
+            <div class="rail-group">
+              <h4>Data foundation</h4>
+              <a href="#dq-scorecard">Quality scorecard</a>
+              <a href="#dq-eda">EDA structural notes</a>
+              <a href="#semantic-model">Semantic model</a>
+            </div>
+            <div class="rail-group">
+              <h4>CRM reconciliation</h4>
+              <a href="#crm-findings">The findings</a>
+              <a href="#crm-memo">Systems memo</a>
+              <a href="#crm-methodology">Reusable tool</a>
+            </div>
+            <div class="rail-group">
+              <h4>Experimentation</h4>
+              <a href="#experiment-feasibility">Feasibility check</a>
+              <a href="#experiment-decision">Decision memo</a>
+            </div>
+            <div class="rail-group">
+              <h4>Attribution</h4>
+              <a href="#attribution-findings">Platform vs. outcome</a>
+              <a href="#attribution-methodology">How it works</a>
+            </div>
+            <div class="rail-group">
+              <h4>Retention &amp; trend</h4>
+              <a href="#cohort-findings">Cohort retention</a>
+              <a href="#timeseries-findings">Time-series trend</a>
+              <a href="#timeseries-methodology">How it was built</a>
+            </div>
+            <div class="rail-group">
+              <h4>Root cause</h4>
+              <a href="#rootcause-findings">Chasing the improvement</a>
+              <a href="#rootcause-methodology">How it was built</a>
+            </div>
+            <div class="rail-group">
+              <h4>Business &amp; dashboard</h4>
+              <a href="#bizmetrics-findings">Conversion vs. revenue</a>
+              <a href="#bizmetrics-methodology">Built new, not force-fit</a>
+              <a href="#dashboard-spec">Dashboard specification</a>
+            </div>
+            <div class="rail-group">
+              <h4>Reactivation &amp; AI workflow</h4>
+              <a href="#reactivation">The mechanism, made real</a>
+              <a href="#pulse-methodology">Lifecycle Pulse</a>
+              <a href="#pulse-digest">A real digest</a>
+            </div>
+            <div class="rail-group">
+              <h4>Sign-off</h4>
+              <a href="#qa-signoff">QA gate</a>
+              <a href="#skills-attribution">Vendored skills, attributed</a>
+            </div>
+          </nav>
+
+          <div class="content">
+            <div class="eyebrow">Trade Signal — process appendix</div>
+            <h1>Every finding, in full</h1>
+            <p class="lede">The main case study links here for anyone who wants more than the summary. Twenty-one write-ups, one per underlying analysis, real numbers and real methodology, not just the one-liners already on the main page.</p>
+
+            <div class="group" id="data-foundation">
+              <div class="group-head">Data foundation</div>
+
+              <section class="entry" id="dq-scorecard">
+                <span class="entry-kicker">Scorecard</span>
+                <h3>Data quality scorecard</h3>
+                <div class="entry-source">analysis/data-quality-audit/output/quality_rubric.md</div>
+                <p>Six standard quality dimensions run against the real dataset (3,200 customers, 8,868 funnel events, 7,949 email engagements, 474 reviews, plus the 669-row raw CRM export): Completeness 9/10, Accuracy 10/10, Consistency 10/10, Uniqueness 8/10, Validity 10/10, weighted overall <strong>9.41/10</strong>, zero Critical or High findings. Timeliness is marked N/A rather than forced into a misleading number, since this is a static generated dataset, not a live pipeline with an SLA.</p>
+                <p>The one Uniqueness deduction is deliberate, not a defect: <code>company_name</code> reads 76% null overall, but that's exactly segment mix (100% populated for trade/commercial, 100% null for homeowner/designer), not a gap. A generic outlier check also flags 311 of 1,654 <code>amount</code> values (18.8%) as IQR outliers, all 311 from the trade/commercial segments even though those two segments are only 19.4% of purchases, the expected shape of mixing very different order sizes, not a data-entry problem.</p>
+                <p>One real engineering note: the vendored <code>null_counter.py</code> script crashes under Python 3.14 (an argparse bug tripping on a bare <code>%</code> in a help string), worked around by importing its core function directly rather than patching the vendored file.</p>
+              </section>
+
+              <section class="entry" id="dq-eda">
+                <span class="entry-kicker">EDA notes</span>
+                <h3>EDA structural notes</h3>
+                <div class="entry-source">analysis/data-quality-audit/output/eda_findings_summary.md</div>
+                <p>Three structural findings, none of them quality defects. <code>funnel_events.amount</code> is 81.4% null because only <code>purchase</code> and <code>repeat_purchase</code> events carry a dollar value, so any blended AOV stat across all customers without a segment cut is misleading. <code>sku_collection</code> is 37.8% null, flagged as worth a follow-up cut by event type before trusting it in collection-level analysis. <code>correlation_explorer.py</code> genuinely doesn't apply to this schema, since every table has at most one numeric measure column.</p>
+                <p>What looks good: referential integrity is 100% clean across all three child-to-parent relationships (17,291 combined rows, 0 orphans), <code>customer_id</code> is 100% unique everywhere including the intentionally messy raw CRM export, and all three business-rule checks pass with zero violations. Verdict: data is ready for analysis, no fix required before proceeding.</p>
+              </section>
+
+              <section class="entry" id="semantic-model">
+                <span class="entry-kicker">Definitions</span>
+                <h3>Semantic model</h3>
+                <div class="entry-source">analysis/semantic-model/README.md</div>
+                <p>Every funnel metric this project reports, formalized into YAML following dbt Semantic Layer conventions: 6 funnel-stage metrics, 4 dimensions, and the core entities and relationships, validating cleanly against a strict schema validator. It documents real gotchas already hit the hard way elsewhere in this project rather than a clean textbook definition: <code>project_rate</code>'s denominator must be filtered to trade/commercial only, since homeowner and designer customers never trigger a <code>project_upload</code> event at all. <code>repeat_purchase_rate</code> documents the cohort-anchoring mistake the cohort analysis made and fixed: anchoring cohorts on signup date produces nonsensical rates above 100%, first-purchase-date is the correct anchor.</p>
+                <p>Nothing in the schema's structure is Fireclay-specific; swapping the data-source and expression fields adapts it to a different business unchanged.</p>
+              </section>
+            </div>
+
+            <div class="group" id="crm">
+              <div class="group-head">CRM reconciliation</div>
+
+              <section class="entry" id="crm-findings">
+                <span class="entry-kicker">Finding</span>
+                <h3>HubSpot &harr; Salesforce: the findings</h3>
+                <div class="entry-source">analysis/crm-reconciliation/output/reconciliation_findings.md</div>
+                <p>Both inputs are live API extracts, not fixtures: 188 HubSpot records, 385 Salesforce records. The matcher found 92 matches total (85 by exact email, 7 by fuzzy name+company), 96 HubSpot-only orphans, 293 Salesforce-only orphans. The 7 fuzzy matches are investigated openly rather than hidden: all 7 are false positives, genuinely different people who happen to share a surname or a repeated company-name template, about 1.7% of 403 candidate pairs, a real limitation of name/company matching without a third identifying field.</p>
+                <p>The real finding, isolated to the 85 genuine cross-system matches: <strong>100% show a lifecycle-stage mismatch</strong>, one mechanism every time, not scattered noise. HubSpot's <code>lifecyclestage</code> reads "lead" while Salesforce's <code>Lead.Status</code> reads "Closed - Converted," because the original HubSpot import set five custom properties but never touched HubSpot's own standard lifecycle field. A secondary drift: 25 of the 85 pairs (29%) show Salesforce's company name as HubSpot's value with an " Inc" suffix appended, consistent with sales-side normalization on lead entry.</p>
+              </section>
+
+              <section class="entry" id="crm-memo">
+                <span class="entry-kicker">Systems memo</span>
+                <h3>HubSpot &harr; Salesforce: the systems memo</h3>
+                <div class="entry-source">analysis/crm-reconciliation/systems-requirements-memo.md</div>
+                <p>Answers the JD's "systems requirements needed for better growth decisions" line literally. The fix is narrow because the failure is narrow: a native Salesforce Flow firing on <code>Lead.Status</code> transitioning to "Working - Contacted" or "Closed - Converted," calling HubSpot's Contacts API to set <code>lifecyclestage</code> on the matching contact, joined on email. The mapping: "Working - Contacted" to <code>salesqualifiedlead</code>, "Closed - Converted" to <code>customer</code>, one-directional by design since Salesforce becomes the system of record once a lead is actively worked.</p>
+                <p>Explicitly argues against a platform purchase (Zapier, Workato, a native connector): those solve problems this data doesn't show exist yet. Rollout note: backfill the 85 already-mismatched contacts once before turning the Flow on, or the fix only stops new drift and this round's findings stay permanently stale.</p>
+              </section>
+
+              <section class="entry" id="crm-methodology">
+                <span class="entry-kicker">Methodology</span>
+                <h3>HubSpot &harr; Salesforce: the reusable tool</h3>
+                <div class="entry-source">analysis/crm-reconciliation/README.md</div>
+                <p><code>reconcile.py</code> is a pure function (two record lists plus a parsed config in, a match/orphan/mismatch report out) with zero hardcoded Fireclay field names anywhere in its matching logic, every field name comes from <code>config.yaml</code> at call time. Matching runs exact email first, then falls back to fuzzy name+company for whatever's left unmatched on both sides.</p>
+                <p>One honest caveat documented rather than glossed over: the reusable REST-based HubSpot extractor script was written but never actually executed in this project, since the live HubSpot data was pulled directly through Claude Code's MCP connector in the same build session instead. Known limitation, stated plainly: fuzzy matching without a third identifying field will occasionally produce false positives (this project's own run: 7 of 403 candidate pairs, 1.7%).</p>
+              </section>
+            </div>
+
+            <div class="group" id="experimentation">
+              <div class="group-head">Experimentation</div>
+
+              <section class="entry" id="experiment-feasibility">
+                <span class="entry-kicker">Finding</span>
+                <h3>Experimentation: the feasibility check</h3>
+                <div class="entry-source">analysis/experimentation/feasibility_findings.md</div>
+                <p>The backlog's Hypothesis 1: a trade-show second-sample nudge, tested as a 90-day holdout-vs-treatment, scaling at an 8-point lift in second-sample rate. Real historical volume: 198 trade-show trade customers over 20 months, 10.05 leads per month. A standard two-proportion power calculation (&alpha;=0.05, 80% power) against an 11% baseline needs 623 total leads to detect an 8-point lift, meaning <strong>62 months, over 5 years</strong>, to reach that number at current volume.</p>
+                <p>Checked whether measuring a faster-arriving proxy (email click-through, real rate 17.6%) would fix the timeline. It doesn't: even a full 2-year wait can only reliably catch a 13.8-point improvement, on either metric, nearly double the original 8-point threshold. The constraint is population size, not metric choice.</p>
+              </section>
+
+              <section class="entry" id="experiment-decision">
+                <span class="entry-kicker">Decision memo</span>
+                <h3>Experimentation: the decision memo</h3>
+                <div class="entry-source">analysis/experimentation/decision_memo.md</div>
+                <p>Answers the JD's "scale, stop, or learn next" language directly with a stop-and-learn on the test <em>design</em>, not the hypothesis. Recommendation: skip the holdout, roll the nudge out to 100% of eligible single-sample trade-show leads, then track the second-sample rate directionally against the pre-rollout 11% baseline over two full quarters. This can't produce a trustworthy p-value at this N, stated plainly rather than dressed up. An explicit reversal bar is set: end the rollout if the rate isn't at least 5 points above baseline after two quarters.</p>
+                <p>Worth naming directly: an earlier draft planned to simulate a treatment effect and "run" the test against a synthetic cohort to produce a scale/iterate/kill result. That was dropped on purpose, a fabricated outcome would have been a more impressive-looking deliverable and a dishonest one.</p>
+              </section>
+            </div>
+
+            <div class="group" id="attribution">
+              <div class="group-head">Attribution</div>
+
+              <section class="entry" id="attribution-findings">
+                <span class="entry-kicker">Finding</span>
+                <h3>Attribution: platform metric vs. commercial outcome</h3>
+                <div class="entry-source">analysis/lifecycle-attribution/output/attribution_findings.md</div>
+                <p>Six real email programs compared on platform metric (open/click rate) against commercial outcome (mean purchase value, engaged vs. unengaged), at three attribution windows. <code>welcome</code> is the one program where the conclusion flips by window: a 30-day look shows a &minus;$56 engaged-vs-unengaged gap; a 90-day look shows +$242. Since tile is a considered purchase, a 30-day report on this program alone would have reached the wrong conclusion.</p>
+                <p><code>sample_followup</code> and <code>project_nurture</code> show a negative value gap at every window tested, most plausibly a selection effect rather than the email causing lower spend, stated as a correlation, not causal proof. Most stark: <code>reactivation</code> and <code>trade_engagement</code>'s 977 combined recipients show zero purchase or repeat-purchase events at any window, regardless of engagement, meaning open rate on those two programs is disconnected from any outcome this dataset can observe at all.</p>
+              </section>
+
+              <section class="entry" id="attribution-methodology">
+                <span class="entry-kicker">Methodology</span>
+                <h3>Attribution: how the engine works</h3>
+                <div class="entry-source">analysis/lifecycle-attribution/README.md</div>
+                <p><code>attribution.py</code> is three pure, generic functions with no Fireclay-specific field names. It is explicitly not a causal-inference tool: it reports correlational gaps between engaged and unengaged recipients, never a randomized result, and treats every negative gap as a hypothesis for a designed test, not a decision on its own. Fully tested (6/6 passing) before being run against real data.</p>
+              </section>
+            </div>
+
+            <div class="group" id="retention">
+              <div class="group-head">Retention &amp; trend</div>
+
+              <section class="entry" id="cohort-findings">
+                <span class="entry-kicker">Finding</span>
+                <h3>Cohort analysis: repeat-purchase retention</h3>
+                <div class="entry-source">analysis/cohort-analysis/output/cohort_findings.md</div>
+                <p>The first version of this analysis anchored cohorts on signup date and produced nonsensical retention rates above 100% in some cells, because tile is a considered purchase and almost no customer's first purchase happens in their signup month. Re-anchoring on each customer's first-purchase month instead fixed it, and that correction is documented rather than silently patched over.</p>
+                <p>The real result: only 15.4% of first-time purchasers (221 of 1,433) ever make a second purchase within the ~22-month window, and <strong>zero repeat purchases happen in month 1</strong>, across every one of the 20 cohorts old enough to observe it. Segment breakdown: trade repeat-purchases at 23.6%, designer 19.9%, commercial 18.1%, homeowner 10.8%, roughly double the homeowner rate for trade and designer. These segment counts independently reproduce a table already published elsewhere in this project, a second cross-check that this project's headline numbers hold up under a different computation method.</p>
+              </section>
+
+              <section class="entry" id="timeseries-findings">
+                <span class="entry-kicker">Finding</span>
+                <h3>Time series: is the stall rate improving?</h3>
+                <div class="entry-source">analysis/time-series/output/ts_findings.md</div>
+                <p>20 monthly points, 2024-01 through 2025-08. Trend: downward, a linear fit of &minus;0.77%/month, weighted stall rate falling from 74.2% in 2024 to 71.7% through August 2025. The full-period time-weighted mean (73.97%) independently reproduces the already-published 73% headline stat. The most recent three months are the lowest sustained stretch in the series: 62.5%, 60.0%, 57.1%.</p>
+                <p>One statistically flagged anomaly, November 2024 at 25.0%, is explained plainly rather than treated as a real event: that month had only 4 leads total, so a single lead's outcome moves the rate by 25 points. The honest read: the improvement is real and worth monitoring, but at 4&ndash;11 leads a month it's too early to credit any specific cause.</p>
+              </section>
+
+              <section class="entry" id="timeseries-methodology">
+                <span class="entry-kicker">Methodology</span>
+                <h3>Time series: how it was built</h3>
+                <div class="entry-source">analysis/time-series/README.md</div>
+                <p>A real bug, found and worked around rather than patched: the vendored analyzer script's <code>__main__</code> block unconditionally calls a demo function and ignores <code>sys.argv</code> entirely, so its real <code>--csv</code> argument parsing is dead code. The fix was to import and call the underlying functions directly, bypassing the broken entry point, and to document the bug rather than editing the vendored file in place. The known limitation is stated plainly: 20 monthly points at low volume is thin for trend or anomaly detection, and every conclusion is stated as directional rather than confident as a result.</p>
+              </section>
+            </div>
+
+            <div class="group" id="rootcause">
+              <div class="group-head">Root cause</div>
+
+              <section class="entry" id="rootcause-findings">
+                <span class="entry-kicker">False start, then honest conclusion</span>
+                <h3>Root cause: chasing the improvement</h3>
+                <div class="entry-source">analysis/root-cause/output/rca_findings.md</div>
+                <p>A structured hypothesis rule-out for the 2024&rarr;2025 stall-rate improvement. A generic drill-down tool's raw-count comparison flagged one SKU collection, Original Ceramic, as the "top driver," since it had the largest absolute count change. Re-checked as a rate rather than a raw count, that claim doesn't hold: Original Ceramic's stall rate did fall (88.9% to 64.3%), but Natural Press's rate <em>rose</em> (56.2% to 69.2%) and Thin Brick's rate also rose (64.3% to 81.8%) over the same window. A real driver should move consistently in one direction; this doesn't.</p>
+                <p>Two hypotheses that could plausibly explain a real improvement, sales rep performance and inventory availability, aren't testable at all: no rep field exists anywhere in the dataset, and only current-state inventory is modeled. Final verdict: <strong>inconclusive</strong>, most consistent with a diffuse, population-level drift, with two concrete systems-requirements gaps named for any future investigation.</p>
+              </section>
+
+              <section class="entry" id="rootcause-methodology">
+                <span class="entry-kicker">Methodology</span>
+                <h3>Root cause: how it was built</h3>
+                <div class="entry-source">analysis/root-cause/README.md</div>
+                <p>Uses the vendored drill-down skill's functions, called directly after finding the same dead-CLI-entry-point bug already documented in the time-series skill, worked around the same way. The write-up's real contribution isn't the tool's raw output, it's declining to stop at the tool's own "top driver" claim and re-checking it as a rate before accepting or rejecting it. A structured process that ends in "no smoking gun, and here's exactly why" is treated as a real result here, not a failed analysis.</p>
+              </section>
+            </div>
+
+            <div class="group" id="business">
+              <div class="group-head">Business &amp; dashboard</div>
+
+              <section class="entry" id="bizmetrics-findings">
+                <span class="entry-kicker">Finding</span>
+                <h3>Business metrics: conversion rate is not revenue</h3>
+                <div class="entry-source">analysis/business-metrics/output/ecommerce_metrics_findings.md</div>
+                <p>Designer converts at 60.7% (highest of any segment, nearly double homeowner's 43.4%) but generates $791 revenue per customer, second-lowest of the four segments. Trade converts at 34.2%, roughly half designer's rate, but generates $5,782 per customer, over 7x designer's, driven almost entirely by AOV: a trade order averages $13,670 against designer's $1,086. Commercial and trade have nearly identical AOV and revenue-per-customer despite trade having 2.5x as many customers, a smaller but equally high-value segment.</p>
+                <p>The explicit takeaway: a dashboard reporting conversion rate alone would rank designer as the strongest segment and trade as one of the weakest; a dashboard reporting revenue would show the opposite for trade. Homeowner is the largest segment by count (1,769, 55% of all customers) but smallest by revenue per customer ($526), high volume, low unit value.</p>
+              </section>
+
+              <section class="entry" id="bizmetrics-methodology">
+                <span class="entry-kicker">Build note</span>
+                <h3>Business metrics: built new, not force-fit</h3>
+                <div class="entry-source">analysis/business-metrics/README.md</div>
+                <p>The vendored business-metrics skill's own documentation claims e-commerce coverage, but its actual shipped script's CLI only has SaaS flags (MRR, ARPU, churn, CAC, LTV), no AOV or GMV path exists at all. Rather than bend real purchase data into a subscription shape to force-fit the vendored tool, <code>ecommerce_metrics.py</code> is small, original, tested code: one function taking plain customer/order dicts with no Fireclay-specific field names, tested against AOV correctness, segment independence, and edge cases (4/4 passing).</p>
+              </section>
+
+              <section class="entry" id="dashboard-spec">
+                <span class="entry-kicker">Specification</span>
+                <h3>Dashboard specification</h3>
+                <div class="entry-source">analysis/dashboard-spec/output/dashboard_spec.md</div>
+                <p>A full two-page dashboard requirements spec, deliberately a document, not a built dashboard, since standing up a real BigQuery/Tableau/dbt stack for a synthetic dataset with no live pipeline behind it would be theater, not evidence. Every metric in it traces to a specific already-computed analysis in this project. Page 1 (weekly self-review): stall-rate hero KPI, live HubSpot&harr;Salesforce mismatch-rate KPI, a stall-rate trend line, conversion and revenue-per-customer by segment. Page 2 (monthly readout): the percentage of email programs where platform-metric rank and commercial-outcome rank disagree, a repeat-purchase retention heatmap by cohort, and ever-repeat-purchase rate by segment.</p>
+                <p>One alert spec is pointedly self-aware: "HubSpot&harr;Salesforce mismatch rate exceeding 5%" would fire immediately on first real deployment, since the real rate is currently 100% on genuine matches, called out as itself informative rather than a hypothetical example.</p>
+              </section>
+            </div>
+
+            <div class="group" id="reactivation-group">
+              <div class="group-head">Reactivation &amp; AI workflow</div>
+
+              <section class="entry" id="reactivation">
+                <span class="entry-kicker">Live systems check, tested and fixed</span>
+                <h3>Reactivation: the mechanism, made real</h3>
+                <div class="entry-source">docs/reactivation-flow.md</div>
+                <p>Rather than invent a completion rate no real customer produced, this round tested whether the Sample Kit Builder's reactivation mechanism actually works end to end against the live store. It didn't, until a real bug was found. Querying the three companion products' real Shopify inventory state found all three set to deny-oversell with 0 units on hand, an oversight from product creation, not a business choice. That combination means Shopify's real <code>/cart/add.js</code> rejects the add outright, the reactivation prompt would have failed silently the exact moment a real trade lead clicked it, with no error anywhere a merchandising owner would notice.</p>
+                <p>Fixed live: all three SKUs restocked to 25 units, confirmed via each API call's response payload, not assumed. Fixed in code: the button now resolves real variant IDs server-side in Liquid and posts an actual <code>/cart/add.js</code> call, with honest success/error states replacing the original stub. Stated plainly: the easier write-up would have been "confirmed the flow works," true of the design, false of the system as it stood.</p>
+              </section>
+
+              <section class="entry" id="pulse-methodology">
+                <span class="entry-kicker">Claude Code skill</span>
+                <h3>Lifecycle Pulse: how it works</h3>
+                <div class="entry-source">.claude/skills/lifecycle-pulse/README.md</div>
+                <p>A git-committed skill generating a week-over-week funnel digest (interest, sample, project, purchase, repeat, advocacy) by segment, with anomaly flags on threshold-crossing declines and an optional live HubSpot/Salesforce cross-reference. The digest logic and snapshot builder are real, tested code; three of four snapshot dates are backdated re-derivations built to prove the delta logic without waiting three real weeks; one digest run is genuinely live-executed against the live database and a live Salesforce query.</p>
+                <p>The live CRM integration is written to degrade gracefully by design: no client module, no credentials, or a live API error all fall through to "digest produced, CRM section omitted or shows the error verbatim," never a hard failure or a silently suppressed section.</p>
+              </section>
+
+              <section class="entry" id="pulse-digest">
+                <span class="entry-kicker">Real, live-executed run</span>
+                <h3>Lifecycle Pulse: a real digest</h3>
+                <div class="entry-source">.claude/skills/lifecycle-pulse/digest_output/2026-09-05-digest.md</div>
+                <p>The one genuinely live-executed digest, run against the real database on 2026-09-05: funnel counts by segment across all six stages, plus a data-quality note citing 89 lifecycle-stage mismatches across 92 matched cross-system contacts. Its live CRM snapshot section shows a real, left-in-not-suppressed authentication failure from an actual Salesforce API call attempted during that run, a deliberate choice: a digest that goes quiet on a broken integration is judged worse than one that states the failure plainly.</p>
+              </section>
+            </div>
+
+            <div class="group" id="signoff">
+              <div class="group-head">Sign-off</div>
+
+              <section class="entry" id="qa-signoff">
+                <span class="entry-kicker">Sign-off</span>
+                <h3>Before this went out: the QA gate</h3>
+                <div class="entry-source">analysis/qa/output/qa_signoff.md</div>
+                <p>A formal six-section manual checklist plus automated checks, not just a claim of review. Automated: a QA runner against every key data file this round touched, 0 fail/0 warn; the full test suite, 39/39 passing; a fresh-virtualenv install check confirming no hidden dependency on this machine's own state. Manual: all six checklist sections pass, two with caveats already addressed at authoring time (small sample sizes in root-cause/time-series, correlational findings that could be misread as causal).</p>
+                <p>Three independent cross-checks, computed by three different methods across separate rounds of work, all reproduce numbers already published elsewhere in this project: the CRM dedup count, the stall-rate weighted average, and the cohort segment repeat-buyer counts. Zero must-fix items identified. Approved for delivery.</p>
+              </section>
+
+              <section class="entry" id="skills-attribution">
+                <span class="entry-kicker">Attribution</span>
+                <h3>Vendored skills, attributed</h3>
+                <div class="entry-source">.claude/skills/README.md</div>
+                <p>One skill, Lifecycle Pulse, was built for this project specifically. Thirteen others are vendored unmodified from a public third-party library, copied as-is and credited rather than represented as original work. Where a vendored skill had a real limitation discovered while using it on this project's data, that limitation is documented in whichever analysis folder used it, never silently patched into the vendored file itself. This project's actual original contributions, the CRM reconciliation engine, the power-analysis tool, the lifecycle-attribution engine, Lifecycle Pulse, and the live Shopify fix, are kept clearly separate from that vendored set.</p>
+              </section>
+            </div>
+
+            <footer class="meta">
+              Trade Signal Appendix — the underlying findings behind the Trade Signal case study, built for Fireclay Tile's Lifecycle Growth &amp; Analytics Manager role.<br>
+              Not affiliated with or endorsed by Fireclay Tile. All customer data is synthetic.<br>
+              Built with Claude Code, Python, and SQLite.
+            </footer>
+          </div>
+        </div>
+      </main>
+
+      <footer class="copyright">
+        <p class="copyright__brand">
+          <span class="copyright__sword" aria-hidden="true"></span>
+          focustender
+        </p>
+        <p class="copyright__line">© 2026</p>
+      </footer>
+    </div>
+
+    <div class="site-menu" id="site-menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+      <nav class="site-menu__links" aria-label="Primary">
+        <a href="work.html" aria-current="page">Work</a>
+        <a href="design.html">Design</a>
+      </nav>
+      <a href="contact.html" class="site-menu__contact">Contact</a>
+    </div>
+
+    <script type="module" src="src/nav.js"></script>
+  </body>
+</html>

@@ -20,6 +20,7 @@ export default defineConfig({
         projectTradeSignal: resolve(__dirname, "project-trade-signal.html"),
         projectTradeSignalCaseStudy: resolve(__dirname, "project-trade-signal-case-study.html"),
         projectTradeSignalSampleKitBuilder: resolve(__dirname, "project-trade-signal-sample-kit-builder.html"),
+        projectTradeSignalAppendix: resolve(__dirname, "project-trade-signal-appendix.html"),
         design: resolve(__dirname, "design.html"),
         ceramics: resolve(__dirname, "ceramics.html"),
         contact: resolve(__dirname, "contact.html"),

@@ -47,7 +47,8 @@
 
 .ts-brief,
 .ts-case,
-.ts-kit {
+.ts-kit,
+.ts-appendix {
   --ink: #111111;
   --paper: #ffffff;
   --paper-raised: #f4f3f1;
@@ -64,7 +65,8 @@
 
 .ts-brief *,
 .ts-case *,
-.ts-kit * {
+.ts-kit *,
+.ts-appendix * {
   box-sizing: border-box;
 }
 
@@ -99,7 +101,8 @@
 
 /* ---- Shared type primitives ---- */
 .ts-brief,
-.ts-case {
+.ts-case,
+.ts-appendix {
   font-family: var(--font-body);
   color: var(--ink);
   line-height: 1.6;
@@ -113,7 +116,8 @@
 
 .ts-brief .eyebrow,
 .ts-case .eyebrow,
-.ts-kit .eyebrow {
+.ts-kit .eyebrow,
+.ts-appendix .eyebrow {
   font-family: var(--font-heading);
   font-weight: 600;
   font-size: 0.75rem;
@@ -161,14 +165,16 @@
 }
 
 .ts-brief .lede,
-.ts-case .lede {
+.ts-case .lede,
+.ts-appendix .lede {
   font-size: 1rem;
   color: var(--slate);
   max-width: 58ch;
   margin-top: 1rem;
 }
 
-.ts-case .lede {
+.ts-case .lede,
+.ts-appendix .lede {
   font-size: 1.05rem;
   max-width: 64ch;
 }
@@ -222,7 +228,8 @@
 
 .ts-brief code,
 .ts-case code,
-.ts-kit code {
+.ts-kit code,
+.ts-appendix code {
   font-family: var(--font-heading);
   font-size: 0.85em;
   background: var(--slate-soft);
@@ -231,7 +238,8 @@
 
 .ts-brief footer.meta,
 .ts-case footer.meta,
-.ts-kit footer.meta {
+.ts-kit footer.meta,
+.ts-appendix footer.meta {
   padding-top: 1.25rem;
   border-top: 1px solid var(--line);
   font-family: var(--font-heading);
@@ -963,4 +971,192 @@
    not a stat, stays plain ink-bold. */
 .ts-kit .rationale li b {
   color: var(--ink);
+}
+
+/* ---- Appendix: full findings archive ----
+   The one page that was still an external claude.ai link ("read the
+   full findings archive" from the case study) instead of a native
+   page — ported the same way as the other three, plus a two-column
+   layout (a grouped jump-nav rail + the 23 write-ups themselves) since
+   this page is long enough to actually need one. Unlike the source
+   artifact, the rail is NOT position:sticky — the site's own nav bar
+   is already sticky at top:0, and stacking a second sticky element
+   under it correctly needs a pixel-exact offset matched to the nav's
+   rendered height at every breakpoint, which is fragile to hardcode
+   and not worth it for a nav that's still fully usable as a normal
+   scrolling list. */
+.ts-appendix h1 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.9rem;
+  margin: 0.6rem 0 0;
+  text-wrap: balance;
+  letter-spacing: -0.01em;
+}
+
+.ts-appendix .shell {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 2.5rem;
+  margin-top: 2.5rem;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .ts-appendix .shell {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.ts-appendix .content {
+  max-width: 720px;
+}
+
+.ts-appendix .rail {
+  border-right: 1px solid var(--line);
+  padding-right: 1.5rem;
+}
+
+.ts-appendix .rail-group {
+  margin-bottom: 1.25rem;
+}
+
+.ts-appendix .rail-group:last-child {
+  margin-bottom: 0;
+}
+
+.ts-appendix .rail-group h4 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slate);
+  margin: 0 0 0.4rem;
+}
+
+.ts-appendix .rail a {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--ink);
+  text-decoration: none;
+  padding: 0.25rem 0;
+}
+
+.ts-appendix .rail a:hover {
+  color: var(--seaglass);
+}
+
+/* At <860px the rail drops the border/two-column layout and becomes a
+   horizontally-scrolling row of pill links instead — same pattern as
+   .work-filters on the Work page (a fixed-height scroller rather than
+   a tall stacked list eating the top of a long page on mobile). */
+@media (max-width: 860px) {
+  .ts-appendix .rail {
+    border-right: none;
+    padding-right: 0;
+    display: flex;
+    gap: 0.4rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.75rem;
+  }
+
+  .ts-appendix .rail-group {
+    display: contents;
+  }
+
+  .ts-appendix .rail-group h4 {
+    display: none;
+  }
+
+  .ts-appendix .rail a {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: 0.35rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--paper-raised);
+  }
+}
+
+.ts-appendix .group {
+  margin-top: 3rem;
+}
+
+.ts-appendix .group:first-child {
+  margin-top: 0;
+}
+
+.ts-appendix .group-head {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+/* scroll-margin-top clears the site's own sticky nav bar when jumping
+   to an entry via a rail link — without it the target entry's heading
+   lands hidden underneath the nav. */
+.ts-appendix section.entry {
+  padding-bottom: 1.75rem;
+  margin-bottom: 1.75rem;
+  border-bottom: 1px solid var(--line);
+  scroll-margin-top: 6rem;
+}
+
+.ts-appendix section.entry:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+/* Plain label ("Finding", "Methodology", ...), not a stat — neutral
+   ink for the same reason as .kicker elsewhere (23 of these on one
+   page would make the accent anything but rare). */
+.ts-appendix .entry-kicker {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.ts-appendix section.entry h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 0.3rem;
+}
+
+.ts-appendix .entry-source {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  color: var(--slate);
+  margin-bottom: 0.85rem;
+}
+
+.ts-appendix section.entry p {
+  font-size: 0.9rem;
+  margin: 0 0 0.85rem;
+  max-width: 64ch;
+}
+
+.ts-appendix section.entry p:last-child {
+  margin-bottom: 0;
+}
+
+/* The one accent use on this page — highlighting the specific number
+   or finding a paragraph is actually making, same restraint principle
+   as .mstat.strong / .stat-line strong on the other pages. */
+.ts-appendix section.entry strong {
+  color: var(--clay);
+  font-weight: 600;
 }
