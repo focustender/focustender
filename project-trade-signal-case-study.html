@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trade Signal — Full Case Study — focustender</title>
+    <link rel="icon" type="image/svg+xml" href="assets/focustendersword.svg" />
+    <link rel="stylesheet" href="src/styles/main.css" />
+    <link rel="stylesheet" href="src/styles/trade-signal.css" />
+  </head>
+  <body>
+    <div class="page">
+      <nav class="nav nav--overlay" aria-label="Primary">
+        <a href="index.html" class="nav__home" aria-label="Home"></a>
+        <a href="work.html" aria-current="page">Work</a>
+        <a href="design.html">Design</a>
+        <a href="contact.html" class="nav__contact">Contact</a>
+        <button type="button" class="nav__toggle" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+        </button>
+      </nav>
+
+      <main class="ts-page ts-case">
+        <a href="project-trade-signal.html" class="project__back">← Trade Signal</a>
+
+        <div class="wrap">
+          <header class="hero">
+            <div class="eyebrow">Fireclay Tile — work sample</div>
+            <h1>Trade Signal</h1>
+            <p class="lede">A live lifecycle-analytics system built to show, not describe, what this role's job description asks for: a friction point diagnosed from real data, two live CRMs reconciled against each other with a scoped fix, a reactivation mechanism tested and fixed against the live system it depends on, and a reusable Claude Code skill that keeps the analysis running instead of living in a one-time export.</p>
+          </header>
+
+          <section>
+            <h2>The finding that started it</h2>
+            <p class="section-sub">From a 3,200-customer synthetic dataset modeled on Fireclay's own funnel language (interest → sample → project → purchase → repeat → advocacy), analyzed directly with Claude Code against a local SQLite store.</p>
+            <div class="stat-block">
+              <div class="stat">73%</div>
+              <p>of trade leads acquired at trade shows who request exactly one sample never advance to a project upload or purchase — more than double the stall rate of leads acquired through email capture (33%). The single strongest predictor of eventual purchase in this segment is requesting a <em>second</em> sample, which trade-show leads do at less than half the rate of the trade segment overall.</p>
+            </div>
+          </section>
+
+          <section>
+            <div class="role-heading"><span class="role-pill">Role</span><h2 style="margin:0;">Lifecycle Growth &amp; Analytics Manager</h2></div>
+            <p class="section-sub">Reports to Samantha Grow, Senior Manager, Integrated Marketing.</p>
+            <div style="overflow-x:auto;">
+              <table class="mapping">
+                <tr><th>What the JD asks for</th><th>What this shows</th></tr>
+                <tr><td>Personally diagnosed and led a lifecycle/growth initiative with measurable gains, explainable as problem → data → action → outcome → learning</td><td>The trade-show stall finding, the Sample Kit Builder intervention it motivated, and a real experimentation decision: a power analysis found the backlog's own proposed test was structurally infeasible (would take 5+ years to reach its threshold), leading to an actual stop-and-redesign call, not just a list of hypotheses</td></tr>
+                <tr><td>Analytically strong, works from imperfect data, reconciles sources</td><td>A deliberately messy raw CRM export (669 rows, mixed casing, split partial records) reconciled down to 600 customers with 34 <code>source_channel</code> values recovered by coalescing sibling rows rather than dropped</td></tr>
+                <tr><td>Hands-on HubSpot + Salesforce experience essential</td><td>Both live: a free HubSpot account (750 contacts, MCP-connected) and a free Salesforce Developer Edition org (385 Leads, JWT Bearer OAuth)</td></tr>
+                <tr><td>Partner with Technology on HubSpot–Salesforce data quality, lifecycle-stage alignment, and the systems requirements needed for better growth decisions</td><td>A live reconciliation of both systems found <strong>100% of the 85 genuine cross-system contacts</strong> show HubSpot's <code>lifecyclestage</code> still reading "lead" while Salesforce shows "Closed - Converted" — HubSpot's field was never written to after import</td></tr>
+                <tr><td>AI-first working style, has built skills/projects/agents</td><td>The entire analysis was run inside Claude Code against the SQLite store, not described after the fact. A real, git-committed Claude Code skill (Lifecycle Pulse, below) is a literal, runnable extension of that same working style</td></tr>
+                <tr><td>Serves both consumer and trade/commercial customers in a considered-purchase category</td><td>All four segments (homeowner, designer, trade, commercial) modeled with segment-specific conversion behavior</td></tr>
+              </table>
+            </div>
+          </section>
+
+          <section>
+            <h2>HubSpot ↔ Salesforce reconciliation</h2>
+            <p class="section-sub">A live, config-driven reconciliation of both real accounts — not a mockup of one. The methodology is generic (the matching engine has no Fireclay-specific field names); the findings below are from actually running it.</p>
+            <div class="grid-two">
+              <div class="deliverable">
+                <span class="kicker">Finding</span>
+                <h3>100% lifecycle-stage disagreement</h3>
+                <p>Of 85 contacts genuinely live in both systems, all 85 show HubSpot's <code>lifecyclestage</code> stuck at "lead" while Salesforce's <code>Lead.Status</code> already reads "Closed - Converted" — one mechanism (a field never written to after import), not scattered noise. A fuzzy name-matching fallback also produced 7 false positives out of ~400 tries, found and reported rather than hidden.</p>
+              </div>
+              <div class="deliverable">
+                <span class="kicker">Systems memo</span>
+                <h3>What would actually fix it</h3>
+                <p>A scoped recommendation grounded in the real data: one Salesforce Flow (fire on <code>Lead.Status</code> change) plus one HubSpot API call, one direction only — not a platform purchase. Answers the JD's own "systems requirements" phrase directly.</p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2>Experimentation: a real stop-and-redesign decision</h2>
+            <p class="section-sub">Real analysis against real historical volume, not a simulated experiment result. The question asked before spending any runway: can the backlog's own proposed test actually work?</p>
+            <div class="grid-two">
+              <div class="deliverable">
+                <span class="kicker">Finding</span>
+                <h3>The test as specified can't work</h3>
+                <p>A power analysis shows the backlog's proposed test (90-day holdout, 8pp scale threshold) needs 623 trade-show leads. The channel produces ~10/month — 62 months to get there. Checked whether a faster-arriving proxy metric would fix it; it doesn't, confirming a real population ceiling, not a fixable test design.</p>
+              </div>
+              <div class="deliverable">
+                <span class="kicker">Decision</span>
+                <h3>Stop, learn, redesign</h3>
+                <p>Kills the randomized-holdout design, not the hypothesis: full rollout to all eligible trade-show leads, directional monitoring over two quarters against the 11% baseline, and an explicit reversal bar (pull back if the rate isn't at least 5pp above baseline) — the JD's own "scale, stop, or learn next" language, answered with an actual call.</p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2>Reactivation: the mechanism, made real</h2>
+            <p class="section-sub">The JD names "activation, education, nurture, <strong>reactivation</strong>" as the lifecycle side of the Trade Program. This backlog hypothesis (a Trade Portal single-sample re-entry flow, the Sample Kit Builder below) couldn't be evaluated for a real conversion rate — no production traffic yet. So this round tested whether the mechanism itself actually works against the live store, and it didn't, until a real bug was found and fixed.</p>
+            <div class="grid-two">
+              <div class="deliverable">
+                <span class="kicker">Live systems check</span>
+                <h3>A bug only a live test would catch</h3>
+                <p>The three companion sample products backing the Sample Kit Builder had zero real inventory with a deny-oversell policy — the reactivation prompt would have failed silently the moment a real lead clicked it, with no error anywhere a merchandising owner would notice.</p>
+              </div>
+              <div class="deliverable">
+                <span class="kicker">Fixed, live + in code</span>
+                <h3>From console.log stub to a real cart action</h3>
+                <p>Restocked all three SKUs live (verified via each API call's response, not assumed) and rebuilt the button's handler to resolve real variant IDs in Liquid and POST an actual <code>/cart/add.js</code> call, with honest success/error states in place of the old stub. Written and committed; not yet pushed to the live preview theme below.</p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2>Lifecycle Pulse</h2>
+            <p class="section-sub">A real, git-committed Claude Code skill — not a described one. Anyone who clones the working repo and opens Claude Code inside it gets it auto-discovered and runnable.</p>
+            <div class="deliverable">
+              <span class="kicker">Claude Code skill</span>
+              <h3>Lifecycle Pulse funnel digest</h3>
+              <p>Generates a week-over-week lifecycle/funnel digest — interest, sample, project, purchase, repeat, advocacy — by segment, with anomaly flags where a stage's count drops past a configurable threshold, plus a live HubSpot/Salesforce cross-reference. Three snapshots are backdated re-derivations of real data (simulated cadence, real counts); one digest is a genuinely live-executed run pulling real numbers from both the local funnel database and the live Salesforce org.</p>
+            </div>
+          </section>
+
+          <section>
+            <h2>Build status</h2>
+            <p class="section-sub">Honest about what's real integration versus what's designed and documented.</p>
+            <div class="stack-list">
+              <span class="stack-item done">Synthetic dataset + SQLite — built</span>
+              <span class="stack-item done">Measurement foundation + experiment backlog — built</span>
+              <span class="stack-item done">CRM reconciliation script — built</span>
+              <span class="stack-item done">HubSpot MCP — connected, Contacts/Companies/Deals read-write</span>
+              <span class="stack-item done">HubSpot seeded — 750 contacts, proportional segments, live-verified via MCP query</span>
+              <span class="stack-item done">Salesforce Developer Edition org — connected via OAuth JWT Bearer, 385 Leads live-verified</span>
+              <span class="stack-item done">HubSpot ↔ Salesforce reconciliation — run against real live extracts from both systems</span>
+              <span class="stack-item done">Experimentation power analysis — real feasibility check, real stop-and-redesign decision</span>
+              <span class="stack-item done">Lifecycle Pulse Claude Code skill — built, tested, one live-executed digest committed</span>
+              <span class="stack-item done">Sample Kit Builder design — built</span>
+              <span class="stack-item done">Shopify Dev Store — connected, live products/collections/metafield/discount configured</span>
+              <span class="stack-item done">Sample Kit Builder ported into a real theme section, reading the live metafield</span>
+              <span class="stack-item done">Live inventory data-quality bug found and fixed — 3 companion SKUs restocked live, were 0 units / deny-oversell</span>
+              <span class="stack-item pending">Sample Kit Builder cart-add — rebuilt as a real Ajax Cart API call, written and ready, pending push to the live dev theme</span>
+              <span class="stack-item done">Figma file built — real bound variables, text styles, and auto-layout</span>
+            </div>
+          </section>
+
+          <section>
+            <h2>Sample Kit Builder — see it live</h2>
+            <p class="section-sub">Live, interactive links — not screenshots.</p>
+            <div class="grid-two">
+              <div class="deliverable">
+                <span class="kicker">Design</span>
+                <h3>Sample Kit Builder concept</h3>
+                <p>The before/after states and the rationale for why it targets this exact point in the funnel.</p>
+                <a href="project-trade-signal-sample-kit-builder.html">Open the concept →</a>
+              </div>
+              <div class="deliverable">
+                <span class="kicker">Figma</span>
+                <h3>Build-ready spec file</h3>
+                <p>Real bound color/text variables and auto-layout — inspectable in Dev Mode.</p>
+                <a href="https://www.figma.com/design/hpXw6uV7Noke53bJTOdcW5?node-id=3-2" target="_blank" rel="noopener noreferrer">Open in Figma →</a>
+              </div>
+              <div class="deliverable" style="grid-column:1/-1;">
+                <span class="kicker">Shopify</span>
+                <h3>Live theme preview</h3>
+                <p>The section running for real on the dev store's product page, reading the live <code>custom.companion_samples</code> metafield.</p>
+                <a href="https://fireclaytile-project.myshopify.com/products/original-ceramic-aegean?preview_theme_id=148365705269" target="_blank" rel="noopener noreferrer">Open the preview →</a>
+                <div class="callout"><strong>Password-protected:</strong> this is a dev store, so the link asks for a storefront password before it'll load anything. Happy to send it along, or walk through it live — just say the word.</div>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2>The rest of the analysis</h2>
+            <p class="section-sub">This round also ran a formal data-quality audit, a cohort-retention analysis, a time-series trend check, a root-cause drill-down, a full business-metrics breakdown, and a dashboard specification — real findings, kept off this page to keep it focused, not hidden.</p>
+            <a class="link-btn" href="https://claude.ai/code/artifact/95bb000f-9994-446e-9042-cc5d08d9e05b" target="_blank" rel="noopener noreferrer">Read the full findings archive →</a>
+          </section>
+
+          <footer class="meta">
+            Trade Signal — a work sample built for Fireclay Tile's Lifecycle Growth &amp; Analytics Manager role.<br>
+            Not affiliated with or endorsed by Fireclay Tile. All customer data is synthetic; the trade-show stall finding is a property of the generated dataset, not a real Fireclay statistic.<br>
+            Built with Claude Code, Python, and SQLite. The working repository is private during the application process — happy to walk through any part of it directly.
+          </footer>
+        </div>
+      </main>
+
+      <footer class="copyright">
+        <p class="copyright__brand">
+          <span class="copyright__sword" aria-hidden="true"></span>
+          focustender
+        </p>
+        <p class="copyright__line">© 2026</p>
+      </footer>
+    </div>
+
+    <div class="site-menu" id="site-menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+      <nav class="site-menu__links" aria-label="Primary">
+        <a href="work.html" aria-current="page">Work</a>
+        <a href="design.html">Design</a>
+      </nav>
+      <a href="contact.html" class="site-menu__contact">Contact</a>
+    </div>
+
+    <script type="module" src="src/nav.js"></script>
+  </body>
+</html>

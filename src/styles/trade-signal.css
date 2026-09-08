@@ -1,0 +1,940 @@
+/* ---- Trade Signal case-study pages ----
+   Three pages ported from private Claude artifacts (the Brief, the full
+   case study, and the Sample Kit Builder concept) so they live natively
+   on the site instead of linking out to claude.ai. Each artifact had its
+   own bespoke visual system (custom color tokens, a stat/diagram-heavy
+   layout) built for a document-style case study, distinct from the
+   site's plainer .project__* card/list treatment used by the other 6
+   portfolio projects — kept here rather than flattened into that
+   treatment since the grid/diagram layout is the point. The one thing
+   NOT ported: the artifacts' own Google-Fonts type system (IBM Plex
+   Sans/Mono + Newsreader) — swapped for the site's own PP Mori
+   (var(--font-heading)/var(--font-body)) throughout, including the
+   "mono label" eyebrow/kicker treatment, which now gets its tracked-out
+   look from letter-spacing on PP Mori rather than an actual monospace
+   face.
+
+   Scoping: each page's content sits inside a page-specific top-level
+   class (.ts-brief / .ts-case / .ts-kit) rather than :root, so these
+   rules can't leak into the rest of the site, and so classes that mean
+   different things on different pages (e.g. header h1 sizing) can't
+   collide with each other. Shared design tokens are still declared once
+   across all three selectors since the palette itself is identical.
+   Dark-mode variants from the source artifacts are dropped entirely —
+   this site has no dark-mode support anywhere else, so adding it only
+   here would be an inconsistent one-off. */
+
+.ts-brief,
+.ts-case,
+.ts-kit {
+  --ink: #211d1a;
+  --paper: #edeee8;
+  --paper-raised: #f6f6f1;
+  --seaglass: #3f6f66;
+  --seaglass-soft: #e2ebe8;
+  --clay: #a15c3e;
+  --clay-soft: #f3e4dc;
+  --slate: #6b6862;
+  --slate-soft: #dcdbd3;
+  --moss: #5b7f3a;
+  --moss-soft: #e6ecdc;
+  --line: #c9c7bd;
+}
+
+.ts-brief *,
+.ts-case *,
+.ts-kit * {
+  box-sizing: border-box;
+}
+
+/* ---- Shared page shell ----
+   Outer side/top/bottom padding matches .project exactly, so these
+   pages hug the site's normal margins instead of introducing a second
+   gutter system. The reading column itself (.wrap) is centered and
+   capped per-page below, with no side padding of its own — the outer
+   .ts-page padding is the only gutter. */
+.ts-page {
+  padding: var(--space-4) var(--page-padding) var(--space-6);
+}
+
+.ts-brief .wrap,
+.ts-case .wrap,
+.ts-kit .wrap {
+  margin: 0 auto;
+  padding-bottom: 3rem;
+}
+
+.ts-brief .wrap {
+  max-width: 760px;
+}
+
+.ts-case .wrap {
+  max-width: 920px;
+}
+
+.ts-kit .wrap {
+  max-width: 900px;
+}
+
+/* ---- Shared type primitives ---- */
+.ts-brief,
+.ts-case {
+  font-family: var(--font-body);
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+.ts-kit {
+  font-family: var(--font-body);
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.ts-brief .eyebrow,
+.ts-case .eyebrow,
+.ts-kit .eyebrow {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+.ts-brief .kicker,
+.ts-case .kicker {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--seaglass);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.ts-brief h1,
+.ts-case h1,
+.ts-kit h1 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  margin: 0.6rem 0 0;
+  text-wrap: balance;
+  letter-spacing: -0.01em;
+}
+
+.ts-case h1 {
+  font-size: 2.4rem;
+}
+
+.ts-brief h1 {
+  font-size: 2.2rem;
+}
+
+.ts-kit h1 {
+  font-weight: 600;
+  font-size: 1.65rem;
+  margin: 0.5rem 0 0;
+}
+
+.ts-brief .lede,
+.ts-case .lede {
+  font-size: 1rem;
+  color: var(--slate);
+  max-width: 58ch;
+  margin-top: 1rem;
+}
+
+.ts-case .lede {
+  font-size: 1.05rem;
+  max-width: 64ch;
+}
+
+.ts-kit .subhead {
+  color: var(--slate);
+  font-size: 0.95rem;
+  margin-top: 0.6rem;
+  max-width: 60ch;
+}
+
+.ts-brief section,
+.ts-case section {
+  padding: 2.5rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.ts-case section {
+  padding: 3rem 0;
+}
+
+.ts-brief section:last-of-type,
+.ts-case section:last-of-type {
+  border-bottom: none;
+}
+
+.ts-brief h2,
+.ts-case h2 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin: 0 0 0.35rem;
+}
+
+.ts-case h2 {
+  font-size: 1.3rem;
+}
+
+.ts-brief .section-sub,
+.ts-case .section-sub {
+  color: var(--slate);
+  font-size: 0.88rem;
+  margin-bottom: 1.5rem;
+  max-width: 58ch;
+}
+
+.ts-case .section-sub {
+  font-size: 0.9rem;
+  max-width: 64ch;
+}
+
+.ts-brief code,
+.ts-case code,
+.ts-kit code {
+  font-family: var(--font-heading);
+  font-size: 0.85em;
+  background: var(--slate-soft);
+  padding: 0.05rem 0.3rem;
+}
+
+.ts-brief footer.meta,
+.ts-case footer.meta,
+.ts-kit footer.meta {
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  color: var(--slate);
+  line-height: 1.8;
+}
+
+.ts-case footer.meta {
+  padding-top: 2.25rem;
+}
+
+.ts-brief footer.meta a,
+.ts-case footer.meta a {
+  color: var(--seaglass);
+}
+
+/* ---- Buttons / links ---- */
+.ts-brief .link-btn,
+.ts-case .link-btn,
+.ts-kit .btn {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.6rem 1rem;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.ts-kit .btn {
+  margin-top: 0.9rem;
+  background: var(--seaglass);
+  color: var(--paper-raised);
+  border: none;
+}
+
+.ts-kit .btn.ghost {
+  background: transparent;
+  color: var(--slate);
+  border: 1px solid var(--line);
+}
+
+.ts-brief .link-btn.primary,
+.ts-case .link-btn {
+  background: var(--seaglass);
+  color: var(--paper-raised);
+}
+
+.ts-brief .link-btn.ghost {
+  border-color: var(--line);
+  color: var(--ink);
+  background: transparent;
+}
+
+.ts-brief .link-btn.small {
+  font-size: 0.78rem;
+  padding: 0.5rem 0.8rem;
+}
+
+.ts-brief .cta-row,
+.ts-brief .link-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.ts-brief .cta-row {
+  margin-top: 1.75rem;
+}
+
+/* ---- Stat block (big italic-style number + caption) ----
+   PP Mori has no italic face shipped (see CLAUDE.md — only Regular and
+   Semibold .woff exist), so the artifact's Newsreader-italic treatment
+   becomes a plain bold PP Mori numeral here instead of trying to fake
+   an italic that doesn't exist. */
+.ts-brief .stat-block,
+.ts-case .stat-block {
+  display: flex;
+  gap: 1.5rem;
+  align-items: baseline;
+}
+
+.ts-brief .stat-block {
+  margin-top: 1.75rem;
+}
+
+.ts-case .stat-block {
+  gap: 1.75rem;
+  margin-bottom: 2rem;
+}
+
+.ts-brief .stat-block .stat,
+.ts-case .stat-block .stat,
+.ts-kit .finding .stat {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--clay);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.ts-brief .stat-block .stat {
+  font-size: 2.8rem;
+}
+
+.ts-case .stat-block .stat {
+  font-size: 3.2rem;
+}
+
+.ts-brief .stat-block p,
+.ts-case .stat-block p {
+  margin: 0;
+  font-size: 0.92rem;
+  max-width: 44ch;
+}
+
+.ts-case .stat-block p {
+  font-size: 0.95rem;
+  max-width: 50ch;
+}
+
+@media (max-width: 700px) {
+  .ts-brief .stat-block,
+  .ts-case .stat-block {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/* ---- Role-fit grid (Brief) ---- */
+.ts-brief .fit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.ts-brief .fit-item {
+  background: var(--paper);
+  padding: 1.1rem 1.25rem;
+}
+
+.ts-brief .fit-item .fit-label {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 0.35rem;
+}
+
+.ts-brief .fit-item p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--slate);
+}
+
+@media (max-width: 640px) {
+  .ts-brief .fit-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- Inline SVG diagrams (Brief) ---- */
+.ts-brief figure.diagram {
+  margin: 0 0 1.5rem;
+  padding: 1.25rem 1rem;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+}
+
+.ts-brief figure.diagram svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.ts-brief figure.diagram svg text {
+  font-family: var(--font-body);
+}
+
+.ts-brief figure.diagram .mono {
+  font-family: var(--font-heading);
+}
+
+.ts-brief figure.diagram .serif {
+  font-family: var(--font-heading);
+}
+
+/* ---- Build arc steps (Brief) ---- */
+.ts-brief .arc-step {
+  margin-bottom: 1.1rem;
+}
+
+.ts-brief .arc-step:last-child {
+  margin-bottom: 0;
+}
+
+.ts-brief .arc-step p {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+  max-width: 60ch;
+}
+
+.ts-brief .arc-tag {
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--clay);
+  font-weight: 600;
+}
+
+/* ---- Two-up grids + deliverable/metric cards (Brief + Case study) ---- */
+.ts-brief .grid-two,
+.ts-case .grid-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.ts-case .grid-two {
+  gap: 1.5rem;
+}
+
+@media (max-width: 700px) {
+  .ts-brief .grid-two,
+  .ts-case .grid-two {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ts-brief .deliverable,
+.ts-case .deliverable {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  padding: 1.35rem;
+}
+
+.ts-case .deliverable {
+  padding: 1.5rem;
+}
+
+.ts-brief .deliverable h3,
+.ts-case .deliverable h3 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1rem;
+  margin: 0 0 0.5rem;
+}
+
+.ts-case .deliverable h3 {
+  font-size: 1.05rem;
+  margin: 0 0 0.6rem;
+}
+
+.ts-brief .deliverable p,
+.ts-case .deliverable p {
+  font-size: 0.87rem;
+  color: var(--ink);
+  margin: 0;
+}
+
+.ts-case .deliverable p {
+  font-size: 0.88rem;
+  margin-bottom: 1rem;
+}
+
+.ts-case .deliverable p:last-child {
+  margin-bottom: 0;
+}
+
+.ts-case .deliverable a {
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.ts-case .deliverable a:hover {
+  text-decoration: underline;
+}
+
+.ts-brief .metric-compare {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--line);
+}
+
+.ts-brief .metric-col {
+  flex: 1;
+  padding: 1.25rem 1.35rem;
+}
+
+.ts-brief .metric-col + .metric-col {
+  border-left: 1px solid var(--line);
+}
+
+.ts-brief .metric-name {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slate);
+  margin-bottom: 0.75rem;
+}
+
+.ts-brief .metric-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+
+.ts-brief .metric-row:last-child {
+  margin-bottom: 0;
+}
+
+.ts-brief .mstat {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.ts-brief .mstat.strong {
+  color: var(--clay);
+}
+
+.ts-brief .mlabel {
+  font-size: 0.8rem;
+  color: var(--slate);
+}
+
+@media (max-width: 640px) {
+  .ts-brief .metric-compare {
+    flex-direction: column;
+  }
+  .ts-brief .metric-col + .metric-col {
+    border-left: none;
+    border-top: 1px solid var(--line);
+  }
+}
+
+.ts-brief .stat-line {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  color: var(--slate);
+  margin: 0 0 0.6rem;
+}
+
+.ts-brief .stat-line strong {
+  color: var(--clay);
+  font-weight: 700;
+}
+
+.ts-brief .process-card {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  padding: 1.35rem 1.5rem;
+}
+
+.ts-brief .process-card p {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+}
+
+.ts-brief .process-card p:last-of-type {
+  margin-bottom: 0;
+}
+
+/* ---- Brand band (Brief only) — full-bleed dark strip above the page's
+   normal padded content, sitting outside .ts-page so it can reach the
+   true viewport edges the same way .hero does on the home page. ---- */
+.ts-brief-band {
+  background: #211d1a;
+  padding: 0.85rem var(--page-padding);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.ts-brief-band-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ts-brief-band-label {
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #a5a196;
+}
+
+.ts-brief-band-logo {
+  width: 118px;
+  height: auto;
+  display: block;
+}
+
+.ts-brief-band-logo svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.ts-brief-band-right {
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  color: #a5a196;
+  text-align: right;
+  max-width: 38ch;
+}
+
+/* ---- Case study: role-mapping table ---- */
+.ts-case table.mapping {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.ts-case table.mapping th {
+  text-align: left;
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--slate);
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.ts-case table.mapping td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.ts-case table.mapping td:first-child {
+  color: var(--ink);
+  font-weight: 600;
+  width: 38%;
+}
+
+.ts-case table.mapping td:last-child {
+  color: var(--slate);
+}
+
+.ts-case .role-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.ts-case .role-pill {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  padding: 0.25rem 0.6rem;
+  background: var(--moss-soft);
+  color: var(--moss);
+}
+
+.ts-case .stack-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.ts-case .stack-item {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--line);
+  background: var(--paper-raised);
+}
+
+.ts-case .stack-item.done {
+  border-color: var(--moss);
+  color: var(--moss);
+}
+
+.ts-case .stack-item.pending {
+  border-color: var(--clay);
+  color: var(--clay);
+}
+
+.ts-case .callout {
+  background: var(--clay-soft);
+  border: 1px solid var(--clay);
+  padding: 0.9rem 1.1rem;
+  font-size: 0.85rem;
+  margin-top: 1rem;
+}
+
+.ts-case .callout strong {
+  color: var(--clay);
+}
+
+/* ---- Sample Kit Builder concept page ---- */
+.ts-kit .finding {
+  display: flex;
+  gap: 1.75rem;
+  align-items: baseline;
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.ts-kit .finding p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--ink);
+  max-width: 48ch;
+}
+
+.ts-kit .finding p strong {
+  font-weight: 700;
+}
+
+.ts-kit .finding .stat {
+  font-size: 3.4rem;
+}
+
+.ts-kit .finding .src {
+  display: block;
+  margin-top: 0.4rem;
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  color: var(--slate);
+}
+
+.ts-kit section.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+@media (max-width: 760px) {
+  .ts-kit section.compare {
+    grid-template-columns: 1fr;
+  }
+  .ts-kit .finding {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+.ts-kit .panel {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+}
+
+.ts-kit .panel-head {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ts-kit .panel-head .label {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+.ts-kit .pill {
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  padding: 0.2rem 0.55rem;
+  border-radius: 2px;
+}
+
+.ts-kit .pill.stalled {
+  background: var(--clay-soft);
+  color: var(--clay);
+}
+
+.ts-kit .pill.active {
+  background: var(--moss-soft);
+  color: var(--moss);
+}
+
+.ts-kit .panel-body {
+  padding: 1.25rem;
+}
+
+.ts-kit .account-strip {
+  display: flex;
+  justify-content: space-between;
+  color: var(--slate);
+  margin-bottom: 1rem;
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+}
+
+.ts-kit .sample-row {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.ts-kit .sample-row:last-of-type {
+  border-bottom: none;
+}
+
+.ts-kit .swatch {
+  width: 2.6rem;
+  height: 2.6rem;
+  flex: none;
+  border: 1px solid var(--line);
+}
+
+.ts-kit .swatch.aegean {
+  background: linear-gradient(135deg, #7ea9a0, #4f7b72);
+}
+
+.ts-kit .swatch.sable {
+  background: linear-gradient(135deg, #8b7a68, #5c4c3d);
+}
+
+.ts-kit .swatch.champagne {
+  background: linear-gradient(135deg, #e4d3ab, #c7ab72);
+}
+
+.ts-kit .sample-meta .name {
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.ts-kit .sample-meta .date {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  color: var(--slate);
+}
+
+.ts-kit .dead-end {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  border: 1px dashed var(--line);
+  color: var(--slate);
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.ts-kit .kit-suggest {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--seaglass-soft);
+  border: 1px solid var(--seaglass);
+}
+
+.ts-kit .kit-suggest .kit-label {
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--seaglass);
+  margin-bottom: 0.6rem;
+  display: block;
+}
+
+.ts-kit .kit-pair {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.ts-kit .kit-pair .swatch {
+  width: 2rem;
+  height: 2rem;
+}
+
+.ts-kit .kit-pair .name {
+  font-size: 0.82rem;
+}
+
+.ts-kit .kit-note {
+  font-size: 0.78rem;
+  color: var(--ink);
+  margin-top: 0.7rem;
+  border-top: 1px solid var(--line);
+  padding-top: 0.6rem;
+}
+
+.ts-kit .kit-note b {
+  color: var(--seaglass);
+}
+
+.ts-kit .rationale {
+  margin-top: 2.5rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.ts-kit .rationale h2 {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.ts-kit .rationale ol {
+  padding-left: 1.2rem;
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.ts-kit .rationale li {
+  margin-bottom: 0.6rem;
+}
+
+.ts-kit .rationale li b {
+  color: var(--seaglass);
+}

@@ -18,6 +18,8 @@ export default defineConfig({
         projectDrugAccessForecasting: resolve(__dirname, "project-drug-access-forecasting.html"),
         projectSubscriptionEconomics: resolve(__dirname, "project-subscription-economics.html"),
         projectTradeSignal: resolve(__dirname, "project-trade-signal.html"),
+        projectTradeSignalCaseStudy: resolve(__dirname, "project-trade-signal-case-study.html"),
+        projectTradeSignalSampleKitBuilder: resolve(__dirname, "project-trade-signal-sample-kit-builder.html"),
         design: resolve(__dirname, "design.html"),
         ceramics: resolve(__dirname, "ceramics.html"),
         contact: resolve(__dirname, "contact.html"),
