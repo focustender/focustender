@@ -31,17 +31,19 @@
    --line now match the rest of the site's own neutrals exactly
    (var(--color-text)/var(--color-bg)/var(--color-muted) from
    variables.css), and every prior use of clay/seaglass collapses onto
-   one shared --clay/--seaglass accent (amber) so there's a single hue
-   in the whole system, not three. --moss (previously green, marking
+   one shared --clay/--seaglass accent so there's a single hue in the
+   whole system, not three. --moss (previously green, marking
    "done"/"active" states) collapses to plain ink instead of a second
-   accent — the amber is reserved for the few things that should
+   accent — the accent is reserved for the few things that should
    actually draw the eye (stat numbers, primary buttons, "pending" /
    "needs attention" states), while "done"/settled states stay neutral.
    A few individual selectors that used --clay/--seaglass for a plain
    label rather than a real accent (the .kicker, footer.meta links, and
    two bolded asides on the Sample Kit Builder page) are pointed at
    --ink directly instead, rather than inheriting the token — see each
-   for why. */
+   for why. The accent itself was amber first, then swapped to a deep
+   "analyst blue" (#1f4e79) per Ian's request — same distribution
+   logic, just a different hue in the two tokens. */
 
 .ts-brief,
 .ts-case,
@@ -49,10 +51,10 @@
   --ink: #111111;
   --paper: #ffffff;
   --paper-raised: #f4f3f1;
-  --seaglass: #b7791f;
-  --seaglass-soft: #f1e6d2;
-  --clay: #b7791f;
-  --clay-soft: #f1e6d2;
+  --seaglass: #1f4e79;
+  --seaglass-soft: #dce6f1;
+  --clay: #1f4e79;
+  --clay-soft: #dce6f1;
   --slate: #6b6b6b;
   --slate-soft: #e2e2e2;
   --moss: #111111;
@@ -294,12 +296,18 @@
   padding: 0.5rem 0.8rem;
 }
 
+/* Right-aligned per Ian's request — applies to every button context,
+   whether it's a multi-button row (cta-row/link-row) or a single
+   standalone button wrapped in .link-row for the same treatment (see
+   the process-card and "rest of the analysis" buttons). */
 .ts-brief .cta-row,
-.ts-brief .link-row {
+.ts-brief .link-row,
+.ts-case .link-row {
   display: flex;
   gap: 0.75rem;
   margin-top: 1.25rem;
   flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .ts-brief .cta-row {
@@ -310,12 +318,14 @@
    PP Mori has no italic face shipped (see CLAUDE.md — only Regular and
    Semibold .woff exist), so the artifact's Newsreader-italic treatment
    becomes a plain bold PP Mori numeral here instead of trying to fake
-   an italic that doesn't exist. */
+   an italic that doesn't exist. align-items:flex-start (not the
+   original artifacts' baseline) so the stat number's top lines up with
+   the top of the caption's body copy, per Ian's request. */
 .ts-brief .stat-block,
 .ts-case .stat-block {
   display: flex;
   gap: 1.5rem;
-  align-items: baseline;
+  align-items: flex-start;
 }
 
 .ts-brief .stat-block {
@@ -609,51 +619,34 @@
   margin-bottom: 0;
 }
 
-/* ---- Brand band (Brief only) — full-bleed dark strip above the page's
-   normal padded content, sitting outside .ts-page so it can reach the
-   true viewport edges the same way .hero does on the home page. ---- */
-.ts-brief-band {
-  background: #111111;
-  padding: 0.85rem var(--page-padding);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  flex-wrap: wrap;
+/* ---- Hero title logo (Brief only) ----
+   Replaces the earlier full-bleed dark "Case study for [logo]" band —
+   the Fireclay wordmark now sits inline inside the H1 itself ("Case
+   Study for [logo]") per Ian's request. Sized relative to the h1's own
+   font-size (em units) so it scales with the heading instead of being
+   pinned to a fixed pixel width, and inherits the heading's ink color
+   via fill="currentColor" on the SVG (set in the HTML) rather than the
+   hardcoded white fill it needed on the old dark band. */
+.ts-brief .hero-logo {
+  display: inline-block;
+  height: 0.82em;
+  width: auto;
+  vertical-align: -0.1em;
+  margin-left: 0.2em;
 }
 
-.ts-brief-band-left {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.ts-brief-band-label {
-  font-family: var(--font-heading);
-  font-size: 0.68rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #a3a3a3;
-}
-
-.ts-brief-band-logo {
-  width: 118px;
-  height: auto;
+.ts-brief .hero-logo svg {
   display: block;
+  height: 100%;
+  width: auto;
 }
 
-.ts-brief-band-logo svg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.ts-brief-band-right {
-  font-family: var(--font-heading);
-  font-size: 0.68rem;
-  color: #a3a3a3;
-  text-align: right;
-  max-width: 38ch;
+/* The old band's "Independent work sample..." disclaimer, now a plain
+   caption line under the title instead of a right-aligned strip. */
+.ts-brief .hero-disclaimer {
+  color: var(--slate);
+  font-size: 0.85rem;
+  margin: 0.75rem 0 0;
 }
 
 /* ---- Case study: role-mapping table ---- */
@@ -746,7 +739,7 @@
 .ts-kit .finding {
   display: flex;
   gap: 1.75rem;
-  align-items: baseline;
+  align-items: flex-start;
   padding: 2rem 0;
   border-bottom: 1px solid var(--line);
 }
@@ -855,15 +848,18 @@
   border-bottom: none;
 }
 
+/* Used on both <div> (flat-color swatches, e.g. Grout — Alabaster,
+   where no real product photo exists) and <img> (real Fireclay product
+   photos, e.g. Aegean/Oatmeal below) — object-fit/display are no-ops on
+   a div but make a photo crop to the same fixed square instead of
+   stretching or sitting inline with descender gap. */
 .ts-kit .swatch {
+  display: block;
   width: 2.6rem;
   height: 2.6rem;
   flex: none;
+  object-fit: cover;
   border: 1px solid var(--line);
-}
-
-.ts-kit .swatch.aegean {
-  background: linear-gradient(135deg, #7ea9a0, #4f7b72);
 }
 
 .ts-kit .swatch.sable {
