@@ -22,23 +22,42 @@
    across all three selectors since the palette itself is identical.
    Dark-mode variants from the source artifacts are dropped entirely —
    this site has no dark-mode support anywhere else, so adding it only
-   here would be an inconsistent one-off. */
+   here would be an inconsistent one-off.
+
+   Palette: originally ported 1:1 from the source artifacts' own
+   clay/seaglass/moss system (literal Fireclay glaze-color references —
+   terracotta, sea-glass, moss). Replaced per Ian's request with a
+   monochrome-plus-one-accent palette instead: --ink/--paper/--slate/
+   --line now match the rest of the site's own neutrals exactly
+   (var(--color-text)/var(--color-bg)/var(--color-muted) from
+   variables.css), and every prior use of clay/seaglass collapses onto
+   one shared --clay/--seaglass accent (amber) so there's a single hue
+   in the whole system, not three. --moss (previously green, marking
+   "done"/"active" states) collapses to plain ink instead of a second
+   accent — the amber is reserved for the few things that should
+   actually draw the eye (stat numbers, primary buttons, "pending" /
+   "needs attention" states), while "done"/settled states stay neutral.
+   A few individual selectors that used --clay/--seaglass for a plain
+   label rather than a real accent (the .kicker, footer.meta links, and
+   two bolded asides on the Sample Kit Builder page) are pointed at
+   --ink directly instead, rather than inheriting the token — see each
+   for why. */
 
 .ts-brief,
 .ts-case,
 .ts-kit {
-  --ink: #211d1a;
-  --paper: #edeee8;
-  --paper-raised: #f6f6f1;
-  --seaglass: #3f6f66;
-  --seaglass-soft: #e2ebe8;
-  --clay: #a15c3e;
-  --clay-soft: #f3e4dc;
-  --slate: #6b6862;
-  --slate-soft: #dcdbd3;
-  --moss: #5b7f3a;
-  --moss-soft: #e6ecdc;
-  --line: #c9c7bd;
+  --ink: #111111;
+  --paper: #ffffff;
+  --paper-raised: #f4f3f1;
+  --seaglass: #b7791f;
+  --seaglass-soft: #f1e6d2;
+  --clay: #b7791f;
+  --clay-soft: #f1e6d2;
+  --slate: #6b6b6b;
+  --slate-soft: #e2e2e2;
+  --moss: #111111;
+  --moss-soft: #e9e8e5;
+  --line: #dcdcdc;
 }
 
 .ts-brief *,
@@ -101,6 +120,8 @@
   color: var(--slate);
 }
 
+/* Plain section label, not a stat/action — kept off the accent token
+   on purpose so amber stays rare (see the palette note above). */
 .ts-brief .kicker,
 .ts-case .kicker {
   font-family: var(--font-heading);
@@ -108,7 +129,7 @@
   font-size: 0.68rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--seaglass);
+  color: var(--ink);
   display: block;
   margin-bottom: 0.5rem;
 }
@@ -221,9 +242,13 @@
   padding-top: 2.25rem;
 }
 
+/* Underline carries the link affordance now instead of a color, so a
+   footer disclaimer link doesn't need the accent token just to read as
+   clickable. */
 .ts-brief footer.meta a,
 .ts-case footer.meta a {
-  color: var(--seaglass);
+  color: var(--ink);
+  text-decoration: underline;
 }
 
 /* ---- Buttons / links ---- */
@@ -415,12 +440,14 @@
   max-width: 60ch;
 }
 
+/* A step label ("PROBLEM"/"ACTION"/...), not a stat — stays neutral so
+   the accent stays reserved for the numbers themselves. */
 .ts-brief .arc-tag {
   font-family: var(--font-heading);
   font-size: 0.68rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--clay);
+  color: var(--ink);
   font-weight: 600;
 }
 
@@ -586,7 +613,7 @@
    normal padded content, sitting outside .ts-page so it can reach the
    true viewport edges the same way .hero does on the home page. ---- */
 .ts-brief-band {
-  background: #211d1a;
+  background: #111111;
   padding: 0.85rem var(--page-padding);
   display: flex;
   align-items: center;
@@ -606,7 +633,7 @@
   font-size: 0.68rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #a5a196;
+  color: #a3a3a3;
 }
 
 .ts-brief-band-logo {
@@ -624,7 +651,7 @@
 .ts-brief-band-right {
   font-family: var(--font-heading);
   font-size: 0.68rem;
-  color: #a5a196;
+  color: #a3a3a3;
   text-align: right;
   max-width: 38ch;
 }
@@ -908,8 +935,9 @@
   padding-top: 0.6rem;
 }
 
+/* Bolded aside, not a stat — stays plain ink-bold rather than accent. */
 .ts-kit .kit-note b {
-  color: var(--seaglass);
+  color: var(--ink);
 }
 
 .ts-kit .rationale {
@@ -935,6 +963,8 @@
   margin-bottom: 0.6rem;
 }
 
+/* Same reasoning as .kit-note b above — an emphasized lead-in phrase,
+   not a stat, stays plain ink-bold. */
 .ts-kit .rationale li b {
-  color: var(--seaglass);
+  color: var(--ink);
 }
