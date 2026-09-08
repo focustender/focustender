@@ -24,7 +24,7 @@
         <a href="work.html" class="project__back">← Work</a>
 
         <header class="project__header">
-          <span class="project__eyebrow">HubSpot + Shopify + Figma</span>
+          <span class="project__eyebrow">HubSpot + Salesforce + Shopify + Figma</span>
           <h1 class="project__title">Trade Signal</h1>
           <p class="project__subtitle">A Lifecycle Growth &amp; Analytics Work Sample, Built for Fireclay Tile</p>
         </header>
@@ -54,6 +54,13 @@
               The raw CRM export backing this analysis is deliberately messy: inconsistent segment casing, mixed date formats, and duplicate-ish rows split across multiple partial records per customer. Reconciling it by grouping raw rows per customer and coalescing fields — rather than a naive first-row-wins dedupe — took 669 raw rows down to 600 distinct customers and recovered acquisition channel for 34 customers who would otherwise have been reported as unattributed, silently darkening the channel-level finding above.
             </p>
           </div>
+
+          <div class="project__finding">
+            <h3>Every contact shared between HubSpot and Salesforce has a mismatched lifecycle stage</h3>
+            <p>
+              Reconciling the two live, real accounts against each other (not a mockup of one) found all 85 contacts genuinely present in both systems still showing HubSpot's <code>lifecyclestage</code> stuck at "lead" while Salesforce already reads "Closed - Converted" — one mechanism (a field never written to after import), not scattered noise. The fix is scoped to one Salesforce Flow and one HubSpot API call, one direction only, not a platform purchase.
+            </p>
+          </div>
         </section>
 
         <section class="project__deliverables">
@@ -64,12 +71,6 @@
               <h3>Sample Kit Builder</h3>
               <p>The Trade Portal module that closes the single-sample dead end, with before/after states and the design rationale for why it targets this exact point in the funnel.</p>
               <a href="https://claude.ai/code/artifact/ab73786b-f081-44f6-8d8e-625854e2515d" target="_blank" rel="noopener noreferrer">Open the artifact →</a>
-            </div>
-            <div class="project__deliverable">
-              <span class="project__deliverable-kicker">Concept</span>
-              <h3>Room Visualizer</h3>
-              <p>A working perspective texture-mapping demo (real homography math, not generative image synthesis) with a before/after toggle across three glaze colorways.</p>
-              <a href="https://claude.ai/code/artifact/5224f126-1319-4e71-906c-33a9097ca8f6" target="_blank" rel="noopener noreferrer">Open the artifact →</a>
             </div>
             <div class="project__deliverable">
               <span class="project__deliverable-kicker">Figma</span>
@@ -86,13 +87,22 @@
           </div>
         </section>
 
-        <section class="project__recommendations">
-          <h2>Experimentation Backlog</h2>
-          <ol class="project__rec-list">
-            <li>Trade-show second-sample nudge: a day-5/day-12 follow-up offering a curated second sample specifically to trade-show-acquired leads, tested holdout-vs-treatment on 90 days of new sign-ups.</li>
-            <li>Trade Portal single-sample re-entry flow: a portal prompt for accounts with exactly one sample on file and no activity in 21 days, powering the Sample Kit Builder above.</li>
-            <li>Visualizer-no-follow-up nurture: an AI-personalized email referencing the specific tile/room a visitor visualized, sent 3 days after a session with no sample request.</li>
-          </ol>
+        <section class="project__findings">
+          <h2>Experimentation</h2>
+
+          <div class="project__finding">
+            <h3>The proposed test can't reach significance</h3>
+            <p>
+              A power analysis on the growth backlog's own proposed test — a 90-day holdout measuring an 8-point-scale threshold — shows it needs 623 trade-show leads. The channel produces roughly 10 a month, putting that 62 months out. A faster-arriving proxy metric doesn't fix it either, confirming a real population ceiling rather than a fixable test design.
+            </p>
+          </div>
+
+          <div class="project__finding">
+            <h3>Stop the holdout, not the hypothesis</h3>
+            <p>
+              Instead: full rollout of the Sample Kit Builder nudge to every eligible trade-show lead, directional monitoring over two quarters against the 11% baseline second-sample rate, and an explicit reversal bar — pull back if the rate doesn't land at least 5 points above baseline.
+            </p>
+          </div>
         </section>
 
         <section class="project__limitations">

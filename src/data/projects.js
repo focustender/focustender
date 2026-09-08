@@ -44,7 +44,7 @@ export const projects = [
     title: "Trade Signal",
     href: "project-trade-signal.html",
     image: "tradeSignalVisualizer.png",
-    tools: ["Python", "Shopify", "HubSpot", "Figma"],
+    tools: ["Python", "Shopify", "HubSpot", "Salesforce", "Figma"],
     industries: ["Business"],
     description: "Finding the customer-journey stall — and shipping the fix, not just a slide.",
   },
