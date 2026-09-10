@@ -43,7 +43,7 @@ export const projects = [
   {
     title: "Coffee Wholesale Analytics",
     href: "project-coffee-wholesale-analytics.html",
-    image: null,
+    image: "CoffeeWholesaleProjectPhoto.jpeg",
     tools: ["Python", "HubSpot", "Shopify"],
     industries: ["Business"],
     description: "Not every at-risk account deserves the same response — segmented and verified live against a real CRM, not assumed from a spreadsheet.",
