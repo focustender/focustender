@@ -41,9 +41,17 @@ export function photoUrl(filename) {
 // from each project page's own summary paragraph; edit freely.
 export const projects = [
   {
-    title: "Trade Signal",
+    title: "Coffee Wholesale Analytics",
+    href: "project-coffee-wholesale-analytics.html",
+    image: null,
+    tools: ["Python", "HubSpot", "Shopify"],
+    industries: ["Business"],
+    description: "Not every at-risk account deserves the same response — segmented and verified live against a real CRM, not assumed from a spreadsheet.",
+  },
+  {
+    title: "Fireclay Case Study",
     href: "project-trade-signal.html",
-    image: "tradeSignalVisualizer.png",
+    image: "FireclayProjectPhoto.png",
     tools: ["Python", "Shopify", "HubSpot", "Salesforce", "Figma"],
     industries: ["Business"],
     description: "Finding the customer-journey stall — and shipping the fix, not just a slide.",

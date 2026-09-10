@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coffee Wholesale Analytics — focustender</title>
+    <link rel="icon" type="image/svg+xml" href="assets/focustendersword.svg" />
+    <link rel="stylesheet" href="src/styles/main.css" />
+  </head>
+  <body>
+    <div class="page">
+      <nav class="nav nav--overlay" aria-label="Primary">
+        <a href="index.html" class="nav__home" aria-label="Home"></a>
+        <a href="work.html" aria-current="page">Work</a>
+        <a href="design.html">Design</a>
+        <a href="contact.html" class="nav__contact">Contact</a>
+        <button type="button" class="nav__toggle" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
+          <span class="nav__toggle-bar"></span>
+          <span class="nav__toggle-bar"></span>
+        </button>
+      </nav>
+
+      <main class="project">
+        <a href="work.html" class="project__back">← Work</a>
+
+        <header class="project__header">
+          <span class="project__eyebrow">Python · HubSpot · Shopify</span>
+          <h1 class="project__title">Coffee Wholesale Analytics</h1>
+          <p class="project__subtitle">Lifecycle Segmentation &amp; Retention Strategy</p>
+        </header>
+
+        <p class="project__note">
+          500 fictional wholesale accounts — restaurants, cafes, hotels, gyms — generated with realistic buying patterns and seeded as real contacts in a live HubSpot portal and real customers in a live Shopify dev store, not just a spreadsheet exercise. Nothing about any company, order, or contact is real.
+          <a href="https://github.com/focustender/coffee-wholesale-analytics" target="_blank" rel="noopener noreferrer">Full write-up, code, and data on GitHub →</a>
+        </p>
+
+        <p class="project__summary">
+          The starting question was simple: once a book of wholesale accounts has had time to actually behave — order, reorder, slow down, go quiet — does the CRM tracking them still reflect reality, and what would a retention program look like if it were built directly against that live, connected data instead of assumed from a slide? Business type, order behavior, and lifecycle stage were the variables in view, read from live HubSpot and Shopify accounts rather than a static dataset alone.
+        </p>
+
+        <section class="project__questions">
+          <h2>Asking Questions</h2>
+          <ol class="project__question-list">
+            <li>Does account value differ meaningfully by business type, or is a "typical" wholesale account a reasonable planning unit?</li>
+            <li>Does the CRM's recorded lifecycle stage still reflect reality once accounts have had time to churn or go quiet?</li>
+            <li>Within a single "At-Risk" label, are all accounts equally worth saving?</li>
+            <li>What would a real, relationship-first retention program look like for every stage of the lifecycle, not just the ones easy to automate?</li>
+          </ol>
+        </section>
+
+        <section class="project__wrangling">
+          <h2>Getting and Connecting the Data</h2>
+          <p>
+            The 500 accounts were generated with weighted, business-type-specific buying patterns rather than uniform random data, then seeded as real contacts in a HubSpot test portal and real customers in a Shopify dev store through each platform's own API, authenticated via CLI/OAuth credentials rather than hardcoded tokens. Lifecycle stage (Lead, New Account, Active Account, Established Account, At-Risk, Churned) is derived from actual order recency and frequency, not a label typed in by hand — which made it possible to test something a typed-in label couldn't answer: whether HubSpot's own recorded status keeps up with that reality once accounts have had time to drift.
+          </p>
+          <p>
+            One thing had to be fixed before any of this was trustworthy. HubSpot's native <code>lifecyclestage</code> field only ever gets set once, on first sale, and is never revisited — realistic, but useless for telling an Active account from a Churned one. Writing the real 6-stage value into a new custom property first, then reading segments back live from HubSpot rather than trusting the local file alone, was the only way to make sure the retention program below is built on what the CRM actually shows, not what the spreadsheet assumes.
+          </p>
+        </section>
+
+        <section class="project__eda">
+          <div class="project__eda-item">
+            <h3 class="project__eda-label"><span>01</span>Business type predicts value far better than a generic wholesale account</h3>
+            <div class="project__eda-chart">
+              <img src="assets/photos/coffeeWholesaleLtvByType.png" alt="Bar chart of average lifetime value by business type: cafe $8,185, hotel $4,769, restaurant $3,517, gym $1,113." />
+            </div>
+            <p class="project__eda-answer">
+              Cafes average $8,185 in lifetime value, more than 7x a gym's $1,113; hotels and restaurants sit in between at $4,769 and $3,517. Treating "wholesale account" as one planning unit hides a nearly order-of-magnitude spread — a flat retention or outreach budget per account would badly misallocate effort before any campaign even ships.
+            </p>
+          </div>
+
+          <div class="project__eda-item">
+            <h3 class="project__eda-label"><span>02</span>HubSpot's recorded status goes stale exactly where it matters most</h3>
+            <div class="project__eda-chart">
+              <img src="assets/photos/coffeeWholesaleReconciliation.png" alt="Bar chart of accounts by lifecycle stage, colored by whether HubSpot's lifecyclestage field reads correctly. Lead, New, Active, and Established are accurate; At-Risk and Churned both still read customer." />
+            </div>
+            <p class="project__eda-answer">
+              HubSpot's <code>lifecyclestage</code> is accurate for every Lead, New, Active, and Established account (455 of 500) — but for all 26 At-Risk and all 19 Churned accounts, it still reads "customer," because the field is set once on first sale and never revisited. That's not scattered noise, it's the exact two stages a retention program needs most, both wrong 100% of the time. Fixed by writing the real 6-stage value into a new property and reading segments back from that instead of the stale field.
+            </p>
+          </div>
+
+          <div class="project__eda-item">
+            <h3 class="project__eda-label"><span>03</span>Not every At-Risk account is worth the same response</h3>
+            <div class="project__eda-chart">
+              <img src="assets/photos/coffeeWholesaleAtRiskConcentration.png" alt="Grouped bar chart comparing each business type's share of At-Risk accounts against its share of At-Risk revenue. Cafes are 38.5% of accounts but 55.4% of revenue; gyms are 11.5% of accounts but 1.3% of revenue." />
+            </div>
+            <p class="project__eda-answer">
+              26 accounts are currently At-Risk, representing $104,850 in combined lifetime value. Cafes are 38.5% of that count but 55.4% of that revenue ($58,058) — restaurants and hotels track closer to proportional, and gyms are 11.5% of the accounts but just 1.3% of the revenue at stake. A single "win them all back" campaign spends the same effort on segments worth very different amounts.
+            </p>
+          </div>
+        </section>
+
+        <section class="project__deliverables">
+          <h2>Retention Program, by Stage</h2>
+          <p class="project__summary">
+            Five relationship programs, one per stage, drafted for review rather than sent — a free/dev HubSpot portal doesn't have marketing-send access either way, and no fabricated response rate is worth a more impressive-looking page. Lead is left out on purpose: that's an acquisition question, a different project.
+          </p>
+          <div class="project__deliverable-grid">
+            <div class="project__deliverable">
+              <span class="project__deliverable-kicker">New Account — 49 accounts, $43,370 LTV</span>
+              <h3>Establish a real point of contact before it's just a transactional vendor</h3>
+              <p>One personal email 2-3 weeks after the first order, from a named contact, not a marketing address. No upsell — the goal is trust, not a second sale.</p>
+            </div>
+            <div class="project__deliverable">
+              <span class="project__deliverable-kicker">Active Account — 146 accounts, $448,084 LTV</span>
+              <h3>Deepen the relationship before there's a problem to react to</h3>
+              <p>Quarterly touch paired with something useful, like the next origin rotation. The largest group, and the one most likely to get no attention until it stalls.</p>
+            </div>
+            <div class="project__deliverable">
+              <span class="project__deliverable-kicker">Established Account — 189 accounts, $1,782,314 LTV</span>
+              <h3>Recognize loyalty before complacency becomes the risk</h3>
+              <p>Roughly annual, tied to tenure — first access to a limited-run origin for the highest tier, plain recognition without a sales pitch for the rest.</p>
+            </div>
+            <div class="project__deliverable">
+              <span class="project__deliverable-kicker">At-Risk — 26 accounts, $104,850 LTV</span>
+              <h3>Ask why before offering a discount</h3>
+              <p>A phone call from an account manager for the cafe segment specifically — 55% of the revenue at stake here — a personal email for everyone else. Leads with a genuine question, not a price cut.</p>
+            </div>
+            <div class="project__deliverable">
+              <span class="project__deliverable-kicker">Churned — 19 accounts, $47,128 LTV</span>
+              <h3>Leave the door open, then actually stop</h3>
+              <p>One graceful note, no follow-up if unanswered. Continuing to chase an account that already chose to leave reads as pressure, not care.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="project__recommendations">
+          <h2>Conclusions &amp; Recommendations</h2>
+          <ol class="project__rec-list">
+            <li>Segment retention effort by stage and business type together, not stage alone — cafes carry disproportionate revenue risk inside the At-Risk group specifically.</li>
+            <li>Fix the underlying CRM field before building any campaign on it — a stale lifecyclestage would have pointed this entire program at the wrong 91% of accounts.</li>
+            <li>Give each lifecycle stage its own relationship goal instead of one repeating drip sequence — an Established account and a New account have nothing in common to hear.</li>
+            <li>Treat At-Risk as a listening moment before a save offer — lead with a genuine question, reserve the discount for when price is actually named as the reason.</li>
+          </ol>
+        </section>
+
+        <section class="project__limitations">
+          <h2>Limitations</h2>
+          <ul>
+            <li><strong>Nothing was sent.</strong> All campaign copy is drafted for review, not measured — a free/dev HubSpot portal doesn't have marketing-send access, and no fabricated open or response rate is worth a more impressive-looking page.</li>
+            <li><strong>Synthetic data throughout.</strong> Every account, order, and contact is generated; pricing and regional patterns are benchmarked against real specialty roasters, but no real company or customer appears anywhere in this project.</li>
+            <li><strong>Value tier is a 3-way split of 4 categories,</strong> not a full RFM model — a simpler cut, chosen because the LTV gap between cafe and everyone else was already large enough not to need one.</li>
+            <li><strong>Shopify integration covers customers only,</strong> not orders — a real win-back offer tied to an actual discount code is a natural next step, not yet built.</li>
+          </ul>
+        </section>
+      </main>
+
+      <footer class="copyright">
+        <p class="copyright__brand">
+          <span class="copyright__sword" aria-hidden="true"></span>
+          focustender
+        </p>
+        <p class="copyright__line">© 2026</p>
+      </footer>
+    </div>
+
+    <div class="site-menu" id="site-menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+      <nav class="site-menu__links" aria-label="Primary">
+        <a href="work.html" aria-current="page">Work</a>
+        <a href="design.html">Design</a>
+      </nav>
+      <a href="contact.html" class="site-menu__contact">Contact</a>
+    </div>
+
+    <script type="module" src="src/nav.js"></script>
+  </body>
+</html>

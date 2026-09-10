@@ -19,47 +19,41 @@
 // — .nav lives inside .page too, and inerting the whole thing would
 // make the toggle itself unclickable, breaking the only way to close
 // the menu.
-const toggle = document.querySelector(".nav__toggle");
-const menu = document.getElementById("site-menu");
+function initNav() {
+  const toggle = document.querySelector(".nav__toggle");
+  const menu = document.getElementById("site-menu");
+  if (!toggle || !menu) return;
 
-if (toggle && menu) {
   const nav = document.querySelector(".nav--overlay");
   const main = document.querySelector("main");
+  const isMenuOpen = () => menu.classList.contains("is-open");
 
-  function openMenu() {
-    menu.classList.add("is-open");
-    menu.setAttribute("aria-hidden", "false");
-    nav.classList.add("nav--above-menu");
-    nav.classList.remove("nav--scroll-hidden");
-    main.inert = true;
-    document.documentElement.style.overflow = "hidden";
-    toggle.setAttribute("aria-expanded", "true");
-    toggle.setAttribute("aria-label", "Close menu");
-  }
-
-  function closeMenu() {
-    menu.classList.remove("is-open");
-    menu.setAttribute("aria-hidden", "true");
-    nav.classList.remove("nav--above-menu");
-    main.inert = false;
-    document.documentElement.style.overflow = "";
-    toggle.setAttribute("aria-expanded", "false");
-    toggle.setAttribute("aria-label", "Open menu");
-    toggle.focus();
+  // Single place that applies every open/close side effect, so the two
+  // states can't drift out of sync with each other the way two
+  // independently-edited open/close functions could.
+  function setMenuOpen(isOpen) {
+    menu.classList.toggle("is-open", isOpen);
+    menu.setAttribute("aria-hidden", String(!isOpen));
+    nav.classList.toggle("nav--above-menu", isOpen);
+    if (isOpen) nav.classList.remove("nav--scroll-hidden");
+    main.inert = isOpen;
+    document.documentElement.style.overflow = isOpen ? "hidden" : "";
+    toggle.setAttribute("aria-expanded", String(isOpen));
+    toggle.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+    if (!isOpen) toggle.focus();
   }
 
   toggle.addEventListener("click", () => {
-    if (menu.classList.contains("is-open")) closeMenu();
-    else openMenu();
+    setMenuOpen(!isMenuOpen());
   });
 
   for (const link of menu.querySelectorAll(".site-menu__links a, .site-menu__contact")) {
-    link.addEventListener("click", closeMenu);
+    link.addEventListener("click", () => setMenuOpen(false));
   }
 
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && menu.classList.contains("is-open")) {
-      closeMenu();
+    if (event.key === "Escape" && isMenuOpen()) {
+      setMenuOpen(false);
     }
   });
 
@@ -70,7 +64,7 @@ if (toggle && menu) {
   // the menu that was blocking it is gone.
   const desktopQuery = window.matchMedia("(min-width: 1024px)");
   desktopQuery.addEventListener("change", (event) => {
-    if (event.matches && menu.classList.contains("is-open")) closeMenu();
+    if (event.matches && isMenuOpen()) setMenuOpen(false);
   });
 
   // ---- Scroll-fade for the closed nav row ----
@@ -83,9 +77,11 @@ if (toggle && menu) {
   window.addEventListener(
     "scroll",
     () => {
-      if (menu.classList.contains("is-open")) return;
+      if (isMenuOpen()) return;
       nav.classList.toggle("nav--scroll-hidden", window.scrollY > 0);
     },
     { passive: true },
   );
 }
+
+initNav();
